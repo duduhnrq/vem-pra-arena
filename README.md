@@ -10,7 +10,7 @@ O projeto visa reduzir a subutilização da Arena Pernambuco através de uma sol
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend (POO)
-* **Java 17+**: Linguagem para modelagem de objetos e lógica de negócio.
+* **Java 21+**: Linguagem para modelagem de objetos e lógica de negócio.
 * **Spring Boot**: Framework para construção da aplicação web.
 * **Maven**: Gerenciamento de dependências.
 
