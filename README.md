@@ -18,24 +18,41 @@ O projeto visa reduzir a subutilização da Arena Pernambuco através de uma sol
 * **HTML5 / JavaScript**: Estrutura e interatividade.
 * **Tailwind CSS**: Estilização baseada no conceito Neo-Brutalista.
 
-## 📐 Arquitetura de Software (POO)
-A aplicação foi estruturada utilizando os conceitos fundamentais da Programação Orientada a Objetos:
-* **Abstração e Herança**: Classe base `Evento` com especializações para `JogoFutebol`, `ShowMusical` e `EventoCorporativo`.
-* **Encapsulamento**: Proteção de dados sensíveis e atributos de eventos e usuários.
-* **Polimorfismo**: Tratamento genérico de diferentes tipos de eventos na listagem principal.
+---
 
-## 📋 Funcionalidades (MVP)
-* **Catálogo de Eventos**: Visualização completa das atividades agendadas na Arena.
-* **Filtros por Categoria**: Busca facilitada por tipo de evento (Esporte, Música, Negócios).
-* **Agendamento Simulado**: Interface para que o usuário demonstre interesse ou participe de eventos.
-* **Interface Responsiva**: Design otimizado para dispositivos móveis e desktop.
+## 📂 Entrega 01: Planejamento, User Stories e Prototipagem
 
-## 🎨 Identidade Visual
-A plataforma utiliza o estilo **Neo-Brutalista**, caracterizado por:
-* Bordas pretas espessas (3px).
-* Ausência de arredondamentos (0px).
-* Sombras sólidas e de alto contraste.
-* Grids abertos e tipografia robusta.
+Esta entrega foca na definição dos requisitos de negócio e na experiência do usuário (UX) através de protótipos de baixa fidelidade.
+
+### 👥 Histórias de Usuário (User Stories)
+As histórias abaixo descrevem as funcionalidades sob a ótica do usuário final, utilizando a sintaxe BDD (Behavior Driven Development) para os critérios de aceitação.
+
+| ID | Título | Descrição (Como/Quero/Para) |
+|:---|:---|:---|
+| **US01** | Catálogo de Eventos | Como torcedor, quero ver os eventos na home para planejar meu lazer.
+| **US02** | Filtro de Categoria | Como fã de música, quero filtrar por "Shows" para achar festivais.
+| **US03** | Seleção de Setor | Como cidadão, quero escolher um setor para garantir minha vaga.
+| **US04** | Identificação | Como interessado, quero inserir meus dados para validar a reserva.
+| **US05** | Busca de Serviços | Como turista, quero buscar por "Tour" para visitar os bastidores.
+| **US06** | Interface Responsiva | Como usuário mobile, quero uma interface legível para navegar no celular.
+| **US07** | Resumo Financeiro | Como comprador, quero ver o valor total com taxas antes de finalizar.
+
+---
+
+### 🎨 Prototipagem Lo-Fi (Figma)
+O protótipo de baixa fidelidade foca na estrutura da informação e no fluxo de navegação, utilizando a estética Neo-Brutalista definida no Styleguide.
+
+* 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](SUBSTITUIR_PELO_LINK)**
+
+---
+
+### 🎬 Apresentação (Screencast)
+No vídeo abaixo, apresento o fluxo de navegação contemplando as 5 principais histórias de usuário (US01 a US05).
+
+* 🎥 **[Assista ao vídeo no YouTube](SUBSTITUIR_PELO_LINK)**
+    * *O vídeo inclui áudio/legendas explicando cada interação.*
+
+---
 
 ## 👥 Equipe
 * **Eduardo Henrique**
