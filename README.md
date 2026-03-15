@@ -24,27 +24,56 @@ O projeto visa reduzir a subutilização da Arena Pernambuco através de uma sol
 
 Esta entrega foca na definição dos requisitos de negócio e na experiência do usuário (UX) através de protótipos de baixa fidelidade.
 
-### 👥 Histórias de Usuário (User Stories)
-As histórias abaixo descrevem as funcionalidades sob a ótica do usuário final, utilizando a sintaxe BDD (Behavior Driven Development) para os critérios de aceitação.
+### 👥 Histórias de Usuário & Critérios de Aceitação (BDD)
 
-| ID | Título | Descrição (Como/Quero/Para) |
-|:---|:---|:---|
-| **US01** | Catálogo de Eventos | Como torcedor, quero ver os eventos na home para planejar meu lazer.
-| **US02** | Filtro de Categoria | Como fã de música, quero filtrar por "Shows" para achar festivais.
-| **US03** | Seleção de Setor | Como cidadão, quero escolher um setor para garantir minha vaga.
-| **US04** | Identificação | Como interessado, quero inserir meus dados para validar a reserva.
-| **US05** | Busca de Serviços | Como turista, quero buscar por "Tour" para visitar os bastidores.
-| **US06** | Interface Responsiva | Como usuário mobile, quero uma interface legível para navegar no celular.
-| **US07** | Resumo Financeiro | Como comprador, quero ver o valor total com taxas antes de finalizar.
+Abaixo estão listadas as histórias que guiam o desenvolvimento do sistema, detalhando o comportamento esperado em cada cenário.
 
----
+#### US01: Catálogo de Eventos
+* **Descrição:** Como usuário, quero ver os eventos na página inicial para saber o que está acontecendo na Arena.
+* **Cenário:** * **Dado** que acesso o site;
+    * **Quando** a página carrega;
+    * **Então** vejo os cards de eventos com título, data e botão de ação.
+
+#### US02: Destaque de Notícias (Marquee)
+* **Descrição:** Como torcedor, quero ver avisos rápidos no topo do site para me manter informado.
+* **Cenário:** * **Dado** que estou na home;
+    * **Quando** olho para o topo;
+    * **Então** vejo uma barra preta com textos correndo sobre os próximos jogos e shows.
+
+#### US03: Busca por Nome
+* **Descrição:** Como usuário, quero digitar o nome de um time na busca para achar o evento mais rápido.
+* **Cenário:** * **Dado** que uso o campo de busca;
+    * **Quando** digito "Náutico";
+    * **Então** o sistema filtra os eventos relacionados.
+
+#### US04: Acesso ao Checkout
+* **Descrição:** Como interessado, quero clicar no botão de um evento para iniciar minha reserva.
+* **Cenário:** * **Dado** que escolhi um evento no card;
+    * **Quando** clico em "Reservar Ingresso";
+    * **Então** sou redirecionado para a página de formulário.
+
+#### US05: Identificação Básica
+* **Descrição:** Como comprador, quero preencher meu nome e e-mail para reservar meu lugar.
+* **Cenário:** * **Dado** que estou na tela de reserva;
+    * **Quando** preencho o formulário;
+    * **Então** clico no botão para confirmar meu pedido.
+
+#### US06: Menu de Navegação
+* **Descrição:** Como usuário, quero usar o menu do topo para pular direto para a seção de agenda.
+* **Cenário:** * **Dado** que estou no topo da página;
+    * **Quando** clico em "Eventos";
+    * **Então** a página desliza automaticamente para a lista de cards.
+
+#### US07: Visualização em Celular
+* **Descrição:** Como usuário de smartphone, quero que o site não quebre a visualização no meu aparelho.
+* **Cenário:** * **Dado** que acesso pelo celular;
+    * **Quando** a página renderiza;
+    * **Então** os elementos se ajustam para caber na tela sem precisar de scroll horizontal.
 
 ### 🎨 Prototipagem Lo-Fi (Figma)
 O protótipo de baixa fidelidade foca na estrutura da informação e no fluxo de navegação, utilizando a estética Neo-Brutalista definida no Styleguide.
 
 * 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](#)**
-
----
 
 ### 🎬 Apresentação (Screencast)
 No vídeo abaixo, apresento o fluxo de navegação contemplando as 5 principais histórias de usuário (US01 a US05).
