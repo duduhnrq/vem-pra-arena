@@ -30,43 +30,50 @@ Abaixo estão listadas as histórias que guiam o desenvolvimento do sistema, det
 
 #### US01: Catálogo de Eventos
 * **Descrição:** Como usuário, quero ver os eventos na página inicial para saber o que está acontecendo na Arena.
-* **Cenário:** * **Dado** que acesso o site;
-    * **Quando** a página carrega;
-    * **Então** vejo os cards de eventos com título, data e botão de ação.
+* **Cenário:**
+  * **Dado** que acesso o site;
+  * **Quando** a página carrega;
+  * **Então** vejo os cards de eventos com título, data e botão de ação.
 
 #### US02: Destaque de Notícias (Marquee)
 * **Descrição:** Como torcedor, quero ver avisos rápidos no topo do site para me manter informado.
-* **Cenário:** * **Dado** que estou na home;
-    * **Quando** olho para o topo;
-    * **Então** vejo uma barra preta com textos correndo sobre os próximos jogos e shows.
+* **Cenário:**
+   * **Dado** que estou na home;
+   * **Quando** olho para o topo;
+   * **Então** vejo uma barra preta com textos correndo sobre os próximos jogos e shows.
 
 #### US03: Busca por Nome
 * **Descrição:** Como usuário, quero digitar o nome de um time na busca para achar o evento mais rápido.
-* **Cenário:** * **Dado** que uso o campo de busca;
+* **Cenário:**
+    * **Dado** que uso o campo de busca;
     * **Quando** digito "Náutico";
     * **Então** o sistema filtra os eventos relacionados.
 
 #### US04: Acesso ao Checkout
 * **Descrição:** Como interessado, quero clicar no botão de um evento para iniciar minha reserva.
-* **Cenário:** * **Dado** que escolhi um evento no card;
+* **Cenário:**
+    * **Dado** que escolhi um evento no card;
     * **Quando** clico em "Reservar Ingresso";
     * **Então** sou redirecionado para a página de formulário.
 
 #### US05: Identificação Básica
 * **Descrição:** Como comprador, quero preencher meu nome e e-mail para reservar meu lugar.
-* **Cenário:** * **Dado** que estou na tela de reserva;
+* **Cenário:**
+    * **Dado** que estou na tela de reserva;
     * **Quando** preencho o formulário;
     * **Então** clico no botão para confirmar meu pedido.
 
 #### US06: Menu de Navegação
 * **Descrição:** Como usuário, quero usar o menu do topo para pular direto para a seção de agenda.
-* **Cenário:** * **Dado** que estou no topo da página;
+* **Cenário:**
+    * **Dado** que estou no topo da página;
     * **Quando** clico em "Eventos";
     * **Então** a página desliza automaticamente para a lista de cards.
 
 #### US07: Visualização em Celular
 * **Descrição:** Como usuário de smartphone, quero que o site não quebre a visualização no meu aparelho.
-* **Cenário:** * **Dado** que acesso pelo celular;
+* **Cenário:**
+    * **Dado** que acesso pelo celular;
     * **Quando** a página renderiza;
     * **Então** os elementos se ajustam para caber na tela sem precisar de scroll horizontal.
 
