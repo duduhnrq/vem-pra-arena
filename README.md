@@ -42,15 +42,14 @@ As histórias abaixo descrevem as funcionalidades sob a ótica do usuário final
 ### 🎨 Prototipagem Lo-Fi (Figma)
 O protótipo de baixa fidelidade foca na estrutura da informação e no fluxo de navegação, utilizando a estética Neo-Brutalista definida no Styleguide.
 
-* 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](SUBSTITUIR_PELO_LINK)**
+* 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](#)**
 
 ---
 
 ### 🎬 Apresentação (Screencast)
 No vídeo abaixo, apresento o fluxo de navegação contemplando as 5 principais histórias de usuário (US01 a US05).
 
-* 🎥 **[Assista ao vídeo no YouTube](SUBSTITUIR_PELO_LINK)**
-    * *O vídeo inclui áudio/legendas explicando cada interação.*
+* 🎥 **[Assista ao vídeo no YouTube](#)**
 
 ---
 
