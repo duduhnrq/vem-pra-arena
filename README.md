@@ -80,12 +80,12 @@ Abaixo estão listadas as histórias que guiam o desenvolvimento do sistema, det
 ### 🎨 Prototipagem Lo-Fi (Figma)
 O protótipo de baixa fidelidade foca na estrutura da informação e no fluxo de navegação, utilizando a estética Neo-Brutalista definida no Styleguide.
 
-* 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](#)**
+* 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](https://www.figma.com/proto/VjPOLNdwJL7iIhuIHU6qJJ/VemPraArena?node-id=30-317&t=xqTDZgPZaEAn8JhZ-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2)**
 
 ### 🎬 Apresentação (Screencast)
-No vídeo abaixo, apresento o fluxo de navegação contemplando as 5 principais histórias de usuário (US01 a US05).
+No vídeo abaixo, apresentamos o fluxo de navegação contemplando as 5 principais histórias de usuário (US01 a US05).
 
-* 🎥 **[Assista ao vídeo no YouTube](#)**
+* 🎥 **[Assista ao vídeo no YouTube](https://www.youtube.com/watch?v=bpGE4QOb8ws)**
 
 ---
 
