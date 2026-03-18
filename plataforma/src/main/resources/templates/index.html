@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VemPraArena</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/input.css">
+    <link rel="stylesheet" href="../static/css/custom.css">
+  </head>
+  <body class="bg-grid">
+    <!-- Marquee de notícias -->
+    <div class="marquee font-black uppercase tracking-widest text-sm">
+        <div>
+            ⚽ PRÓXIMO JOGO: NÁUTICO VS SPORT - 25/10 • 🎙️ SHOW: REC SUMMER FEST - 02/11 • 🏟️ TOUR NA ARENA TODOS OS SÁBADOS • ⚽ PRÓXIMO JOGO: NÁUTICO VS SPORT - 25/10
+        </div>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="sticky top-0 z-50 bg-white border-b-[3px] border-black p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="brutal-border bg-white px-3 py-1 hover:bg-black hover:text-white transition-colors cursor-pointer">
+                <a href="#" class="text-2xl font-black tracking-tighter uppercase">VEM<span class="text-governo-blue">PRA</span>ARENA</a>
+            </div>
+            <div class="md:flex space-x-6 font-black uppercase text-sm">
+                <a href="#explorar" class="px-2 py-1 hover:underline transition-all">Explorar Arena</a>
+                <a href="#eventos" class="px-2 py-1 hover:underline transition-all">Eventos</a>
+                <a href="#faq" class="px-2 py-1 hover:underline transition-all">Dúvidas</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="font-black uppercase text-sm hover:underline">Criar conta</button>
+                <button class="brutal-btn btn-yellow-hover brutal-border bg-governo-yellow px-6 py-2 font-black brutal-shadow uppercase text-sm">
+                    Entrar
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-7xl mx-auto py-16 lg:py-32 px-4">
+        <div class="flex flex-col lg:flex-row gap-16 justify-center items-center">
+            <div>
+                <span class="brutal-border bg-black text-white px-3 py-1 font-black text-sm uppercase mb-6 inline-block">ARENA PERNAMBUCO</span>
+                <h1 class="text-8xl md:text-9xl mb-8 font-black">
+                    VIVA A <br> <span class="bg-governo-yellow px-2">NOSSA</span> <br> ARENA.
+                </h1>
+                <p class="text-2xl font-bold mb-10 max-w-lg leading-tight">
+                    Não é apenas um estádio, é o centro de tudo. Esporte, cultura e lazer no coração de Pernambuco.
+                </p>
+                <div class="flex flex-wrap gap-8 lg:gap-4">
+                    <a href="#eventos" class="brutal-btn btn-black-hover brutal-border bg-black text-white px-10 py-5 font-black text-xl brutal-shadow-lg text-center w-full lg:w-auto">
+                        VER AGENDA ↓
+                    </a>
+                    <button class="brutal-btn brutal-border bg-white px-10 py-5 font-black text-xl brutal-shadow-lg hover:bg-governo-blue hover:text-white w-full lg:w-auto">
+                        CONHECER TOUR
+                    </button>
+                </div>
+            </div>
+            <div class="relative group mr-4">
+                <div class="brutal-border w-full h-auto brutal-shadow-lg flex items-center justify-center overflow-hidden transition-transform group-hover:-translate-y-2">
+                    <img src="../static/images/arena-pernambuco.jpg" alt="[Imagem da Arena]" class="w-full h-full">
+                </div>
+                <div class="absolute -top-8 -right-8 w-32 h-32 brutal-border bg-governo-pink rounded-full flex items-center justify-center text-center font-black leading-none p-4 brutal-shadow rotate-12 group-hover:rotate-0 transition-transform">
+                    CAPACIDADE 45 MIL
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção de Busca -->
+    <section id="explorar" class="border-y-[3px] border-black bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-black mb-8 uppercase italic">Encontre sua diversão</h2>
+            <div class="grid md:grid-cols-12 gap-6">
+                <div class="md:col-span-8">
+                    <div class="brutal-border brutal-shadow bg-white flex items-center p-2">
+                        <span class="px-4 text-2xl">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Busque por 'Sport', 'Show'..." class="w-full p-4 text-xl font-bold focus:outline-none">
+                        <button onclick="filterEvents()" class="brutal-btn bg-black text-white px-8 py-4 font-black uppercase brutal-border mx-2">Buscar</button>
+                    </div>
+                </div>
+                <div class="md:col-span-4 grid grid-cols-2 gap-4">
+                    <div onclick="setSearch('')" class="brutal-border p-4 bg-governo-pink brutal-shadow flex flex-col justify-between hover:bg-black hover:text-white transition-colors cursor-pointer group">
+                        <span class="text-xs font-black">RESETAR</span>
+                        <span class="text-2xl font-black">VER <br>TODOS</span>
+                    </div>
+                    <div class="brutal-border p-4 bg-white brutal-shadow flex flex-col justify-between hover:bg-governo-blue hover:text-white transition-colors cursor-pointer">
+                        <span class="text-xs font-black">CALENDÁRIO</span>
+                        <span class="text-2xl font-black">BUSCAR <br>POR DATA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Categorias -->
+    <section class="max-w-7xl mx-auto px-4 py-20">
+        <div class="grid md:grid-cols-4 gap-6">
+            <div onclick="setSearch('Esporte')" class="brutal-border p-8 bg-governo-yellow brutal-shadow-lg flex flex-col items-start justify-between min-h-[300px] group cursor-pointer">
+                <span class="text-6xl group-hover:scale-110 transition-transform">⚽</span>
+                <div>
+                    <h3 class="text-3xl font-black leading-none mb-2">ESPORTES</h3>
+                    <p class="font-bold">Jogos, campeonatos e treinos.</p>
+                </div>
+            </div>
+            <div onclick="setSearch('Festival')" class="brutal-border p-8 bg-governo-pink brutal-shadow-lg flex flex-col items-start justify-between min-h-[300px] group cursor-pointer text-white">
+                <span class="text-6xl group-hover:scale-110 transition-transform">🎸</span>
+                <div>
+                    <h3 class="text-3xl font-black leading-none mb-2">SHOWS</h3>
+                    <p class="font-bold">Festivais e grandes turnês.</p>
+                </div>
+            </div>
+            <div onclick="setSearch('Feira')" class="brutal-border p-8 bg-white brutal-shadow-lg flex flex-col items-start justify-between min-h-[300px] group cursor-pointer">
+                <span class="text-6xl group-hover:scale-110 transition-transform">🤝</span>
+                <div>
+                    <h3 class="text-3xl font-black leading-none mb-2">NEGÓCIOS</h3>
+                    <p class="font-bold">Feiras, congressos e reuniões.</p>
+                </div>
+            </div>
+            <div onclick="setSearch('Tour')" class="brutal-border p-8 bg-governo-blue brutal-shadow-lg flex flex-col items-start justify-between min-h-[300px] group cursor-pointer text-white">
+                <span class="text-6xl group-hover:scale-110 transition-transform">🏟️</span>
+                <div>
+                    <h3 class="text-3xl font-black leading-none mb-2">VISITAS</h3>
+                    <p class="font-bold">Tour guiado e museu do esporte.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+  </body>
+</html>
