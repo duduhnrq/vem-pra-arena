@@ -1,5 +1,6 @@
 html {
     scroll-behavior: smooth;
+    scroll-margin-top: 80px;
 }
 
 body {
@@ -76,8 +77,32 @@ h3,
   background-color: #f4d03f;
 }
 
+.hover\:bg-governo-yellow:hover {
+    background-color: #f4d03f;
+}
+
+.border-governo-yellow {
+  border-color: #f4d03f;
+}
+
 .bg-governo-pink {
   background-color: #ff6b6b;
+}
+
+.hover\:bg-governo-pink:hover {
+    background-color: #ff6b6b;
+}
+
+.border-governo-pink {
+  border-color: #ff6b6b;
+}
+
+.bg-governo-green {
+  background-color: #4ade80;
+}
+
+.hover\:bg-governo-green:hover {
+    background-color: #4ade80;
 }
 
 .bg-grid {
