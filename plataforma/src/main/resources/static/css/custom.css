@@ -1,6 +1,6 @@
 html {
-    scroll-behavior: smooth;
-    scroll-margin-top: 80px;
+  scroll-behavior: smooth;
+  scroll-margin-top: 80px;
 }
 
 body {
@@ -70,7 +70,7 @@ h3,
 }
 
 .hover\:bg-governo-blue:hover {
-    background-color: #3772ff;
+  background-color: #3772ff;
 }
 
 .bg-governo-yellow {
@@ -78,7 +78,7 @@ h3,
 }
 
 .hover\:bg-governo-yellow:hover {
-    background-color: #f4d03f;
+  background-color: #f4d03f;
 }
 
 .border-governo-yellow {
@@ -90,7 +90,7 @@ h3,
 }
 
 .hover\:bg-governo-pink:hover {
-    background-color: #ff6b6b;
+  background-color: #ff6b6b;
 }
 
 .border-governo-pink {
@@ -102,7 +102,7 @@ h3,
 }
 
 .hover\:bg-governo-green:hover {
-    background-color: #4ade80;
+  background-color: #4ade80;
 }
 
 .bg-grid {
@@ -154,4 +154,38 @@ h3,
 
 .faq-item.active .faq-icon {
   transform: rotate(45deg);
+}
+
+
+/* IA Chatbot Styles */
+.message-bubble {
+  max-width: 85%;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.ai-message {
+  background-color: #f4d03f;
+  color: #000;
+  align-self: flex-start;
+  border: 2px solid black;
+  box-shadow: 4px 4px 0px black;
+}
+
+.user-message {
+  background-color: #000;
+  color: #fff;
+  align-self: flex-end;
+  border: 2px solid black;
+  box-shadow: 4px 4px 0px black;
+}
+
+#chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 0;
 }
