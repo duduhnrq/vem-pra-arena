@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso - VemPraArena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
+    <style>
+      :root {
+        --blue: #3772ff;
+        --yellow: #f4d03f;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8f8f8;
+        color: #000;
+        overflow-x: hidden;
+      }
+      .brutal-title {
+        font-family: "Archivo Black", sans-serif;
+        text-transform: uppercase;
+      }
+      .brutal-border {
+        border: 3px solid #000;
+      }
+      .brutal-shadow {
+        box-shadow: 8px 8px 0px #000;
+      }
+
+      /* Grid de fundo sutil */
+      .bg-grid {
+        background-image:
+          linear-gradient(#e5e5e5 1px, transparent 1px),
+          linear-gradient(90deg, #e5e5e5 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+
+      .auth-container {
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .input-brutal {
+        width: 100%;
+        padding: 1rem;
+        border: 3px solid #000;
+        font-weight: 700;
+        transition: all 0.2s;
+        background: #fff;
+      }
+
+      .btn-brutal {
+        background: #000;
+        color: #fff;
+        padding: 1.25rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        border: 3px solid #000;
+        transition: all 0.1s;
+        cursor: pointer;
+        width: 100%;
+        display: block;
+        text-align: center;
+      }
+
+      .btn-brutal:hover {
+        background-color: var(--blue);
+        transform: translate(-4px, -4px);
+        box-shadow: 8px 8px 0px #000;
+      }
+
+      .btn-brutal:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0px 0px 0px #000;
+      }
+
+      .form-toggle {
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        border: 2px solid transparent;
+      }
+
+      .form-toggle.active {
+        background: #000;
+        color: #fff;
+        border-color: #000;
+      }
+
+      .auth-card {
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .hidden-card {
+        display: none;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body class="bg-grid">
+    <div class="auth-container">
+      <!-- Lado Esquerdo: Hero/Branding -->
+      <div
+        class="auth-hero p-12 bg-governo-blue border-r-[6px] border-[#000] fixed hidden lg:flex flex-col justify-between overflow-hidden h-full w-[45%]"
+      >
+        <div class="z-10 space-y-10">
+          <a
+            href="index.html"
+            class="bg-white brutal-border px-3 py-1 text-2xl font-black tracking-tighter uppercase hover:bg-black hover:text-white transition-all"
+            >VEM<span class="text-governo-blue">PRA</span>ARENA</a
+          >
+          <div class="flex flex-col">
+            <h1 class="text-white text-7xl brutal-title leading-[0.9] italic">
+              O Seu Lugar <br /><span
+                class="text-black bg-governo-yellow px-2 py-4 inline-block"
+                >No Jogo.</span
+              >
+            </h1>
+            <p class="text-white font-bold mt-6 text-xl max-w-sm">
+              Acesse a plataforma oficial de ingressos e experiências da Arena
+              Pernambuco.
+            </p>
+          </div>
+        </div>
+
+        <div class="z-10">
+          <div class="flex gap-4 mb-4 items-center">
+            <div
+              class="w-12 h-12 bg-governo-yellow brutal-border brutal-shadow flex items-center justify-center font-black"
+            >
+              10+
+            </div>
+            <p class="text-white font-bold text-xs uppercase leading-tight">
+              Anos de emoção <br />no Coração de PE
+            </p>
+          </div>
+        </div>
+
+        <!-- Elemento decorativo abstrato -->
+        <div class="absolute -bottom-20 -right-20 opacity-20">
+          <div class="w-96 h-96 border-[40px] border-black rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- Lado Direito: Formulários -->
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-6 md:p-12 w-[100%] lg:ml-[45%]"
+      >
+        <div class="w-full max-w-md">
+          <!-- Toggle de Formulário -->
+          <div class="flex mb-8 brutal-border bg-white p-1 w-fit mx-auto">
+            <button
+              id="toggle-login"
+              onclick="toggleForm('login')"
+              class="form-toggle active"
+            >
+              Login
+            </button>
+            <button
+              id="toggle-register"
+              onclick="toggleForm('register')"
+              class="form-toggle"
+            >
+              Cadastro
+            </button>
+          </div>
+
+          <!-- CARD LOGIN -->
+          <div
+            id="login-card"
+            class="auth-card brutal-border bg-white p-8 md:p-10 brutal-shadow"
+          >
+            <h2 class="text-4xl brutal-title mb-2">Entrar</h2>
+            <p
+              class="font-bold text-gray-500 mb-8 uppercase text-xs tracking-widest italic"
+            >
+              Bem-vindo novamente, torcedor.
+            </p>
+
+            <form
+              class="space-y-6"
+              onsubmit="
+                event.preventDefault();
+                window.location.href = 'index.html';
+              "
+            >
+              <div class="space-y-1">
+                <label class="block font-black text-[10px] uppercase"
+                  >E-mail</label
+                >
+                <input
+                  type="email"
+                  class="input-brutal"
+                  placeholder="exemplo@email.com"
+                  required
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block font-black text-[10px] uppercase"
+                  >Senha</label
+                >
+                <input
+                  type="password"
+                  class="input-brutal"
+                  placeholder="••••••••"
+                  required
+                />
+                <a href="#" class="text-[10px] font-black underline uppercase w-full text-right block hover:text-gray-700 transition-all"
+                  >Esqueci a senha</a
+                >
+              </div>
+              <button type="submit" class="btn-brutal text-xl">
+                Acessar Conta →
+              </button>
+            </form>
+
+            <div class="relative my-8">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t-2 border-black border-dashed"></div>
+              </div>
+              <div class="relative flex justify-center text-[10px] font-black">
+                <span class="bg-white px-2 uppercase text-gray-400">Ou </span>
+              </div>
+            </div>
+
+            <button
+              class="w-full brutal-border p-4 font-black flex items-center justify-center gap-3 hover:bg-gray-100 transition-all active:translate-y-1 uppercase"
+            >
+              <img
+                src="https://www.google.com/favicon.ico"
+                class="w-5 h-5"
+                alt="Google"
+              />
+              Entrar com Google
+            </button>
+          </div>
+
+          <!-- CARD CADASTRO -->
+          <div
+            id="register-card"
+            class="auth-card hidden-card brutal-border bg-white p-8 md:p-10 brutal-shadow"
+          >
+            <h2 class="text-4xl brutal-title mb-2">Criar Conta</h2>
+            <p
+              class="font-bold text-gray-500 mb-8 uppercase text-xs tracking-widest italic"
+            >
+              Faça parte da nossa história.
+            </p>
+
+            <form
+              class="space-y-4"
+              onsubmit="
+                event.preventDefault();
+                alert('Conta criada com sucesso!');
+                toggleForm('login');
+              "
+            >
+              <div class="space-y-1">
+                <label class="block font-black text-[10px] uppercase"
+                  >Nome Completo</label
+                >
+                <input
+                  type="text"
+                  class="input-brutal"
+                  placeholder="Seu nome..."
+                  required
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block font-black text-[10px] uppercase"
+                  >E-mail</label
+                >
+                <input
+                  type="email"
+                  class="input-brutal"
+                  placeholder="seu@email.com"
+                  required
+                />
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Senha</label
+                  >
+                  <input
+                    type="password"
+                    class="input-brutal"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Confirmar Senha</label
+                  >
+                  <input
+                    type="password"
+                    class="input-brutal"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+              </div>
+              <div
+                class="flex items-start gap-3 p-3 bg-gray-50 border-2 border-black border-dashed"
+              >
+                <input
+                  type="checkbox"
+                  class="w-5 h-5 mt-1 brutal-border cursor-pointer"
+                  required
+                />
+                <p class="text-[10px] font-bold leading-tight">
+                  Declaro ser maior de 18 anos e aceito os termos de privacidade
+                  e uso de dados da Arena.
+                </p>
+              </div>
+              <button type="submit" class="btn-brutal text-xl">
+                Finalizar Cadastro →
+              </button>
+            </form>
+          </div>
+
+          <!-- Footer do Auth -->
+          <div class="mt-12 text-center">
+            <p class="text-[10px] font-black uppercase text-gray-400">
+              © 2026 ARENA PERNAMBUCO • GOVERNO DO ESTADO
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleForm(type) {
+        const loginCard = document.getElementById("login-card");
+        const registerCard = document.getElementById("register-card");
+        const toggleLogin = document.getElementById("toggle-login");
+        const toggleRegister = document.getElementById("toggle-register");
+
+        if (type === "login") {
+          loginCard.classList.remove("hidden-card");
+          registerCard.classList.add("hidden-card");
+          toggleLogin.classList.add("active");
+          toggleRegister.classList.remove("active");
+        } else {
+          loginCard.classList.add("hidden-card");
+          registerCard.classList.remove("hidden-card");
+          toggleLogin.classList.remove("active");
+          toggleRegister.classList.add("active");
+        }
+      }
+
+      // Verificar se veio da URL com parâmetro register
+      window.addEventListener("DOMContentLoaded", function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("register") === "true") {
+          toggleForm("register");
+        }
+      });
+    </script>
+  </body>
+</html>
