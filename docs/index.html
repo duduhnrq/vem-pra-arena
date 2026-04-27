@@ -4,36 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VemPraArena</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="input.css" />
-    <link rel="stylesheet" href="custom.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
     <link
       rel="shortcut icon"
-      href="images/favicon.ico"
+      href="../static/images/favicon.ico"
       type="image/x-icon"
     />
-    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-grid">
     <!-- Marquee de notícias -->
     <div class="marquee font-black uppercase tracking-widest text-sm">
       <div>
         ⚽ PRÓXIMO JOGO: NÁUTICO VS SPORT - 25/10 • 🎙️ SHOW: REC SUMMER FEST -
-        02/11 • 🏟️ TOUR NA ARENA TODOS OS SÁBADOS • ⚽ PRÓXIMO JOGO: NÁUTICO VS
-        SPORT - 25/10
+        02/11 • 🏟️ TOUR NA ARENA TODOS OS SÁBADOS
       </div>
     </div>
 
     <!-- Navegação -->
     <nav class="sticky top-0 z-50 bg-white border-b-[3px] border-black p-4">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div
-          class="brutal-border bg-white px-3 py-1 hover:bg-black hover:text-white transition-colors cursor-pointer"
+        <a
+          href="#"
+          class="bg-white brutal-border px-3 py-1 text-2xl font-black tracking-tighter uppercase hover:bg-black hover:text-white transition-all"
+          >VEM<span class="text-governo-blue">PRA</span>ARENA</a
         >
-          <a href="#" class="text-2xl font-black tracking-tighter uppercase"
-            >VEM<span class="text-governo-blue">PRA</span>ARENA</a
-          >
-        </div>
         <div class="md:flex space-x-6 font-black uppercase text-sm">
           <a
             href="#explorar"
@@ -57,10 +53,14 @@
           >
         </div>
         <div class="flex items-center space-x-4">
-          <button class="font-black uppercase text-sm hover:underline">
+          <button
+            onclick="window.location.href = 'auth.html?register=true'"
+            class="font-black uppercase text-sm hover:underline"
+          >
             Criar conta
           </button>
           <button
+            onclick="window.location.href = 'auth.html'"
             class="brutal-btn btn-yellow-hover brutal-border bg-governo-yellow px-6 py-2 font-black brutal-shadow uppercase text-sm"
           >
             Entrar
@@ -105,7 +105,7 @@
             class="brutal-border w-full h-auto brutal-shadow-lg flex items-center justify-center overflow-hidden transition-transform group-hover:-translate-y-2"
           >
             <img
-              src="images/arena-pernambuco.jpg"
+              src="../static/images/arena-pernambuco.jpg"
               alt="[Imagem da Arena]"
               class="w-full h-full"
             />
@@ -119,121 +119,8 @@
       </div>
     </header>
 
-    <!-- Seção de Busca -->
-    <section
-      id="explorar"
-      class="border-y-[3px] border-black bg-white py-12 scroll-mt-24"
-    >
-      <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-4xl font-black mb-8 uppercase italic">
-          Encontre sua diversão
-        </h2>
-        <div class="w-full brutal-border bg-white p-6 brutal-shadow-lg">
-          <div class="flex w-full gap-4">
-            <div class="flex flex-col w-full gap-3">
-              <div
-                class="brutal-border brutal-shadow bg-white flex items-center p-2"
-              >
-                <span class="px-4 text-2xl">🔍</span>
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder="Busque por 'Sport', 'Show'..."
-                  class="w-full p-4 text-xl font-bold focus:outline-none"
-                />
-                <button
-                  onclick="filterEvents()"
-                  class="brutal-btn bg-black text-white px-8 py-4 font-black uppercase brutal-border mx-2"
-                >
-                  Buscar
-                </button>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-xs">Buscas recentes:</span>
-                <div class="flex items-center gap-2">
-                  <button
-                    onclick="setSearch('Sport')"
-                    class="text-xs underline font-bold"
-                  >
-                    Sport
-                  </button>
-                  <button
-                    onclick="setSearch('Show')"
-                    class="text-xs underline font-bold"
-                  >
-                    Show
-                  </button>
-                  <button
-                    onclick="setSearch('Feira')"
-                    class="text-xs underline font-bold"
-                  >
-                    Feira
-                  </button>
-                  <button
-                    onclick="setSearch('Tour')"
-                    class="text-xs underline font-bold"
-                  >
-                    Tour
-                  </button>
-                </div>
-              </div>
-            </div>
-            <!-- Ações de Filtro -->
-            <div class="gap-4">
-              <div
-                class="brutal-border p-4 bg-governo-yellow text-black brutal-shadow flex flex-col justify-between hover:bg-governo-blue hover:text-white transition-colors cursor-pointer flex-1 h-32"
-              >
-                <span class="text-xs font-black">CALENDÁRIO</span>
-                <span class="text-2xl font-black mr-3">FILTRO <br />DATA</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Filtro por Categoria -->
-          <div class="flex flex-wrap gap-3">
-            <button
-              onclick="setCategoryFilter('all', this)"
-              class="filter-btn active brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-gray-400 transition-all"
-            >
-              Todos
-            </button>
-            <button
-              onclick="setCategoryFilter('ESPORTE', this)"
-              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-yellow transition-all"
-            >
-              ⚽ Esporte
-            </button>
-            <button
-              onclick="setCategoryFilter('SHOW', this)"
-              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-pink hover:text-white transition-all"
-            >
-              🎙️ Música
-            </button>
-            <button
-              onclick="setCategoryFilter('TECNOLOGIA', this)"
-              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-green transition-all"
-            >
-              💻 Tecnologia
-            </button>
-            <button
-              onclick="setCategoryFilter('CULTURA', this)"
-              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-blue hover:text-white transition-all"
-            >
-              🎭 Cultura
-            </button>
-            <button
-              onclick="setCategoryFilter('TOUR', this)"
-              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-orange-400 transition-all"
-            >
-              🏟️ Visita
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Destaques -->
-    <section class="max-w-7xl mx-auto px-4 py-20 my-3">
+    <section class="max-w-7xl mx-auto px-4">
       <div class="flex items-center space-x-4 mb-10">
         <h2 class="text-5xl uppercase italic font-black">Em Alta 🔥</h2>
         <div class="h-1 bg-black flex-grow"></div>
@@ -296,20 +183,219 @@
       </div>
     </section>
 
+    <!-- Seção de Busca -->
+    <section
+      id="explorar"
+      class="border-y-[3px] border-black bg-white py-12 mt-16 scroll-mt-24"
+    >
+      <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-4xl font-black mb-8 uppercase italic">
+          Encontre sua diversão
+        </h2>
+        <div class="w-full brutal-border bg-white p-6 brutal-shadow-lg">
+          <div class="flex w-full gap-4">
+            <div class="flex flex-col w-full gap-3">
+              <div
+                class="brutal-border brutal-shadow bg-white flex items-center p-2"
+              >
+                <span class="px-4 text-2xl">🔍</span>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Busque por 'Sport', 'Show'..."
+                  class="w-full p-4 text-xl font-bold focus:outline-none"
+                />
+                <button
+                  onclick="filterEvents()"
+                  class="brutal-btn bg-black text-white px-8 py-4 font-black uppercase brutal-border mx-2"
+                >
+                  Buscar
+                </button>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-xs">Buscas recentes:</span>
+                <div class="flex items-center gap-2">
+                  <button
+                    onclick="setSearch('Sport')"
+                    class="text-xs underline font-bold"
+                  >
+                    Sport
+                  </button>
+                  <button
+                    onclick="setSearch('Show')"
+                    class="text-xs underline font-bold"
+                  >
+                    Show
+                  </button>
+                  <button
+                    onclick="setSearch('Feira')"
+                    class="text-xs underline font-bold"
+                  >
+                    Feira
+                  </button>
+                  <button
+                    onclick="setSearch('Tour')"
+                    class="text-xs underline font-bold"
+                  >
+                    Tour
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Ações de Filtro - Calendário -->
+            <div class="flex flex-col gap-3">
+              <button
+                onclick="toggleDateFilter()"
+                class="brutal-border p-4 bg-governo-yellow text-black brutal-shadow flex flex-col justify-center hover:bg-black hover:text-white transition-colors cursor-pointer h-32 group"
+              >
+                <span class="text-xs font-black mb-2">FILTRO</span>
+                <span class="text-2xl font-black leading-none">📅 DATA</span>
+              </button>
+              
+              <!-- Popup de Data -->
+              <div
+                id="date-filter-popup"
+                class="hidden absolute top-64 right-0 brutal-border bg-white brutal-shadow-lg p-6 z-50 w-80"
+              >
+                <div class="flex justify-between items-center mb-6 pb-4 border-b-2 border-black">
+                  <h3 class="font-black uppercase text-sm">Escolha a Data</h3>
+                  <button
+                    onclick="toggleDateFilter()"
+                    class="font-black text-xl hover:text-governo-pink"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <!-- Opções Rápidas -->
+                <div class="mb-6 space-y-2">
+                  <p class="font-black text-xs uppercase text-gray-500 mb-3">Opções Rápidas:</p>
+                  <button
+                    onclick="setDateRange('this-weekend')"
+                    class="w-full brutal-border bg-governo-yellow p-3 font-black uppercase text-xs hover:bg-black hover:text-white transition-all text-left"
+                  >
+                    🎯 Este Fim de Semana
+                  </button>
+                  <button
+                    onclick="setDateRange('next-week')"
+                    class="w-full brutal-border bg-governo-blue text-white p-3 font-black uppercase text-xs hover:bg-black transition-all text-left"
+                  >
+                    📅 Próxima Semana
+                  </button>
+                  <button
+                    onclick="setDateRange('next-month')"
+                    class="w-full brutal-border bg-governo-pink text-white p-3 font-black uppercase text-xs hover:bg-black transition-all text-left"
+                  >
+                    🗓️ Próximo Mês
+                  </button>
+                </div>
+
+                <!-- Divider -->
+                <div class="relative my-6">
+                  <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t-2 border-black border-dashed"></div>
+                  </div>
+                  <div class="relative flex justify-center text-xs font-black">
+                    <span class="bg-white px-2 text-gray-400">OU ESCOLHA</span>
+                  </div>
+                </div>
+
+                <!-- Calendário Customizado -->
+                <div class="space-y-4">
+                  <div class="flex gap-2">
+                    <input
+                      type="date"
+                      id="date-from"
+                      class="flex-1 brutal-border p-3 font-bold focus:outline-none focus:bg-governo-yellow"
+                      placeholder="Data inicial"
+                    />
+                    <span class="font-black self-center">→</span>
+                    <input
+                      type="date"
+                      id="date-to"
+                      class="flex-1 brutal-border p-3 font-bold focus:outline-none focus:bg-governo-yellow"
+                      placeholder="Data final"
+                    />
+                  </div>
+                  <button
+                    onclick="applyCustomDateRange()"
+                    class="w-full brutal-border bg-black text-white p-3 font-black uppercase text-xs hover:bg-governo-blue transition-all"
+                  >
+                    Aplicar Filtro
+                  </button>
+                </div>
+
+                <!-- Data Selecionada -->
+                <div
+                  id="selected-date-display"
+                  class="mt-6 pt-6 border-t-2 border-dashed border-black text-center"
+                >
+                  <p class="text-xs font-black text-gray-500 mb-2">DATA SELECIONADA:</p>
+                  <p id="selected-date-text" class="font-black text-lg text-governo-blue">
+                    Nenhuma data
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtro por Categoria -->
+          <div class="flex flex-wrap gap-3">
+            <button
+              onclick="setCategoryFilter('all', this)"
+              class="filter-btn active brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-gray-400 transition-all"
+            >
+              Todos
+            </button>
+            <button
+              onclick="setCategoryFilter('ESPORTE', this)"
+              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-yellow transition-all"
+            >
+              ⚽ Esporte
+            </button>
+            <button
+              onclick="setCategoryFilter('SHOW', this)"
+              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-pink hover:text-white transition-all"
+            >
+              🎙️ Música
+            </button>
+            <button
+              onclick="setCategoryFilter('TECNOLOGIA', this)"
+              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-green transition-all"
+            >
+              💻 Tecnologia
+            </button>
+            <button
+              onclick="setCategoryFilter('CULTURA', this)"
+              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-governo-blue hover:text-white transition-all"
+            >
+              🎭 Cultura
+            </button>
+            <button
+              onclick="setCategoryFilter('TOUR', this)"
+              class="filter-btn brutal-border px-6 py-2 font-black uppercase text-sm bg-white hover:bg-orange-400 transition-all"
+            >
+              🏟️ Visita
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Listagem Principal de Eventos -->
-    <main id="eventos" class="max-w-7xl mx-auto px-4 scroll-mt-24">
+    <main id="eventos" class="max-w-7xl mx-auto px-4 mt-16 scroll-mt-24">
       <div class="px-4 py-16 bg-white brutal-border brutal-shadow-lg">
         <div
           class="flex justify-between items-end mb-12 border-b-4 border-black pb-6"
         >
           <h2 class="text-5xl font-black uppercase italic">AGENDA OFICIAL</h2>
-          <div class="hidden md:block font-bold text-sm">
-            MOSTRANDO 12 DE 45 EVENTOS
+          <div class="hidden md:block font-bold text-sm" id="event-count">
+            MOSTRANDO 3 DE 3 EVENTOS
           </div>
         </div>
-        <div class="grid md:grid-cols-3 gap-12">
+        <div class="grid md:grid-cols-3 gap-12" id="events-grid">
           <!-- Evento 1 -->
-          <div class="brutal-card brutal-border bg-white group cursor-pointer">
+          <div class="brutal-card brutal-border bg-white group cursor-pointer" data-category="ESPORTE" data-title="Náutico vs Sport clássico futebol">
             <div
               class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden"
             >
@@ -318,8 +404,8 @@
                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
               <span
-                class="absolute top-4 left-4 brutal-border bg-governo-yellow px-3 py-1 font-black text-xs z-10"
-                >FUTEBOL</span
+                class="absolute top-4 left-4 brutal-border bg-governo-yellow px-3 py-1 font-black text-xs z-10 uppercase"
+                >Futebol</span
               >
             </div>
             <div class="p-6">
@@ -349,7 +435,7 @@
             </div>
           </div>
           <!-- Evento 2 -->
-          <div class="brutal-card brutal-border bg-white group cursor-pointer">
+          <div class="brutal-card brutal-border bg-white group cursor-pointer" data-category="SHOW" data-title="Rec Summer Festival música show">
             <div
               class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden"
             >
@@ -358,8 +444,8 @@
                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
               <span
-                class="absolute top-4 left-4 brutal-border bg-governo-pink text-white px-3 py-1 font-black text-xs z-10"
-                >FESTIVAL</span
+                class="absolute top-4 left-4 brutal-border bg-governo-pink text-white px-3 py-1 font-black text-xs z-10 uppercase"
+                >Música</span
               >
             </div>
             <div class="p-6">
@@ -389,7 +475,7 @@
             </div>
           </div>
           <!-- Evento 3 -->
-          <div class="brutal-card brutal-border bg-white group cursor-pointer">
+          <div class="brutal-card brutal-border bg-white group cursor-pointer" data-category="TECNOLOGIA" data-title="Feira de Inovação tecnologia">
             <div
               class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden"
             >
@@ -398,7 +484,7 @@
                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
               <span
-                class="absolute top-4 left-4 brutal-border bg-green-400 px-3 py-1 font-black text-xs z-10"
+                class="absolute top-4 left-4 brutal-border bg-green-400 px-3 py-1 font-black text-xs z-10 uppercase"
                 >TECNOLOGIA</span
               >
             </div>
@@ -428,7 +514,21 @@
             </div>
           </div>
         </div>
-        <div class="text-center mt-12">
+        <!-- Mensagem quando não há eventos -->
+        <div id="no-events-message" class="hidden text-center py-16">
+          <div class="text-6xl mb-4">🔍</div>
+          <h3 class="text-3xl font-black uppercase mb-4">Nenhum evento encontrado</h3>
+          <p class="font-bold text-gray-600 mb-8">
+            Tente buscar por outro termo ou selecionar outra categoria.
+          </p>
+          <button 
+            onclick="clearFilters()" 
+            class="brutal-btn brutal-border bg-black text-white px-8 py-4 font-black uppercase"
+          >
+            Limpar Filtros
+          </button>
+        </div>
+        <div class="text-center mt-12" id="view-all-btn">
           <button
             class="brutal-btn brutal-border bg-white px-12 py-4 font-black text-xl brutal-shadow uppercase hover:bg-governo-blue hover:text-white"
           >
@@ -783,6 +883,109 @@
     </footer>
 
     <script>
+      // ==================== FILTRO DE BUSCA E CATEGORIA ====================
+      
+      let currentCategory = 'all';
+      let currentSearch = '';
+
+      // Função para definir busca rápida
+      function setSearch(term) {
+        document.getElementById('searchInput').value = term;
+        filterEvents();
+      }
+
+      // Função principal de filtro
+      function filterEvents() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        currentSearch = searchTerm;
+        applyFilters();
+      }
+
+      // Função para filtro de categoria
+      function setCategoryFilter(category, element) {
+        currentCategory = category;
+        
+        // Atualizar visual dos botões
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.classList.remove('bg-black', 'text-white');
+          btn.classList.add('bg-white');
+        });
+        if (element) {
+          element.classList.remove('bg-white');
+          element.classList.add('bg-black', 'text-white');
+        }
+        
+        applyFilters();
+      }
+
+      // Aplicar ambos os filtros
+      function applyFilters() {
+        const events = document.querySelectorAll('#events-grid > div');
+        let visibleCount = 0;
+
+        events.forEach(event => {
+          const category = event.getAttribute('data-category') || '';
+          const title = event.getAttribute('data-title') || '';
+          
+          // Verificar categoria
+          const categoryMatch = currentCategory === 'all' || category === currentCategory;
+          
+          // Verificar busca
+          const searchMatch = currentSearch === '' || 
+            title.toLowerCase().includes(currentSearch) ||
+            category.toLowerCase().includes(currentSearch);
+          
+          // Mostrar/ocultar
+          if (categoryMatch && searchMatch) {
+            event.style.display = '';
+            visibleCount++;
+          } else {
+            event.style.display = 'none';
+          }
+        });
+
+        // Atualizar contador
+        const totalEvents = events.length;
+        const countElement = document.getElementById('event-count');
+        if (countElement) {
+          countElement.textContent = `MOSTRANDO ${visibleCount} DE ${totalEvents} EVENTOS`;
+        }
+
+        // Mostrar/ocultar mensagem de "nenhum evento encontrado"
+        const noEventsMsg = document.getElementById('no-events-message');
+        const viewAllBtn = document.getElementById('view-all-btn');
+        
+        if (visibleCount === 0) {
+          noEventsMsg.classList.remove('hidden');
+          if (viewAllBtn) viewAllBtn.classList.add('hidden');
+        } else {
+          noEventsMsg.classList.add('hidden');
+          if (viewAllBtn) viewAllBtn.classList.remove('hidden');
+        }
+      }
+
+      // Limpar filtros
+      function clearFilters() {
+        currentCategory = 'all';
+        currentSearch = '';
+        document.getElementById('searchInput').value = '';
+        
+        // Resetar botões de categoria
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.classList.remove('bg-black', 'text-white');
+          btn.classList.add('bg-white');
+        });
+        
+        applyFilters();
+      }
+
+      // Permitir busca ao pressionar Enter
+      document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          filterEvents();
+        }
+      });
+
       // FAQ
       function toggleFaq(element) {
         const items = document.querySelectorAll(".faq-item");
@@ -791,6 +994,97 @@
         });
         element.classList.toggle("active");
       }
+
+      // FILTRO DE DATA
+      function toggleDateFilter() {
+        const popup = document.getElementById("date-filter-popup");
+        popup.classList.toggle("hidden");
+      }
+
+      function setDateRange(range) {
+        const today = new Date();
+        let startDate = new Date();
+        let endDate = new Date();
+
+        if (range === "this-weekend") {
+          // Próximo sábado até domingo
+          const day = today.getDay();
+          const daysUntilSaturday = (6 - day + 7) % 7 || 0;
+          startDate.setDate(today.getDate() + daysUntilSaturday);
+          endDate.setDate(startDate.getDate() + 1);
+        } else if (range === "next-week") {
+          // Próxima segunda até domingo
+          const day = today.getDay();
+          const daysUntilMonday = (1 - day + 7) % 7 || 7;
+          startDate.setDate(today.getDate() + daysUntilMonday);
+          endDate.setDate(startDate.getDate() + 6);
+        } else if (range === "next-month") {
+          // Próximos 30 dias
+          startDate = new Date(today);
+          endDate.setDate(today.getDate() + 30);
+        }
+
+        document.getElementById("date-from").value = startDate.toISOString().split("T")[0];
+        document.getElementById("date-to").value = endDate.toISOString().split("T")[0];
+
+        updateSelectedDateDisplay(startDate, endDate);
+        filterEventsByDate(startDate, endDate);
+      }
+
+      function applyCustomDateRange() {
+        const dateFrom = document.getElementById("date-from").value;
+        const dateTo = document.getElementById("date-to").value;
+
+        if (!dateFrom || !dateTo) {
+          alert("Por favor, selecione ambas as datas!");
+          return;
+        }
+
+        const startDate = new Date(dateFrom);
+        const endDate = new Date(dateTo);
+
+        if (startDate > endDate) {
+          alert("A data inicial não pode ser maior que a data final!");
+          return;
+        }
+
+        updateSelectedDateDisplay(startDate, endDate);
+        filterEventsByDate(startDate, endDate);
+      }
+
+      function updateSelectedDateDisplay(startDate, endDate) {
+        const formatDate = (date) => {
+          return date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+        };
+
+        const displayText = `${formatDate(startDate)} → ${formatDate(endDate)}`;
+        document.getElementById("selected-date-text").textContent = displayText;
+      }
+
+      function filterEventsByDate(startDate, endDate) {
+        // Aqui será implementado a lógica real
+        // Por enquanto, vamos mostrar uma mensagem visual
+        console.log(
+          `Filtrando eventos de ${startDate.toISOString().split("T")[0]} até ${endDate.toISOString().split("T")[0]}`
+        );
+
+        // Exemplo: fazer uma chamada AJAX para o backend aqui
+        // fetch(`/api/eventos?dataInicio=${startDate}&dataFim=${endDate}`)
+      }
+
+      // Fechar popup quando clicar fora
+      document.addEventListener("click", function (event) {
+        const datePopup = document.getElementById("date-filter-popup");
+        const dateButton = event.target.closest("button[onclick*='toggleDateFilter']");
+
+        if (datePopup && !datePopup.contains(event.target) && !dateButton) {
+          datePopup.classList.add("hidden");
+        }
+      });
 
       // Lógica do Chatbot de IA
       const chatWindow = document.getElementById("chat-window");
