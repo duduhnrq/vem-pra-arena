@@ -37,7 +37,7 @@ O protótipo de baixa fidelidade foca na estrutura da informação e no fluxo de
 ### 🎬 Apresentação (Screencast)
 No vídeo abaixo, apresentamos o fluxo de navegação contemplando as histórias de usuário implementadas recentemente.
 
-* 🎥 **[Assista ao vídeo no YouTube](https://www.youtube.com/watch?v=xJK_guZqAdI)**
+* 🎥 **[Assista ao vídeo no YouTube](https://www.youtube.com/watch?si=rtgCtEo-YtJ4olWc&v=FEn-dxPlGSY&feature=youtu.be)**
 
 ---
 
