@@ -815,6 +815,22 @@ video {
   scroll-margin-top: 6rem;
 }
 
+.scroll-mt-22 {
+  scroll-margin-top: 5.5rem;
+}
+
+.scroll-mt-20 {
+  scroll-margin-top: 5rem;
+}
+
+.scroll-mt-18 {
+  scroll-margin-top: 4.5rem;
+}
+
+.scroll-mt-16 {
+  scroll-margin-top: 4rem;
+}
+
 .flex-col {
   flex-direction: column;
 }
