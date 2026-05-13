@@ -14,7 +14,7 @@ public class BugTrackerService {
         logDeErros.add(report);
         
         System.err.printf("[%s] [BUG-TRACK] Erro crítico detectado: %s | Tipo: %s%n", 
-            report.getDataHora(), report.getMensagem(), report.getTipoDeErro());
+            report.getDataHora(), report.getMensagem(), report.getLocalDoErro());
     }
 
     public List<BugReport> getHistorico() {
