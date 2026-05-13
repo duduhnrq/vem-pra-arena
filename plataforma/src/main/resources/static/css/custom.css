@@ -112,6 +112,22 @@ h3,
     linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
 }
 
+.text-governo-blue {
+  color: #3772ff;
+}
+
+.text-governo-yellow {
+  color: #f4d03f;
+}
+
+.text-governo-pink {
+  color: #ff6b6b;
+}
+
+.text-governo-green {
+  color: #4ade80;
+}
+
 .marquee {
   overflow: hidden;
   white-space: nowrap;
