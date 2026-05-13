@@ -216,7 +216,9 @@
                   placeholder="••••••••"
                   required
                 />
-                <a href="#" class="text-[10px] font-black underline uppercase w-full text-right block hover:text-gray-700 transition-all"
+                <a
+                  href="#"
+                  class="text-[10px] font-black underline uppercase w-full text-right block hover:text-gray-700 transition-all"
                   >Esqueci a senha</a
                 >
               </div>
@@ -260,11 +262,7 @@
 
             <form
               class="space-y-4"
-              onsubmit="
-                event.preventDefault();
-                alert('Conta criada com sucesso!');
-                toggleForm('login');
-              "
+              onsubmit="cadastrar(event)"
             >
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
@@ -362,12 +360,55 @@
       }
 
       // Verificar se veio da URL com parâmetro register
-      window.addEventListener("DOMContentLoaded", function() {
+      window.addEventListener("DOMContentLoaded", function () {
         const params = new URLSearchParams(window.location.search);
         if (params.get("register") === "true") {
           toggleForm("register");
         }
       });
+
+      async function cadastrar(event) {
+        event.preventDefault();
+
+        const nome = document.querySelector(
+          '#register-card input[type="text"]',
+        ).value;
+        const email = document.querySelectorAll(
+          '#register-card input[type="email"]',
+        )[0].value;
+        const senha = document.querySelectorAll(
+          '#register-card input[type="password"]',
+        )[0].value;
+        const confirmarSenha = document.querySelectorAll(
+          '#register-card input[type="password"]',
+        )[1].value;
+
+        if (senha !== confirmarSenha) {
+          alert("As senhas não coincidem!");
+          return;
+        }
+
+        try {
+          const res = await fetch(
+            "http://localhost:8080/api/usuarios/cadastrar",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ nome, email, senha }),
+            },
+          );
+
+          if (res.status === 201) {
+            alert("Conta criada com sucesso!");
+            toggleForm("login");
+          } else {
+            const msg = await res.text();
+            alert(msg);
+          }
+        } catch (err) {
+          alert("Erro de conexão com o servidor.");
+        }
+      }
     </script>
   </body>
 </html>
