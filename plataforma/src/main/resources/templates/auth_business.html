@@ -71,7 +71,8 @@
       }
 
       .btn-brutal:hover {
-        background-color: var(--blue);
+        background-color: var(--yellow);
+        color: black;
         transform: translate(-4px, -4px);
         box-shadow: 8px 8px 0px #000;
       }
@@ -79,6 +80,24 @@
       .btn-brutal:active {
         transform: translate(2px, 2px);
         box-shadow: 0px 0px 0px #000;
+      }
+
+      .btn-secondary {
+        background: #e5e5e5;
+        color: #000;
+        padding: 1.25rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        border: 3px solid #000;
+        transition: all 0.1s;
+        cursor: pointer;
+      }
+
+      .btn-secondary:hover {
+        background-color: #000;
+        color: #fff;
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0px #000;
       }
 
       .form-toggle {
@@ -114,7 +133,7 @@
         background: #fff;
       }
       .step-dot.active {
-        background: var(--blue);
+        background: var(--yellow);
         transform: scale(1.3);
       }
       .step-content {
@@ -202,7 +221,7 @@
       <div
         class="flex-1 flex flex-col justify-center items-center p-6 md:p-12 w-[100%] lg:ml-[45%]"
       >
-        <div class="w-full max-w-md">
+        <div class="w-full max-w-xl lg:max-w-md">
           <!-- Toggle de Formulário -->
           <div class="flex mb-8 brutal-border bg-white p-1 w-fit mx-auto">
             <button
@@ -286,7 +305,6 @@
             </p>
 
             <form
-              class="space-y-4"
               onsubmit="
                 event.preventDefault();
                 alert('Conta criada com sucesso!');
@@ -299,46 +317,158 @@
                   <div class="step-dot" id="dot-2"></div>
                   <div class="step-dot" id="dot-3"></div>
                 </div>
-                <span class="text-[10px] font-black uppercase" id="step-label"
+                <span
+                  id="step-label"
+                  class="text-[10px] font-black uppercase"
+                  id="step-label"
                   >Passo 1: Identificação</span
                 >
               </div>
-              <div class="space-y-1">
-                <label class="block font-black text-[10px] uppercase"
-                  >CNPJ</label
-                >
-                <input
-                  type="text"
-                  class="input-brutal"
-                  placeholder="00.000.000/0000-00"
-                  required
-                />
+
+              <div id="step-1" class="step-content active space-y-6">
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >CNPJ</label
+                  >
+                  <input
+                    type="text"
+                    class="input-brutal"
+                    placeholder="00.000.000/0000-00"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Razão Social</label
+                  >
+                  <input
+                    type="text"
+                    class="input-brutal"
+                    placeholder="Nome da Empresa LTDA"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Nome Fantasia</label
+                  >
+                  <input
+                    type="text"
+                    class="input-brutal"
+                    placeholder="Como o público conhece sua empresa"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn-brutal text-xl" onclick="nextStep(2)">
+                  Próximo Passo →
+                </button>
               </div>
-              <div class="space-y-1">
-                <label class="block font-black text-[10px] uppercase"
-                  >Razão Social</label
-                >
-                <input
-                  type="text"
-                  class="input-brutal"
-                  placeholder="Nome da Empresa LTDA"
-                  required
-                />
+
+              <div id="step-2" class="step-content space-y-6">
+                <div class="flex gap-4">
+                  <div class="space-y-1">
+                    <label class="block font-black text-[10px] uppercase"
+                      >Telefone Fixo</label
+                    >
+                    <input
+                      type="text"
+                      class="input-brutal"
+                      placeholder="(00) 0000-0000"
+                      required
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block font-black text-[10px] uppercase"
+                      >Whatsapp Negócios</label
+                    >
+                    <input
+                      type="text"
+                      class="input-brutal"
+                      placeholder="(00) 90000-0000"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Nome do Representante Legal</label
+                  >
+                  <input
+                    type="text"
+                    class="input-brutal"
+                    placeholder="Nome Completo do Responsável"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >E-mail Corporativo</label
+                  >
+                  <input
+                    type="text"
+                    class="input-brutal"
+                    placeholder="Como o público conhece sua empresa"
+                    required
+                  />
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <button type="submit" class="btn-secondary text-xl" onclick="nextStep(1)">
+                    Voltar
+                  </button>
+                  <button type="submit" class="btn-brutal text-xl" onclick="nextStep(3)">
+                    Próximo Passo →
+                  </button>
+                </div>
               </div>
-              <div class="space-y-1">
-                <label class="block font-black text-[10px] uppercase"
-                  >Nome Fantasia</label
-                >
-                <input
-                  type="text"
-                  class="input-brutal"
-                  placeholder="Como o público conhece sua empresa"
-                  required
-                />
+
+              <div id="step-3" class="step-content space-y-6">
+                <div class="space-y-3">
+                  <div class="file-dropzone">
+                    <p class="text-[10px] font-black uppercase">
+                      Cartão CNPJ (PDF)
+                    </p>
+                    <p class="text-[8px] font-bold opacity-50">
+                      CLIQUE OU ARRASTE O ARQUIVO
+                    </p>
+                  </div>
+                  <div class="file-dropzone">
+                    <p class="text-[10px] font-black uppercase">
+                      Última Alteração Contratual
+                    </p>
+                    <p class="text-[8px] font-bold opacity-50">
+                      DOCUMENTO COM O QUADRO SOCIETÁRIO
+                    </p>
+                  </div>
+                  <div class="file-dropzone">
+                    <p class="text-[10px] font-black uppercase">
+                      Documento de Identidade (Sócio)
+                    </p>
+                    <p class="text-[8px] font-bold opacity-50">
+                      RG, CNH OU PASSAPORTE
+                    </p>
+                  </div>
+                </div>
+
+                <div class="bg-yellow-100 border-2 border-black p-4">
+                  <p
+                    class="text-[9px] font-black uppercase leading-tight italic"
+                  >
+                    Importante: Seu cadastro passará por uma análise técnica e
+                    fiscal de até 72 horas úteis. O acesso ao calendário de
+                    pautas será liberado somente após a aprovação.
+                  </p>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <button type="submit" class="btn-secondary text-xl" onclick="nextStep(2)">
+                    Voltar
+                  </button>
+                  <button type="submit" class="btn-brutal text-xl">
+                    Finalizar Cadastro →
+                  </button>
+                </div>
               </div>
-              <button type="submit" class="btn-brutal text-xl">
-                Próximo Passo →
-              </button>
             </form>
           </div>
 
@@ -372,13 +502,29 @@
         }
       }
 
-      // Verificar se veio da URL com parâmetro register
       window.addEventListener("DOMContentLoaded", function () {
         const params = new URLSearchParams(window.location.search);
         if (params.get("register") === "true") {
           toggleForm("register");
         }
       });
+
+      function nextStep(step) {
+            // Esconde todos os passos
+            document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active'));
+            
+            // Mostra o passo atual
+            document.getElementById('step-' + step).classList.add('active');
+            
+            // Atualiza indicadores visuais
+            for(let i = 1; i <= step; i++) {
+                document.getElementById('dot-' + i).classList.add('active');
+            }
+
+            const labels = ["Identificação", "Contato", "Documentação"];
+            document.getElementById('step-label').innerText = `Passo ${step}: ${labels[step-1]}`;
+        }
     </script>
   </body>
 </html>
