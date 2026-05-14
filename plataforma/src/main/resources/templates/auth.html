@@ -190,10 +190,7 @@
 
             <form
               class="space-y-6"
-              onsubmit="
-                event.preventDefault();
-                window.location.href = 'index.html';
-              "
+              onsubmit="login(event)"
             >
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
@@ -260,10 +257,7 @@
               Faça parte da nossa história.
             </p>
 
-            <form
-              class="space-y-4"
-              onsubmit="cadastrar(event)"
-            >
+            <form class="space-y-4" onsubmit="cadastrar(event)">
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
                   >Nome Completo</label
@@ -359,7 +353,6 @@
         }
       }
 
-      // Verificar se veio da URL com parâmetro register
       window.addEventListener("DOMContentLoaded", function () {
         const params = new URLSearchParams(window.location.search);
         if (params.get("register") === "true") {
@@ -407,6 +400,29 @@
           }
         } catch (err) {
           alert("Erro de conexão com o servidor.");
+        }
+      }
+
+      async function login(event) {
+        event.preventDefault();
+        const email = document.querySelector(
+          '#login-card input[type="email"]',
+        ).value;
+        const senha = document.querySelector(
+          '#login-card input[type="password"]',
+        ).value;
+
+        const res = await fetch("http://localhost:8080/api/usuarios/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+
+        if (res.ok) {
+          window.location.href = "index.html";
+        } else {
+          const msg = await res.text();
+          alert(msg);
         }
       }
     </script>
