@@ -186,18 +186,13 @@
               Bem-vindo novamente, torcedor.
             </p>
 
-            <form
-              class="space-y-6"
-              onsubmit="
-                event.preventDefault();
-                window.location.href = 'index.html';
-              "
-            >
+            <form id="form-login" class="space-y-6">
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
                   >E-mail</label
                 >
                 <input
+                  id="login-email"
                   type="email"
                   class="input-brutal"
                   placeholder="exemplo@email.com"
@@ -209,6 +204,7 @@
                   >Senha</label
                 >
                 <input
+                  id="login-senha"
                   type="password"
                   class="input-brutal"
                   placeholder="••••••••"
@@ -256,19 +252,13 @@
               Faça parte da nossa história.
             </p>
 
-            <form
-              class="space-y-4"
-              onsubmit="
-                event.preventDefault();
-                alert('Conta criada com sucesso!');
-                toggleForm('login');
-              "
-            >
+            <form id="form-register" class="space-y-4">
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
                   >Nome Completo</label
                 >
                 <input
+                  id="register-nome"
                   type="text"
                   class="input-brutal"
                   placeholder="Seu nome..."
@@ -280,6 +270,7 @@
                   >E-mail</label
                 >
                 <input
+                  id="register-email"
                   type="email"
                   class="input-brutal"
                   placeholder="seu@email.com"
@@ -292,6 +283,7 @@
                     >Senha</label
                   >
                   <input
+                    id="register-senha"
                     type="password"
                     class="input-brutal"
                     placeholder="••••••••"
@@ -303,6 +295,7 @@
                     >Confirmar Senha</label
                   >
                   <input
+                    id="register-confirm-senha"
                     type="password"
                     class="input-brutal"
                     placeholder="••••••••"
@@ -364,6 +357,67 @@
         const params = new URLSearchParams(window.location.search);
         if (params.get("register") === "true") {
           toggleForm("register");
+        }
+      });
+
+      // Lógica de Login
+      document.getElementById('form-login').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('login-email').value;
+        const senha = document.getElementById('login-senha').value;
+
+        try {
+          const response = await fetch('http://localhost:8080/api/usuarios/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, senha })
+          });
+
+          if (response.ok) { // Status 200-299
+            localStorage.setItem('logado', 'true');
+            window.location.href = 'index.html';
+          } else {
+            alert('E-mail ou senha incorretos.');
+          }
+        } catch (error) {
+          alert('Erro de conexão com o servidor.');
+        }
+      });
+
+      // Lógica de Cadastro
+      document.getElementById('form-register').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const nome = document.getElementById('register-nome').value;
+        const email = document.getElementById('register-email').value;
+        const senha = document.getElementById('register-senha').value;
+        const confirmSenha = document.getElementById('register-confirm-senha').value;
+
+        if (senha !== confirmSenha) {
+          alert('As senhas não coincidem.');
+          return;
+        }
+
+        try {
+          const response = await fetch('http://localhost:8080/api/usuarios/cadastrar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, email, senha })
+          });
+
+          if (response.ok) { // Status 200 ou 201
+            localStorage.setItem('logado', 'true');
+            window.location.href = 'index.html';
+          } else {
+            alert('Não foi possível realizar o cadastro. Verifique os dados.');
+          }
+        } catch (error) {
+          alert('Erro de conexão com o servidor.');
         }
       });
     </script>

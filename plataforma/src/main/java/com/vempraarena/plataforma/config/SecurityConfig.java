@@ -27,7 +27,7 @@ public class SecurityConfig {
             // O resto continua igual ao seu:
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth.html", "/index.html", "/css/**", "/images/**", "/api/usuarios/cadastrar").permitAll()
+                .requestMatchers("/auth.html", "/index.html", "/css/**", "/images/**", "/api/usuarios/cadastrar", "/api/usuarios/login").permitAll()
                 .anyRequest().authenticated()
             );
             
@@ -43,7 +43,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // Permite qualquer origem (seu Live Server)
+        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500")); // Permite a origem do seu Live Server
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         
