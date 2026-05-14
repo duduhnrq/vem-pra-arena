@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Auth Guard: Executa imediatamente antes de renderizar o DOM
+      //if (localStorage.getItem('logado') !== 'true') {
+       // window.location.href = 'auth.html';
+     // }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VemPraArena</title>
     <link rel="stylesheet" href="custom.css" />
@@ -52,17 +58,12 @@
           >
         </div>
         <div class="flex items-center space-x-4">
+          <span id="user-greeting" class="font-black uppercase text-sm hidden md:inline"></span>
           <button
-            onclick="window.location.href = 'auth.html?register=true'"
-            class="font-black uppercase text-sm hover:underline"
+            id="btn-logout"
+            class="brutal-btn btn-yellow-hover brutal-border bg-governo-pink text-white px-6 py-2 font-black brutal-shadow uppercase text-sm"
           >
-            Criar conta
-          </button>
-          <button
-            onclick="window.location.href = 'auth.html'"
-            class="brutal-btn btn-yellow-hover brutal-border bg-governo-yellow px-6 py-2 font-black brutal-shadow uppercase text-sm"
-          >
-            Entrar
+            Sair
           </button>
         </div>
       </div>
@@ -1172,6 +1173,45 @@
         const text = userInput.value.trim();
         if (text) sendMessage(text);
       });
+
+      // ==================== CONTROLE DE SESSÃO E SEGURANÇA ====================
+document.addEventListener('DOMContentLoaded', () => {
+  const userGreeting = document.getElementById('user-greeting');
+  const btnLogout = document.getElementById('btn-logout');
+  const navContainer = btnLogout.parentElement; // Pega o div que segura os botões
+  
+  const estaLogado = localStorage.getItem('logado') === 'true';
+
+  if (estaLogado) {
+    // --- USUÁRIO LOGADO ---
+    const nomeUsuario = localStorage.getItem('nome_usuario') || 'Torcedor';
+    userGreeting.textContent = `Olá, ${nomeUsuario}!`;
+    userGreeting.classList.remove('hidden');
+    btnLogout.classList.remove('hidden');
+  } else {
+    // --- USUÁRIO VISITANTE (NÃO LOGADO) ---
+    userGreeting.classList.add('hidden');
+    btnLogout.classList.add('hidden');
+
+    // Se não estiver logado, cria os botões de Login e Cadastro dinamicamente
+    // Verificamos se já não foram criados para não duplicar
+    if (!document.getElementById('btn-login-header')) {
+      const loginHtml = `
+        <div id="auth-buttons" class="flex items-center space-x-2">
+          <a href="auth.html" id="btn-login-header" class="px-4 py-2 font-black uppercase text-sm hover:bg-black hover:text-white transition-all brutal-border">Entrar</a>
+          <a href="auth.html?register=true" class="bg-black text-white px-4 py-2 font-black uppercase text-sm brutal-border brutal-shadow-sm hover:bg-governo-blue transition-all">Cadastrar</a>
+        </div>
+      `;
+      navContainer.insertAdjacentHTML('beforeend', loginHtml);
+    }
+  }
+
+  // Lógica do botão de Sair
+  btnLogout.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'index.html'; // Recarrega a home limpa
+  });
+});
     </script>
 
     <style>
