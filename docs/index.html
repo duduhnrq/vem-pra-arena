@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <script>
       // Auth Guard: Executa imediatamente antes de renderizar o DOM
-      if (localStorage.getItem('logado') !== 'true') {
-        window.location.href = 'auth.html';
-      }
+      //if (localStorage.getItem('logado') !== 'true') {
+       // window.location.href = 'auth.html';
+     // }
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VemPraArena</title>
@@ -1175,27 +1175,43 @@
       });
 
       // ==================== CONTROLE DE SESSÃO E SEGURANÇA ====================
-      document.addEventListener('DOMContentLoaded', () => {
-        // Exibição segura do nome do usuário usando textContent (Prevenção XSS)
-        const userGreeting = document.getElementById('user-greeting');
-        if (userGreeting) {
-          // Pode buscar o nome salvo no login, se houver. Ex: localStorage.getItem('nome_usuario')
-          const nomeUsuario = localStorage.getItem('nome_usuario') || 'Torcedor';
-          userGreeting.textContent = `Olá, ${nomeUsuario}!`; 
-        }
+document.addEventListener('DOMContentLoaded', () => {
+  const userGreeting = document.getElementById('user-greeting');
+  const btnLogout = document.getElementById('btn-logout');
+  const navContainer = btnLogout.parentElement; // Pega o div que segura os botões
+  
+  const estaLogado = localStorage.getItem('logado') === 'true';
 
-        // Logout Seguro
-        const btnLogout = document.getElementById('btn-logout');
-        if (btnLogout) {
-          btnLogout.addEventListener('click', () => {
-            // Limpa a sessão do localStorage completamente
-            localStorage.clear();
-            
-            // Redireciona imediatamente para a tela de login
-            window.location.href = 'auth.html';
-          });
-        }
-      });
+  if (estaLogado) {
+    // --- USUÁRIO LOGADO ---
+    const nomeUsuario = localStorage.getItem('nome_usuario') || 'Torcedor';
+    userGreeting.textContent = `Olá, ${nomeUsuario}!`;
+    userGreeting.classList.remove('hidden');
+    btnLogout.classList.remove('hidden');
+  } else {
+    // --- USUÁRIO VISITANTE (NÃO LOGADO) ---
+    userGreeting.classList.add('hidden');
+    btnLogout.classList.add('hidden');
+
+    // Se não estiver logado, cria os botões de Login e Cadastro dinamicamente
+    // Verificamos se já não foram criados para não duplicar
+    if (!document.getElementById('btn-login-header')) {
+      const loginHtml = `
+        <div id="auth-buttons" class="flex items-center space-x-2">
+          <a href="auth.html" id="btn-login-header" class="px-4 py-2 font-black uppercase text-sm hover:bg-black hover:text-white transition-all brutal-border">Entrar</a>
+          <a href="auth.html?register=true" class="bg-black text-white px-4 py-2 font-black uppercase text-sm brutal-border brutal-shadow-sm hover:bg-governo-blue transition-all">Cadastrar</a>
+        </div>
+      `;
+      navContainer.insertAdjacentHTML('beforeend', loginHtml);
+    }
+  }
+
+  // Lógica do botão de Sair
+  btnLogout.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'index.html'; // Recarrega a home limpa
+  });
+});
     </script>
 
     <style>
