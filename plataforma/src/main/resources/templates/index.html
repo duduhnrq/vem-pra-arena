@@ -53,17 +53,15 @@
           >
         </div>
         <div class="flex items-center space-x-4">
+          <span
+            id="user-greeting"
+            class="font-black uppercase text-sm hidden md:inline"
+          ></span>
           <button
-            onclick="window.location.href = 'auth.html?register=true'"
-            class="font-black uppercase text-sm hover:underline"
+            id="btn-logout"
+            class="brutal-btn btn-yellow-hover brutal-border bg-governo-pink text-white w-12 h-12 rounded-full font-black brutal-shadow uppercase text-xl"
           >
-            Criar conta
-          </button>
-          <button
-            onclick="window.location.href = 'auth.html'"
-            class="brutal-btn btn-yellow-hover brutal-border bg-governo-yellow px-6 py-2 font-black brutal-shadow uppercase text-sm"
-          >
-            Entrar
+            ⎋
           </button>
         </div>
       </div>
@@ -723,7 +721,7 @@
     <section class="bg-black text-white py-20 overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 z-10">
         <div class="flex items-center justify-center gap-16">
-          <div style="width: 60%;">
+          <div style="width: 60%">
             <h2
               class="font-black text-5xl md:text-7xl italic text-governo-yellow mb-8"
             >
@@ -772,7 +770,7 @@
             </div>
           </div>
 
-          <div class="bg-white p-2 rotate-6" style="width: 40%;">
+          <div class="bg-white p-2 rotate-6" style="width: 40%">
             <div class="bg-blue-600 p-8 text-white">
               <h3 class="font-black text-2xl mb-4">Por que a Arena?</h3>
               <ul class="space-y-4 font-black uppercase text-sm">
@@ -889,7 +887,7 @@
             class="brutal-border bg-black text-white px-3 py-1 inline-block mb-6"
           >
             <span class="text-2xl font-black tracking-tighter uppercase"
-              >VEM PRA ARENA</span
+              >VEMPRAARENA</span
             >
           </div>
           <p class="font-bold text-lg max-w-sm">
@@ -915,9 +913,7 @@
           </div>
         </div>
         <div>
-          <h5 class="font-black uppercase mb-4 underline">
-            Navegação
-          </h5>
+          <h5 class="font-black uppercase mb-4 underline">Navegação</h5>
           <ul class="font-bold space-y-2">
             <li><a href="#explorar" class="hover:underline">Explorar</a></li>
             <li><a href="#eventos" class="hover:underline">Eventos</a></li>
@@ -926,9 +922,7 @@
           </ul>
         </div>
         <div>
-          <h5 class="font-black uppercase mb-4 underline">
-            Para Empresas
-          </h5>
+          <h5 class="font-black uppercase mb-4 underline">Para Empresas</h5>
           <ul class="font-bold space-y-2">
             <li>
               <a href="#explorar" class="hover:underline">Portal do Promotor</a>
@@ -1263,6 +1257,45 @@
         e.preventDefault();
         const text = userInput.value.trim();
         if (text) sendMessage(text);
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const userGreeting = document.getElementById("user-greeting");
+        const btnLogout = document.getElementById("btn-logout");
+        const navContainer = btnLogout.parentElement; // Pega o div que segura os botões
+
+        const estaLogado = localStorage.getItem("esta_logado") === "true";
+
+        if (estaLogado) {
+          // --- USUÁRIO LOGADO ---
+          const nomeUsuario =
+          localStorage.getItem("nome_usuario") || "Torcedor";
+          userGreeting.textContent = `Olá, ${nomeUsuario}!`;
+          userGreeting.classList.remove("hidden");
+          btnLogout.classList.remove("hidden");
+        } else {
+          // --- USUÁRIO VISITANTE (NÃO LOGADO) ---
+          userGreeting.classList.add("hidden");
+          btnLogout.classList.add("hidden");
+
+          // Se não estiver logado, cria os botões de Login e Cadastro dinamicamente
+          // Verificamos se já não foram criados para não duplicar
+          if (!document.getElementById("btn-login-header")) {
+            const loginHtml = `
+              <div id="auth-buttons" class="flex items-center gap-2">
+                <a href="auth.html" id="btn-login-header" class="px-4 py-2 font-black uppercase text-sm hover:bg-black hover:text-white transition-all brutal-border">Entrar</a>
+                <a href="auth.html?register=true" class="brutal-btn bg-black text-white px-4 py-2 font-black uppercase text-sm brutal-border brutal-shadow-sm hover:bg-governo-blue transition-all">Cadastrar</a>
+              </div>
+            `;
+            navContainer.insertAdjacentHTML("beforeend", loginHtml);
+          }
+        }
+
+        // Lógica do botão de Sair
+        btnLogout.addEventListener("click", () => {
+          localStorage.clear();
+          window.location.href = "index.html"; // Recarrega a home limpa
+        });
       });
     </script>
 
