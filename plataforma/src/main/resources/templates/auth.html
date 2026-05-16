@@ -111,6 +111,15 @@
         display: none;
         opacity: 0;
       }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .animate-spin {
+        animation: spin 1s linear infinite;
+      }
     </style>
   </head>
   <body class="bg-grid">
@@ -193,10 +202,7 @@
               Bem-vindo novamente, torcedor.
             </p>
 
-            <form
-              class="space-y-6"
-              onsubmit="login(event)"
-            >
+            <form class="space-y-6" onsubmit="login(event)">
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
                   >E-mail</label
@@ -338,6 +344,80 @@
       </div>
     </div>
 
+    <!-- MODAIS -->
+
+    <!-- Overlay -->
+    <div
+      id="modal-overlay"
+      class="fixed inset-0 bg-black/60 z-50 items-center justify-center flex hidden"
+    >
+      <!-- Modal: Processando -->
+      <div
+        id="modal-loading"
+        class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden"
+      >
+        <div
+          class="w-14 h-14 border-[5px] border-t-governo-blue rounded-full animate-spin"
+        ></div>
+        <div class="text-center">
+          <p id="modal-loading-title" class="brutal-title text-xl">
+            Processando
+          </p>
+          <p
+            id="modal-loading-sub"
+            class="text-[11px] font-bold text-gray-500 uppercase mt-1"
+          >
+            Aguarde um momento...
+          </p>
+        </div>
+      </div>
+
+      <!-- Modal: Sucesso -->
+      <div
+        id="modal-success"
+        class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden"
+      >
+        <div
+          class="w-16 h-16 bg-green-400 brutal-border flex items-center justify-center text-3xl animate-bounce"
+        >
+          ✓
+        </div>
+        <div class="text-center">
+          <p id="modal-success-title" class="brutal-title text-xl">Sucesso!</p>
+          <p
+            id="modal-success-sub"
+            class="text-[11px] font-bold text-gray-500 uppercase mt-1"
+          >
+          </p>
+        </div>
+        <button onclick="fecharModal()" class="btn-brutal py-3 text-sm">
+          OK →
+        </button>
+      </div>
+
+      <!-- Modal: Erro -->
+      <div
+        id="modal-error"
+        class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden"
+      >
+        <div
+          class="w-16 h-16 bg-red-400 brutal-border flex items-center justify-center text-3xl"
+        >
+          ✕
+        </div>
+        <div class="text-center">
+          <p id="modal-error-title" class="brutal-title text-xl">Erro</p>
+          <p
+            id="modal-error-sub"
+            class="text-[11px] font-bold text-gray-500 uppercase mt-1"
+          ></p>
+        </div>
+        <button onclick="fecharModal()" class="btn-brutal py-3 text-sm">
+          Tentar Novamente →
+        </button>
+      </div>
+    </div>
+
     <script>
       function toggleForm(type) {
         const loginCard = document.getElementById("login-card");
@@ -365,6 +445,104 @@
         }
       });
 
+      // Sistema de Modais
+
+      const overlay = document.getElementById("modal-overlay");
+
+      function mostrarModal(tipo, { titulo, sub, redirect } = {}) {
+        // Esconde todas as caixas
+        document
+          .querySelectorAll(".modal-box")
+          .forEach((m) => m.classList.add("hidden"));
+
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+
+        const box = document.getElementById(`modal-${tipo}`);
+        box.classList.remove("hidden");
+
+        if (titulo)
+          document.getElementById(`modal-${tipo}-title`).textContent = titulo;
+        if (sub) document.getElementById(`modal-${tipo}-sub`).textContent = sub;
+
+        // Redireciona automaticamente após sucesso
+        if (tipo === "success" && redirect) {
+          setTimeout(() => {
+            fecharModal();
+            if (typeof redirect === "function") redirect();
+            else window.location.href = redirect;
+          }, 2000);
+        }
+      }
+
+      function fecharModal() {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        document
+          .querySelectorAll(".modal-box")
+          .forEach((m) => m.classList.add("hidden"));
+      }
+
+      // Fecha ao clicar no overlay (fora da caixa)
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) fecharModal();
+      });
+
+      // Login
+
+      async function login(event) {
+        event.preventDefault();
+
+        const email = document.querySelector(
+          '#login-card input[type="email"]',
+        ).value;
+        const senha = document.querySelector(
+          '#login-card input[type="password"]',
+        ).value;
+
+        mostrarModal("loading", {
+          titulo: "Entrando",
+          sub: "Verificando suas credenciais...",
+        });
+
+        try {
+          const res = await fetch("http://localhost:8080/api/usuarios/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, senha }),
+          });
+
+          if (res.ok) {
+            const data = await res.json().catch(() => ({}));
+            localStorage.setItem("esta_logado", "true");
+            localStorage.setItem(
+              "nome_usuario",
+              data.nome || email.split("@")[0],
+            );
+            localStorage.setItem("email_usuario", data.email || email);
+
+            mostrarModal("success", {
+              titulo: "Bem-vindo!",
+              sub: "Login realizado com sucesso.",
+              redirect: "index.html",
+            });
+          } else {
+            const msg = await res.text();
+            mostrarModal("error", {
+              titulo: "Falha no Login",
+              sub: msg || "E-mail ou senha incorretos.",
+            });
+          }
+        } catch (err) {
+          mostrarModal("error", {
+            titulo: "Sem Conexão",
+            sub: "Não foi possível conectar ao servidor.",
+          });
+        }
+      }
+
+      // Cadastro
+
       async function cadastrar(event) {
         event.preventDefault();
 
@@ -382,9 +560,17 @@
         )[1].value;
 
         if (senha !== confirmarSenha) {
-          alert("As senhas não coincidem!");
+          mostrarModal("error", {
+            titulo: "Senhas Diferentes",
+            sub: "As senhas digitadas não coincidem.",
+          });
           return;
         }
+
+        mostrarModal("loading", {
+          titulo: "Criando Conta",
+          sub: "Registrando seus dados...",
+        });
 
         try {
           const res = await fetch(
@@ -397,37 +583,23 @@
           );
 
           if (res.status === 201) {
-            alert("Conta criada com sucesso!");
-            toggleForm("login");
+            mostrarModal("success", {
+              titulo: "Conta Criada!",
+              sub: "Seu cadastro foi realizado com sucesso.",
+              redirect: () => toggleForm("login"),
+            });
           } else {
             const msg = await res.text();
-            alert(msg);
+            mostrarModal("error", {
+              titulo: "Erro no Cadastro",
+              sub: msg || "Não foi possível criar sua conta.",
+            });
           }
         } catch (err) {
-          alert("Erro de conexão com o servidor.");
-        }
-      }
-
-      async function login(event) {
-        event.preventDefault();
-        const email = document.querySelector(
-          '#login-card input[type="email"]',
-        ).value;
-        const senha = document.querySelector(
-          '#login-card input[type="password"]',
-        ).value;
-
-        const res = await fetch("http://localhost:8080/api/usuarios/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
-        });
-
-        if (res.ok) {
-          window.location.href = "index.html";
-        } else {
-          const msg = await res.text();
-          alert(msg);
+          mostrarModal("error", {
+            titulo: "Sem Conexão",
+            sub: "Não foi possível conectar ao servidor.",
+          });
         }
       }
     </script>

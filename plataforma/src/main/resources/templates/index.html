@@ -754,13 +754,13 @@
             <div class="flex flex-col lg:flex-row gap-4">
               <!-- LINK PARA PROMOTORES 02: CTA Principal de Negócios -->
               <a
-                href="negocios.html"
+                href="auth_business.html"
                 class="bg-white text-black px-8 py-4 font-black uppercase text-center hover:bg-governo-yellow transition-colors"
               >
                 Solicitar Nova Pauta →
               </a>
               <a
-                href="auth.html"
+                href="auth_business.html"
                 class="border-2 border-white px-8 py-4 font-black uppercase text-center hover:bg-governo-blue transition-colors"
               >
                 Portal do Promotor
@@ -1264,7 +1264,7 @@
 
         const estaLogado = localStorage.getItem("esta_logado") === "true";
 
-        if (!estaLogado) {
+        if (estaLogado) {
           const nomeUsuario =
             localStorage.getItem("nome_usuario") || "Torcedor";
           const emailUsuario = localStorage.getItem("email_usuario") || "";
