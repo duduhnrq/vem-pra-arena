@@ -144,9 +144,12 @@
     </nav>
 
     <div class="max-w-7xl mx-auto px-4 md:px-6 mt-2">
-        <button class="brutal-btn brutal-border uppercase bg-white text-black px-6 py-3 m-4 font-black hover:bg-gray-100 transition-all" onclick="window.history.back()">
-            ← Voltar
-        </button>
+      <button
+        class="brutal-btn brutal-border uppercase bg-white text-black px-6 py-3 m-4 font-black transition-all"
+        onclick="window.history.back()"
+      >
+        ← Voltar
+      </button>
     </div>
 
     <main
@@ -159,9 +162,9 @@
           <div
             class="w-24 h-24 bg-pink-400 brutal-border mx-auto mb-4 flex items-center justify-center overflow-hidden"
           >
-            <span class="brutal-title text-4xl">JS</span>
+            <span id="profile-icon" class="brutal-title text-4xl"></span>
           </div>
-          <h2 class="brutal-title text-xl leading-tight">João Silva</h2>
+          <h2 id="profile-name" class="brutal-title text-xl leading-tight"></h2>
           <div class="mt-2 inline-block badge-socio">SÓCIO DIAMANTE</div>
           <p class="text-xs text-gray-600 mt-4 uppercase">
             Membro desde Out 2023
@@ -172,26 +175,26 @@
           <button
             onclick="switchTab('dados')"
             id="tab-dados"
-            class="nav-item active flex items-center gap-3 brutal-border p-4 text-left uppercase text-xs hover:bg-gray-100 transition-all"
+            class="nav-item active flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
           >
             <span>👤</span> Informações Pessoais
           </button>
           <button
             onclick="switchTab('ingressos')"
             id="tab-ingressos"
-            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs hover:bg-gray-100 transition-all"
+            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
           >
-            <span>🎫</span> Meus Ingressos (4)
+            <span>🎫</span> Meus Ingressos (2)
           </button>
           <button
             id="tab-pagamento"
-            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs hover:bg-gray-100 transition-all"
+            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
           >
             <span>💳</span> Cartões e Pagamento
           </button>
           <button
             id="tab-seguranca"
-            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs hover:bg-gray-100 transition-all"
+            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
           >
             <span>🔒</span> Segurança e Senha
           </button>
@@ -219,7 +222,6 @@
                 <input
                   type="text"
                   class="input-brutal"
-                  value="João Silva de Oliveira"
                 />
               </div>
               <div>
@@ -229,7 +231,6 @@
                 <input
                   type="email"
                   class="input-brutal"
-                  value="joao.silva@email.com"
                 />
               </div>
             </div>
@@ -285,7 +286,7 @@
         </section>
 
         <section id="content-ingressos" class="tab-content hidden space-y-6">
-          <h2 class="brutal-title text-3xl mb-2 italic">Próximos Eventos</h2>
+          <h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>
 
           <!-- Ticket 1 -->
           <div
@@ -430,6 +431,116 @@
         activeBtn.classList.add("active");
         activeBtn.classList.remove("bg-white");
       }
+
+      window.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("tickets") === "true") {
+          switchTab("ingressos");
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // ─── Dados do localStorage ───────────────────────────────────────
+        const nomeUsuario = localStorage.getItem("nome_usuario") || "Usuário";
+        const emailUsuario = localStorage.getItem("email_usuario") || "";
+        const cpfUsuario = localStorage.getItem("cpf_usuario") || "";
+        const telUsuario = localStorage.getItem("tel_usuario") || "";
+        const nascUsuario = localStorage.getItem("nasc_usuario") || "";
+
+        // ─── Sidebar ─────────────────────────────────────────────────────
+        const profileIcon = document.getElementById("profile-icon");
+        const profileName = document.getElementById("profile-name");
+
+        if (profileIcon)
+          profileIcon.textContent = nomeUsuario.charAt(0).toUpperCase();
+        if (profileName) profileName.textContent = nomeUsuario;
+
+        // ─── Formulário de dados pessoais ────────────────────────────────
+        const campos = {
+          nome: document.querySelector('input[type="text"]'),
+          email: document.querySelector('input[type="email"]'),
+          cpf: document.querySelectorAll('input[type="text"]')[1],
+          nascimento: document.querySelector('input[type="date"]'),
+          telefone: document.querySelectorAll('input[type="text"]')[2],
+        };
+
+        if (campos.nome && nomeUsuario) campos.nome.value = nomeUsuario;
+        if (campos.email && emailUsuario) campos.email.value = emailUsuario;
+        if (campos.cpf && cpfUsuario) campos.cpf.value = cpfUsuario;
+        if (campos.nascimento && nascUsuario)
+          campos.nascimento.value = nascUsuario;
+        if (campos.telefone && telUsuario) campos.telefone.value = telUsuario;
+
+        // ─── Tabs ─────────────────────────────────────────────────────────
+        window.switchTab = function (tab) {
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((s) => s.classList.add("hidden"));
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((b) =>
+              b.classList.remove("active", "bg-black", "text-white"),
+            );
+
+          const content = document.getElementById(`content-${tab}`);
+          const navBtn = document.getElementById(`tab-${tab}`);
+
+          if (content) content.classList.remove("hidden");
+          if (navBtn) navBtn.classList.add("active", "bg-black", "text-white");
+        };
+
+        // ─── Salvar alterações ────────────────────────────────────────────
+        window.salvarDados = function () {
+          const novoNome = campos.nome?.value.trim();
+          const novoEmail = campos.email?.value.trim();
+          const novoTel = campos.telefone?.value.trim();
+          const novoNasc = campos.nascimento?.value;
+
+          if (!novoNome || !novoEmail) {
+            alert("Nome e e-mail são obrigatórios.");
+            return;
+          }
+
+          localStorage.setItem("nome_usuario", novoNome);
+          localStorage.setItem("email_usuario", novoEmail);
+          localStorage.setItem("tel_usuario", novoTel);
+          localStorage.setItem("nasc_usuario", novoNasc);
+
+          // Atualiza sidebar sem recarregar
+          if (profileIcon)
+            profileIcon.textContent = novoNome.charAt(0).toUpperCase();
+          if (profileName) profileName.textContent = novoNome;
+
+          mostrarToast("Alterações salvas com sucesso!");
+        };
+
+        // ─── Toast de confirmação ─────────────────────────────────────────
+        function mostrarToast(msg) {
+          const toast = document.createElement("div");
+          toast.textContent = msg;
+          toast.className = [
+            "fixed bottom-6 right-6 z-50",
+            "bg-black text-white",
+            "px-6 py-4 font-black uppercase text-xs",
+            "brutal-border brutal-shadow",
+            "transition-all duration-300 opacity-0 translate-y-2",
+          ].join(" ");
+
+          document.body.appendChild(toast);
+
+          // Anima entrada
+          requestAnimationFrame(() => {
+            toast.classList.remove("opacity-0", "translate-y-2");
+            toast.classList.add("opacity-100", "translate-y-0");
+          });
+
+          // Remove após 3s
+          setTimeout(() => {
+            toast.classList.add("opacity-0", "translate-y-2");
+            toast.addEventListener("transitionend", () => toast.remove());
+          }, 3000);
+        }
+      });
 
       function salvarDados() {
         const btn = event.target;

@@ -23,14 +23,14 @@
     </div>
 
     <!-- Navegação -->
-    <nav class="sticky top-0 z-50 bg-white border-b-[3px] border-black p-4">
+    <nav class="top-0 z-50 bg-white border-b-[3px] border-black p-4 relative">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
         <a
           href="#"
           class="bg-white brutal-border px-3 py-1 text-2xl font-black tracking-tighter uppercase hover:bg-black hover:text-white transition-all"
           >VEMPRAARENA</a
         >
-        <div class="md:flex space-x-6 font-black uppercase text-sm">
+        <div class="md:flex hidden space-x-6 font-black uppercase text-sm">
           <a
             href="#explorar"
             class="px-2 py-1 hover:bg-black hover:text-white transition-all"
@@ -52,17 +52,15 @@
             >Contato</a
           >
         </div>
-        <div class="flex items-center space-x-4">
+        <div id="nav-auth-container" class="flex items-center space-x-4 relative">
           <span
             id="user-greeting"
-            class="font-black uppercase text-sm hidden md:inline"
+            class="font-black uppercase text-sm hidden"
           ></span>
           <button
-            id="btn-logout"
-            class="brutal-btn btn-yellow-hover brutal-border bg-governo-pink text-white w-12 h-12 rounded-full font-black brutal-shadow uppercase text-xl"
-          >
-            ⎋
-          </button>
+            id="btn-profile"
+            class="brutal-btn btn-yellow-hover brutal-border bg-governo-pink text-white w-12 h-12 rounded-full font-black brutal-shadow uppercase text-xl hidden"
+          ></button>
         </div>
       </div>
     </nav>
@@ -1261,41 +1259,89 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         const userGreeting = document.getElementById("user-greeting");
-        const btnLogout = document.getElementById("btn-logout");
-        const navContainer = btnLogout.parentElement; // Pega o div que segura os botões
+        const btnProfile = document.getElementById("btn-profile");
+        const navContainer = document.getElementById("nav-auth-container");
 
         const estaLogado = localStorage.getItem("esta_logado") === "true";
 
-        if (estaLogado) {
-          // --- USUÁRIO LOGADO ---
+        if (!estaLogado) {
           const nomeUsuario =
-          localStorage.getItem("nome_usuario") || "Torcedor";
+            localStorage.getItem("nome_usuario") || "Torcedor";
+          const emailUsuario = localStorage.getItem("email_usuario") || "";
+
           userGreeting.textContent = `Olá, ${nomeUsuario}!`;
           userGreeting.classList.remove("hidden");
-          btnLogout.classList.remove("hidden");
-        } else {
-          // --- USUÁRIO VISITANTE (NÃO LOGADO) ---
-          userGreeting.classList.add("hidden");
-          btnLogout.classList.add("hidden");
 
-          // Se não estiver logado, cria os botões de Login e Cadastro dinamicamente
-          // Verificamos se já não foram criados para não duplicar
+          btnProfile.textContent = nomeUsuario.charAt(0).toUpperCase();
+          btnProfile.classList.remove("hidden");
+
+          // Injeta o dropdown
+          if (!document.getElementById("profile-dropdown")) {
+            navContainer.insertAdjacentHTML(
+              "beforeend",
+              `
+                <div id="profile-dropdown"
+                  class="absolute right-0 top-12 mt-2 w-56 bg-white brutal-border brutal-shadow hidden z-50"
+                >
+                  <div class="p-3 border-b-2 border-black bg-gray-50">
+                    <p class="text-xs font-black text-gray-400 uppercase">Bem-vindo</p>
+                    <p class="text-xs font-bold truncate">${emailUsuario}</p>
+                  </div>
+                  <a href="profile.html" class="block p-3 font-black text-xs uppercase hover:bg-governo-blue hover:text-white border-b-2 border-black">👤 Meu Perfil</a>
+                  <a href="profile.html?tickets=true" class="block p-3 font-black text-xs uppercase hover:bg-governo-blue hover:text-white border-b-2 border-black">🎫 Meus Ingressos</a>
+                  <a href="favorites.html" class="block p-3 font-black text-xs uppercase hover:bg-governo-blue hover:text-white border-b-2 border-black">⭐ Favoritos</a>
+                  <button id="btn-logout-dropdown" class="block w-full text-left p-3 font-black text-xs uppercase hover:bg-governo-pink hover:text-white">🚪 Sair</button>
+                </div>
+              `,
+            );
+
+            const dropdown = document.getElementById("profile-dropdown");
+
+            // Abre/fecha ao clicar no botão de perfil
+            btnProfile.addEventListener("click", (e) => {
+              e.stopPropagation();
+              dropdown.classList.toggle("hidden");
+            });
+
+            // Fecha ao clicar fora
+            document.addEventListener("click", (e) => {
+              if (!dropdown.contains(e.target) && e.target !== btnProfile) {
+                dropdown.classList.add("hidden");
+              }
+            });
+
+            // Logout
+            document
+              .getElementById("btn-logout-dropdown")
+              .addEventListener("click", () => {
+                localStorage.removeItem("esta_logado");
+                localStorage.removeItem("nome_usuario");
+                localStorage.removeItem("email_usuario");
+                window.location.reload();
+              });
+          }
+        } else {
+          userGreeting.classList.add("hidden");
+          btnProfile.classList.add("hidden");
+
           if (!document.getElementById("btn-login-header")) {
-            const loginHtml = `
-              <div id="auth-buttons" class="flex items-center gap-2">
-                <a href="auth.html" id="btn-login-header" class="px-4 py-2 font-black uppercase text-sm hover:bg-black hover:text-white transition-all brutal-border">Entrar</a>
-                <a href="auth.html?register=true" class="brutal-btn bg-black text-white px-4 py-2 font-black uppercase text-sm brutal-border brutal-shadow-sm hover:bg-governo-blue transition-all">Cadastrar</a>
-              </div>
-            `;
-            navContainer.insertAdjacentHTML("beforeend", loginHtml);
+            navContainer.insertAdjacentHTML(
+              "beforeend",
+              `
+                <div id="auth-buttons" class="flex items-center gap-2">
+                  <a href="auth.html" id="btn-login-header"
+                    class="px-4 py-2 font-black uppercase text-sm hover:bg-black hover:text-white transition-all brutal-border">
+                    Entrar
+                  </a>
+                  <a href="auth.html?register=true"
+                    class="brutal-btn bg-black text-white px-4 py-2 font-black uppercase text-sm brutal-border brutal-shadow-sm hover:bg-governo-blue transition-all">
+                    Cadastrar
+                  </a>
+                </div>
+              `,
+            );
           }
         }
-
-        // Lógica do botão de Sair
-        btnLogout.addEventListener("click", () => {
-          localStorage.clear();
-          window.location.href = "index.html"; // Recarrega a home limpa
-        });
       });
     </script>
 
