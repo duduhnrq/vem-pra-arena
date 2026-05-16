@@ -223,7 +223,7 @@
       >
         <div class="w-full max-w-xl lg:max-w-md">
           <!-- Toggle de Formulário -->
-          <div class="flex mb-8 brutal-border bg-white p-1 w-fit mx-auto">
+          <div class="flex mb-4 brutal-border bg-white p-1 w-fit mx-auto">
             <button
               id="toggle-login"
               onclick="toggleForm('login')"
@@ -240,6 +240,10 @@
             </button>
           </div>
 
+          <!-- Mensagem de Erro Geral -->
+          <div id="error-message" class="hidden mb-4 p-4 border-2 border-red-500 bg-red-100 text-red-700 font-bold text-xs uppercase brutal-shadow">
+          </div>
+
           <!-- CARD LOGIN -->
           <div
             id="login-card"
@@ -252,19 +256,14 @@
               Acesse sua conta corporativa.
             </p>
 
-            <form
-              class="space-y-6"
-              onsubmit="
-                event.preventDefault();
-                window.location.href = 'index.html';
-              "
-            >
+            <form id="loginForm" class="space-y-6">
               <div class="space-y-1">
                 <label class="block font-black text-[10px] uppercase"
                   >E-mail Corporativo</label
                 >
                 <input
                   type="email"
+                  id="login-email"
                   class="input-brutal"
                   placeholder="exemplo@email.com"
                   required
@@ -276,6 +275,7 @@
                 >
                 <input
                   type="password"
+                  id="login-senha"
                   class="input-brutal"
                   placeholder="••••••••"
                   required
@@ -304,13 +304,7 @@
               Cadastre-se para acessar o portal.
             </p>
 
-            <form
-              onsubmit="
-                event.preventDefault();
-                alert('Conta criada com sucesso!');
-                toggleForm('login');
-              "
-            >
+            <form id="registerForm">
               <div class="flex justify-between mb-8">
                 <div class="flex gap-2">
                   <div class="step-dot active" id="dot-1"></div>
@@ -320,7 +314,6 @@
                 <span
                   id="step-label"
                   class="text-[10px] font-black uppercase"
-                  id="step-label"
                   >Passo 1: Identificação</span
                 >
               </div>
@@ -332,6 +325,7 @@
                   >
                   <input
                     type="text"
+                    name="cnpj"
                     class="input-brutal"
                     placeholder="00.000.000/0000-00"
                     required
@@ -343,6 +337,7 @@
                   >
                   <input
                     type="text"
+                    name="razaoSocial"
                     class="input-brutal"
                     placeholder="Nome da Empresa LTDA"
                     required
@@ -354,12 +349,13 @@
                   >
                   <input
                     type="text"
+                    name="nomeFantasia"
                     class="input-brutal"
                     placeholder="Como o público conhece sua empresa"
                     required
                   />
                 </div>
-                <button type="submit" class="btn-brutal text-xl" onclick="nextStep(2)">
+                <button type="button" class="btn-brutal text-xl" onclick="nextStep(2)">
                   Próximo Passo →
                 </button>
               </div>
@@ -372,9 +368,9 @@
                     >
                     <input
                       type="text"
+                      name="telefoneFixo"
                       class="input-brutal"
                       placeholder="(00) 0000-0000"
-                      required
                     />
                   </div>
                   <div class="space-y-1">
@@ -383,33 +379,34 @@
                     >
                     <input
                       type="text"
+                      name="whatsappNegocios"
                       class="input-brutal"
                       placeholder="(00) 90000-0000"
                       required
                     />
-                  </div>
-                </div>
-                <div class="space-y-1">
-                  <label class="block font-black text-[10px] uppercase"
-                    >Nome do Representante Legal</label
-                  >
-                  <input
+                    </div>
+                    </div>
+                    <div class="space-y-1">
+                    <label class="block font-black text-[10px] uppercase"
+                    >Nome do Representante Legal</label>
+                    <input
                     type="text"
+                    name="nomeRepresentante"
                     class="input-brutal"
                     placeholder="Nome Completo do Responsável"
                     required
-                  />
-                </div>
-                <div class="space-y-1">
-                  <label class="block font-black text-[10px] uppercase"
-                    >E-mail Corporativo</label
-                  >
-                  <input
-                    type="text"
+                    />
+                    </div>
+                    <div class="space-y-1">
+                    <label class="block font-black text-[10px] uppercase"
+                    >E-mail Corporativo</label>
+                    <input
+                    type="email"
+                    name="emailCorporativo"
                     class="input-brutal"
-                    placeholder="Como o público conhece sua empresa"
+                    placeholder="exemplo@email.com"
                     required
-                  />
+                    />
                 </div>
                 <div class="space-y-1">
                   <label class="block font-black text-[10px] uppercase"
@@ -417,6 +414,7 @@
                   >
                   <input
                     id="senha-promotor"
+                    name="senha"
                     type="password"
                     class="input-brutal"
                     placeholder="••••••••"
@@ -425,10 +423,10 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4">
-                  <button type="submit" class="btn-secondary text-xl" onclick="nextStep(1)">
+                  <button type="button" class="btn-secondary text-xl" onclick="nextStep(1)">
                     Voltar
                   </button>
-                  <button type="submit" class="btn-brutal text-xl" onclick="nextStep(3)">
+                  <button type="button" class="btn-brutal text-xl" onclick="nextStep(3)">
                     Próximo Passo →
                   </button>
                 </div>
@@ -436,29 +434,32 @@
 
               <div id="step-3" class="step-content space-y-6">
                 <div class="space-y-3">
-                  <div class="file-dropzone">
+                  <div class="file-dropzone" onclick="document.getElementById('file-cartaoCnpj').click()">
                     <p class="text-[10px] font-black uppercase">
                       Cartão CNPJ (PDF)
                     </p>
-                    <p class="text-[8px] font-bold opacity-50">
+                    <p class="text-[8px] font-bold opacity-50" id="text-cartaoCnpj">
                       CLIQUE OU ARRASTE O ARQUIVO
                     </p>
+                    <input type="file" name="cartaoCnpj" id="file-cartaoCnpj" accept=".pdf" class="hidden" onchange="updateFileName(this, 'text-cartaoCnpj')" required>
                   </div>
-                  <div class="file-dropzone">
+                  <div class="file-dropzone" onclick="document.getElementById('file-alteracaoContratual').click()">
                     <p class="text-[10px] font-black uppercase">
                       Última Alteração Contratual
                     </p>
-                    <p class="text-[8px] font-bold opacity-50">
+                    <p class="text-[8px] font-bold opacity-50" id="text-alteracaoContratual">
                       DOCUMENTO COM O QUADRO SOCIETÁRIO
                     </p>
+                    <input type="file" name="alteracaoContratual" id="file-alteracaoContratual" accept=".pdf" class="hidden" onchange="updateFileName(this, 'text-alteracaoContratual')" required>
                   </div>
-                  <div class="file-dropzone">
+                  <div class="file-dropzone" onclick="document.getElementById('file-documentoSocio').click()">
                     <p class="text-[10px] font-black uppercase">
                       Documento de Identidade (Sócio)
                     </p>
-                    <p class="text-[8px] font-bold opacity-50">
+                    <p class="text-[8px] font-bold opacity-50" id="text-documentoSocio">
                       RG, CNH OU PASSAPORTE
                     </p>
+                    <input type="file" name="documentoSocio" id="file-documentoSocio" accept=".pdf" class="hidden" onchange="updateFileName(this, 'text-documentoSocio')" required>
                   </div>
                 </div>
 
@@ -473,7 +474,7 @@
                 </div>
                 
                 <div class="flex flex-col sm:flex-row gap-4">
-                  <button type="submit" class="btn-secondary text-xl" onclick="nextStep(2)">
+                  <button type="button" class="btn-secondary text-xl" onclick="nextStep(2)">
                     Voltar
                   </button>
                   <button type="submit" class="btn-brutal text-xl">
@@ -495,7 +496,20 @@
     </div>
 
     <script>
+      function showError(message) {
+        const errorDiv = document.getElementById("error-message");
+        errorDiv.innerText = message;
+        errorDiv.classList.remove("hidden");
+      }
+
+      function hideError() {
+        const errorDiv = document.getElementById("error-message");
+        errorDiv.classList.add("hidden");
+        errorDiv.innerText = "";
+      }
+
       function toggleForm(type) {
+        hideError();
         const loginCard = document.getElementById("login-card");
         const registerCard = document.getElementById("register-card");
         const toggleLogin = document.getElementById("toggle-login");
@@ -522,21 +536,126 @@
       });
 
       function nextStep(step) {
-            // Esconde todos os passos
-            document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active'));
-            
-            // Mostra o passo atual
-            document.getElementById('step-' + step).classList.add('active');
-            
-            // Atualiza indicadores visuais
-            for(let i = 1; i <= step; i++) {
-                document.getElementById('dot-' + i).classList.add('active');
-            }
-
-            const labels = ["Identificação", "Contato", "Documentação"];
-            document.getElementById('step-label').innerText = `Passo ${step}: ${labels[step-1]}`;
+        // Esconde todos os passos
+        document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active'));
+        
+        // Mostra o passo atual
+        document.getElementById('step-' + step).classList.add('active');
+        
+        // Atualiza indicadores visuais
+        for(let i = 1; i <= step; i++) {
+            document.getElementById('dot-' + i).classList.add('active');
         }
+
+        const labels = ["Identificação", "Contato", "Documentação"];
+        document.getElementById('step-label').innerText = `Passo ${step}: ${labels[step-1]}`;
+      }
+
+      function updateFileName(input, textId) {
+        const textElement = document.getElementById(textId);
+        if (input.files && input.files.length > 0) {
+          textElement.innerText = input.files[0].name;
+        } else {
+          if(textId === 'text-cartaoCnpj') textElement.innerText = 'CLIQUE OU ARRASTE O ARQUIVO';
+          if(textId === 'text-alteracaoContratual') textElement.innerText = 'DOCUMENTO COM O QUADRO SOCIETÁRIO';
+          if(textId === 'text-documentoSocio') textElement.innerText = 'RG, CNH OU PASSAPORTE';
+        }
+      }
+
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideError();
+        
+        const email = document.getElementById('login-email').value;
+        const senha = document.getElementById('login-senha').value;
+        
+        try {
+          const response = await fetch('http://localhost:8080/api/promotores/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ emailCorporativo: email, senha })
+          });
+          
+          if (response.status === 200) {
+            sessionStorage.setItem('email', email);
+            sessionStorage.setItem('promotor_logado', 'true');
+            window.location.href = '/business.html';
+          } else {
+            const errorText = await response.text();
+            showError(errorText || 'Erro ao realizar login. Verifique suas credenciais.');
+          }
+        } catch (error) {
+          showError('Erro de conexão com o servidor.');
+        }
+      });
+
+      document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideError();
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerText;
+        
+        const formData = new FormData(this);
+        const fileFields = ['cartaoCnpj', 'alteracaoContratual', 'documentoSocio'];
+        let hasError = false;
+
+        for (const field of fileFields) {
+          const file = formData.get(field);
+          if (file && file.size > 0) {
+            if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+              showError(`O arquivo para ${field} deve ser um PDF.`);
+              hasError = true;
+              break;
+            }
+            if (file.size > 10 * 1024 * 1024) { // 10MB
+              showError(`O arquivo para ${field} deve ter no máximo 10MB.`);
+              hasError = true;
+              break;
+            }
+          } else {
+            showError(`O arquivo para ${field} é obrigatório.`);
+            hasError = true;
+            break;
+          }
+        }
+        
+        if (hasError) return;
+
+        submitBtn.innerText = 'Processando...';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        try {
+          const response = await fetch('http://localhost:8080/api/promotores/cadastrar', {
+            method: 'POST',
+            body: formData // o navegador define o Content-Type: multipart/form-data automaticamente
+          });
+          
+          if (response.ok) {
+            hideError();
+            alert('Conta criada com sucesso!');
+            this.reset();
+            updateFileName(document.getElementById('file-cartaoCnpj'), 'text-cartaoCnpj');
+            updateFileName(document.getElementById('file-alteracaoContratual'), 'text-alteracaoContratual');
+            updateFileName(document.getElementById('file-documentoSocio'), 'text-documentoSocio');
+            nextStep(1);
+            toggleForm('login');
+          } else {
+            const errorText = await response.text();
+            showError(errorText || 'Erro ao realizar cadastro.');
+          }
+        } catch (error) {
+          showError('Erro de conexão com o servidor.');
+        } finally {
+          submitBtn.innerText = originalBtnText;
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      });
     </script>
   </body>
 </html>
