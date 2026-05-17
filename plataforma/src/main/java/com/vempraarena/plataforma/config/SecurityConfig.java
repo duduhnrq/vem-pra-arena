@@ -21,16 +21,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Liberação do CORS adicionada aqui:
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            
-            // O resto continua igual ao seu:
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth.html", "/index.html", "/css/**", "/images/**", "/api/usuarios/cadastrar", "/api/usuarios/login", "/api/promotores/cadastrar", "/api/promotores/login").permitAll()
-                .anyRequest().authenticated()
-            );
-            
+                // 1. Liberação do CORS adicionada aqui:
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // O resto continua igual ao seu:
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth.html", "/index.html", "/css/**", "/images/**",
+                                "/api/usuarios/cadastrar", "/api/usuarios/login", "/api/promotores/cadastrar",
+                                "/api/promotores/login")
+                        .permitAll()
+                        .anyRequest().authenticated());
+
         return http.build();
     }
 
@@ -43,10 +45,11 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500")); // Permite a origem do seu Live Server
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // ← corrigido
+        configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
