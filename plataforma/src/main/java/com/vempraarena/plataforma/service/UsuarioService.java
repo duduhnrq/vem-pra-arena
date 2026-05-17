@@ -35,4 +35,28 @@ public class UsuarioService {
 
         return usuario;
     }
+
+    public Usuario atualizarUsuario(java.util.UUID id, Usuario dadosAtualizados) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        if (dadosAtualizados.getNome() != null && !dadosAtualizados.getNome().isBlank()) {
+            usuario.setNome(dadosAtualizados.getNome());
+        }
+
+        if (dadosAtualizados.getEmail() != null && !dadosAtualizados.getEmail().isBlank()) {
+            usuarioRepository.findByEmail(dadosAtualizados.getEmail()).ifPresent(u -> {
+                if (!u.getId().equals(id)) {
+                    throw new IllegalArgumentException("E-mail já está em uso.");
+                }
+            });
+            usuario.setEmail(dadosAtualizados.getEmail());
+        }
+
+        if (dadosAtualizados.getSenha() != null && !dadosAtualizados.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(dadosAtualizados.getSenha()));
+        }
+
+        return usuarioRepository.save(usuario);
+    }
 }
