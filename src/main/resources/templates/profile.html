@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VemPraArena - Meu Perfil</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <style>
+      :root {
+        --blue: #3772ff;
+        --yellow: #f4d03f;
+        --pink: #ff6b6b;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f0f0;
+        color: #000;
+        background-image: radial-gradient(#000 1.2px, transparent 1.2px);
+        background-size: 25px 25px;
+      }
+
+      .brutal-title {
+        font-family: "Archivo Black", sans-serif;
+        text-transform: uppercase;
+      }
+      .brutal-border {
+        border: 4px solid #000;
+      }
+      .brutal-shadow {
+        box-shadow: 8px 8px 0px #000;
+      }
+      .brutal-shadow-sm {
+        box-shadow: 4px 4px 0px #000;
+      }
+
+      .nav-item.active {
+        background-color: var(--blue);
+        color: white;
+        transform: translate(-4px, -4px);
+        box-shadow: 4px 4px 0px #000;
+      }
+
+      .input-brutal {
+        width: 100%;
+        padding: 1rem;
+        border: 3px solid #000;
+        font-weight: 700;
+        background: #fff;
+        transition: all 0.2s ease;
+      }
+      .input-brutal:focus {
+        background-color: #ebf8ff;
+        outline: none;
+      }
+
+      .badge-socio {
+        background: linear-gradient(45deg, #000, #333);
+        color: var(--yellow);
+        padding: 4px 12px;
+        font-family: "Archivo Black", sans-serif;
+        font-size: 10px;
+        border: 2px solid #000;
+      }
+
+      .border-dashed {
+        border-style: dashed;
+      }
+
+      .bg-blue-50 {
+        background-color: #ebf8ff;
+      }
+
+      .bg-gray-400 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1));
+      }
+
+      .bg-pink-400 {
+        background-color: #ff6b6b;
+      }
+
+      .bg-yellow-400 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1));
+      }
+
+      .bg-blue-600 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(49 130 206 / var(--tw-bg-opacity, 1));
+      }
+
+      .text-blue-600 {
+        --tw-text-opacity: 1;
+        color: rgb(49 130 206 / var(--tw-text-opacity, 1));
+      }
+
+      .text-gray-400 {
+        --tw-text-opacity: 1;
+        color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+      }
+
+      .mt-2 {
+        margin-top: 0.5rem;
+      }
+
+      .w-24 {
+        width: 6rem;
+      }
+
+      .h-24 {
+        height: 6rem;
+      }
+
+      .opacity-60 {
+        opacity: 0.6;
+      }
+
+      @media (min-width: 768px) {
+        .md\:w-60 {
+          width: 15rem /* 240px */;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navegação -->
+    <nav class="sticky top-0 z-50 bg-white border-b-[3px] border-black p-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a
+          href="index.html"
+          class="bg-white brutal-border px-3 py-1 text-2xl font-black tracking-tighter uppercase hover:bg-black hover:text-white transition-all"
+          >VEMPRAARENA</a
+        >
+        <span class="uppercase font-black text-xs">Área do Cidadão</span>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 md:px-6 mt-2">
+      <button
+        class="brutal-btn brutal-border uppercase bg-white text-black px-6 py-3 m-4 font-black transition-all"
+        onclick="window.history.back()"
+      >
+        ← Voltar
+      </button>
+    </div>
+
+    <main
+      class="flex flex-col md:flex-row justify-center items-start max-w-7xl w-full mx-auto p-4 md:p-6 gap-8 font-black"
+    >
+      <aside class="space-y-4 w-full md:w-auto">
+        <div
+          class="bg-white brutal-border p-6 w-full md:w-60 brutal-shadow mb-8 text-center"
+        >
+          <div
+            class="w-24 h-24 bg-pink-400 brutal-border mx-auto mb-4 flex items-center justify-center overflow-hidden"
+          >
+            <span id="profile-icon" class="brutal-title text-4xl"></span>
+          </div>
+          <h2 id="profile-name" class="brutal-title text-xl leading-tight"></h2>
+          <div class="mt-2 inline-block badge-socio">SÓCIO DIAMANTE</div>
+          <p class="text-xs text-gray-600 mt-4 uppercase">
+            Membro desde Out 2023
+          </p>
+        </div>
+
+        <nav class="flex flex-col gap-2">
+          <button
+            onclick="switchTab('dados')"
+            id="tab-dados"
+            class="nav-item active flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
+          >
+            <span>👤</span> Informações Pessoais
+          </button>
+          <button
+            onclick="switchTab('ingressos')"
+            id="tab-ingressos"
+            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
+          >
+            <span>🎫</span> Meus Ingressos (2)
+          </button>
+          <button
+            id="tab-pagamento"
+            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
+          >
+            <span>💳</span> Cartões e Pagamento
+          </button>
+          <button
+            id="tab-seguranca"
+            class="nav-item flex items-center gap-3 brutal-border bg-white p-4 text-left uppercase text-xs transition-all"
+          >
+            <span>🔒</span> Segurança e Senha
+          </button>
+        </nav>
+      </aside>
+
+      <div class="lg:col-span-3 space-y-8 w-full">
+        <!-- SEÇÃO: DADOS PESSOAIS -->
+        <section
+          id="content-dados"
+          class="tab-content bg-white brutal-border p-8 brutal-shadow"
+        >
+          <h2
+            class="brutal-title text-3xl mb-8 italic border-b-4 border-black inline-block"
+          >
+            Minhas Informações
+          </h2>
+
+          <form class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block font-black text-[10px] uppercase mb-1"
+                  >Nome Completo</label
+                >
+                <input
+                  type="text"
+                  class="input-brutal"
+                />
+              </div>
+              <div>
+                <label class="block font-black text-[10px] uppercase mb-1"
+                  >E-mail</label
+                >
+                <input
+                  type="email"
+                  class="input-brutal"
+                />
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              <div>
+                <label class="block font-black text-[10px] uppercase mb-1"
+                  >CPF</label
+                >
+                <input
+                  type="text"
+                  class="input-brutal"
+                  value="123.456.789-00"
+                  readonly
+                />
+              </div>
+              <div>
+                <label class="block font-black text-[10px] uppercase mb-1"
+                  >Nascimento</label
+                >
+                <input type="date" class="input-brutal" value="1990-05-15" />
+              </div>
+              <div>
+                <label class="block font-black text-[10px] uppercase mb-1"
+                  >Telefone</label
+                >
+                <input
+                  type="text"
+                  class="input-brutal"
+                  value="(81) 99887-7665"
+                />
+              </div>
+            </div>
+
+            <div
+              class="p-6 bg-blue-50 border-2 border-black border-dashed flex items-center gap-4"
+            >
+              <div class="bg-blue-600 text-white p-2 font-black text-xs">!</div>
+              <p class="text-xs font-bold">
+                Para alterar seu CPF ou data de nascimento, é necessário entrar
+                em contato com o suporte enviando um documento oficial com foto.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onclick="salvarDados()"
+              class="brutal-btn brutal-border uppercase bg-black text-white px-8 py-4 hover:bg-governo-yellow hover:text-black transition-all"
+            >
+              Salvar Alterações
+            </button>
+          </form>
+        </section>
+
+        <section id="content-ingressos" class="tab-content hidden space-y-6">
+          <h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>
+
+          <!-- Ticket 1 -->
+          <div
+            class="bg-white brutal-border brutal-shadow flex flex-col md:flex-row"
+          >
+            <div
+              class="bg-black text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black"
+            >
+              <span class="text-[10px] font-black uppercase">OUT</span>
+              <span class="text-3xl brutal-title">25</span>
+            </div>
+            <div class="p-6 flex-1">
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <span
+                    class="bg-yellow-400 border-2 border-black px-2 py-0.5 text-xs font-black uppercase"
+                    >Futebol</span
+                  >
+                  <h3 class="brutal-title text-xl mt-1">NÁUTICO x SPORT</h3>
+                </div>
+                <span class="text-xs font-black text-blue-600">#99281-AA</span>
+              </div>
+              <div
+                class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-bold uppercase"
+              >
+                <div>
+                  <p class="text-gray-400">Setor</p>
+                  <p>SUL VISITANTE</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Portão</p>
+                  <p>PORTÃO G</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Assento</p>
+                  <p>LIVRE</p>
+                </div>
+                <button
+                  class="brutal-btn brutal-border bg-black text-white p-2 font-black hover:bg-governo-blue"
+                >
+                  IMPRIMIR PDF
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ticket 2 -->
+          <div
+            class="bg-white brutal-border brutal-shadow flex flex-col md:flex-row opacity-60 grayscale"
+          >
+            <div
+              class="bg-gray-400 text-black p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black"
+            >
+              <span class="text-[10px] font-black uppercase">SET</span>
+              <span class="text-3xl brutal-title">12</span>
+            </div>
+            <div class="p-6 flex-1 flex flex-col gap-2">
+              <h3 class="brutal-title text-xl">SHOW: JÃO - SUPERTOUR</h3>
+              <p class="text-xs font-black uppercase">
+                Evento Finalizado •
+                <span class="underline">Ver Comprovante</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="content-seguranca"
+          class="tab-content hidden bg-white brutal-border p-8 brutal-shadow"
+        >
+          <h2
+            class="brutal-title text-3xl mb-8 italic border-b-4 border-black inline-block"
+          >
+            Segurança
+          </h2>
+
+          <div class="space-y-8">
+            <div class="max-w-md space-y-4">
+              <h3 class="font-black uppercase text-sm">Alterar Senha</h3>
+              <input
+                type="password"
+                class="input-brutal"
+                placeholder="Senha Atual"
+              />
+              <input
+                type="password"
+                class="input-brutal"
+                placeholder="Nova Senha"
+              />
+              <input
+                type="password"
+                class="input-brutal"
+                placeholder="Confirmar Nova Senha"
+              />
+              <button
+                class="w-full bg-black text-white p-4 font-black uppercase"
+              >
+                Atualizar Senha
+              </button>
+            </div>
+
+            <div class="border-t-4 border-black pt-8">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h3 class="font-black uppercase text-sm">
+                    Autenticação em Dois Fatores
+                  </h3>
+                  <p class="text-xs font-bold text-gray-500">
+                    Aumente a segurança da sua conta.
+                  </p>
+                </div>
+                <button
+                  class="bg-green-400 brutal-border px-6 py-2 font-black text-[10px] uppercase brutal-shadow-sm"
+                >
+                  Ativar
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function switchTab(tabId) {
+        // Esconder todos os conteúdos
+        document.querySelectorAll(".tab-content").forEach((content) => {
+          content.classList.add("hidden");
+        });
+
+        // Remover estado ativo dos botões
+        document.querySelectorAll(".nav-item").forEach((btn) => {
+          btn.classList.remove("active", "bg-blue-600", "text-white");
+          btn.classList.add("bg-white");
+        });
+
+        // Mostrar o conteúdo selecionado
+        document.getElementById("content-" + tabId).classList.remove("hidden");
+
+        // Ativar o botão correspondente
+        const activeBtn = document.getElementById("tab-" + tabId);
+        activeBtn.classList.add("active");
+        activeBtn.classList.remove("bg-white");
+      }
+
+      window.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("tickets") === "true") {
+          switchTab("ingressos");
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // ─── Dados do localStorage ───────────────────────────────────────
+        const nomeUsuario = localStorage.getItem("nome_usuario") || "Usuário";
+        const emailUsuario = localStorage.getItem("email_usuario") || "";
+        const cpfUsuario = localStorage.getItem("cpf_usuario") || "";
+        const telUsuario = localStorage.getItem("tel_usuario") || "";
+        const nascUsuario = localStorage.getItem("nasc_usuario") || "";
+
+        // ─── Sidebar ─────────────────────────────────────────────────────
+        const profileIcon = document.getElementById("profile-icon");
+        const profileName = document.getElementById("profile-name");
+
+        if (profileIcon)
+          profileIcon.textContent = nomeUsuario.charAt(0).toUpperCase();
+        if (profileName) profileName.textContent = nomeUsuario;
+
+        // ─── Formulário de dados pessoais ────────────────────────────────
+        const campos = {
+          nome: document.querySelector('input[type="text"]'),
+          email: document.querySelector('input[type="email"]'),
+          cpf: document.querySelectorAll('input[type="text"]')[1],
+          nascimento: document.querySelector('input[type="date"]'),
+          telefone: document.querySelectorAll('input[type="text"]')[2],
+        };
+
+        if (campos.nome && nomeUsuario) campos.nome.value = nomeUsuario;
+        if (campos.email && emailUsuario) campos.email.value = emailUsuario;
+        if (campos.cpf && cpfUsuario) campos.cpf.value = cpfUsuario;
+        if (campos.nascimento && nascUsuario)
+          campos.nascimento.value = nascUsuario;
+        if (campos.telefone && telUsuario) campos.telefone.value = telUsuario;
+
+        // ─── Tabs ─────────────────────────────────────────────────────────
+        window.switchTab = function (tab) {
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((s) => s.classList.add("hidden"));
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((b) =>
+              b.classList.remove("active", "bg-black", "text-white"),
+            );
+
+          const content = document.getElementById(`content-${tab}`);
+          const navBtn = document.getElementById(`tab-${tab}`);
+
+          if (content) content.classList.remove("hidden");
+          if (navBtn) navBtn.classList.add("active", "bg-black", "text-white");
+        };
+
+        // ─── Salvar alterações ────────────────────────────────────────────
+        window.salvarDados = function () {
+          const novoNome = campos.nome?.value.trim();
+          const novoEmail = campos.email?.value.trim();
+          const novoTel = campos.telefone?.value.trim();
+          const novoNasc = campos.nascimento?.value;
+
+          if (!novoNome || !novoEmail) {
+            alert("Nome e e-mail são obrigatórios.");
+            return;
+          }
+
+          localStorage.setItem("nome_usuario", novoNome);
+          localStorage.setItem("email_usuario", novoEmail);
+          localStorage.setItem("tel_usuario", novoTel);
+          localStorage.setItem("nasc_usuario", novoNasc);
+
+          // Atualiza sidebar sem recarregar
+          if (profileIcon)
+            profileIcon.textContent = novoNome.charAt(0).toUpperCase();
+          if (profileName) profileName.textContent = novoNome;
+
+          mostrarToast("Alterações salvas com sucesso!");
+        };
+
+        // ─── Toast de confirmação ─────────────────────────────────────────
+        function mostrarToast(msg) {
+          const toast = document.createElement("div");
+          toast.textContent = msg;
+          toast.className = [
+            "fixed bottom-6 right-6 z-50",
+            "bg-black text-white",
+            "px-6 py-4 font-black uppercase text-xs",
+            "brutal-border brutal-shadow",
+            "transition-all duration-300 opacity-0 translate-y-2",
+          ].join(" ");
+
+          document.body.appendChild(toast);
+
+          // Anima entrada
+          requestAnimationFrame(() => {
+            toast.classList.remove("opacity-0", "translate-y-2");
+            toast.classList.add("opacity-100", "translate-y-0");
+          });
+
+          // Remove após 3s
+          setTimeout(() => {
+            toast.classList.add("opacity-0", "translate-y-2");
+            toast.addEventListener("transitionend", () => toast.remove());
+          }, 3000);
+        }
+      });
+
+      function salvarDados() {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "SALVANDO...";
+        btn.disabled = true;
+
+        setTimeout(() => {
+          alert("DADOS ATUALIZADOS COM SUCESSO!");
+          btn.innerText = originalText;
+          btn.disabled = false;
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>

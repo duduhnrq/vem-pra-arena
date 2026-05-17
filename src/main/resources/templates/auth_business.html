@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso - VemPraArena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <style>
+      :root {
+        --blue: #3772ff;
+        --yellow: #f4d03f;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8f8f8;
+        color: #000;
+        overflow-x: hidden;
+      }
+      .brutal-title {
+        font-family: "Archivo Black", sans-serif;
+        text-transform: uppercase;
+      }
+      .brutal-border {
+        border: 3px solid #000;
+      }
+      .brutal-shadow {
+        box-shadow: 8px 8px 0px #000;
+      }
+
+      /* Grid de fundo sutil */
+      .bg-grid {
+        background-image:
+          linear-gradient(#e5e5e5 1px, transparent 1px),
+          linear-gradient(90deg, #e5e5e5 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+
+      .auth-container {
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .input-brutal {
+        width: 100%;
+        padding: 1rem;
+        border: 3px solid #000;
+        font-weight: 700;
+        transition: all 0.2s;
+        background: #fff;
+      }
+
+      .input-brutal:focus {
+        background-color: #fef9c3;
+        outline: none;
+      }
+
+      .btn-brutal {
+        background: #000;
+        color: #fff;
+        padding: 1.25rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        border: 3px solid #000;
+        transition: all 0.1s;
+        cursor: pointer;
+        width: 100%;
+        display: block;
+        text-align: center;
+      }
+
+      .btn-brutal:hover {
+        background-color: var(--yellow);
+        color: black;
+        transform: translate(-4px, -4px);
+        box-shadow: 8px 8px 0px #000;
+      }
+
+      .btn-brutal:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0px 0px 0px #000;
+      }
+
+      .btn-secondary {
+        background: #e5e5e5;
+        color: #000;
+        padding: 1.25rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        border: 3px solid #000;
+        transition: all 0.1s;
+        cursor: pointer;
+      }
+
+      .btn-secondary:hover {
+        background-color: #000;
+        color: #fff;
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0px #000;
+      }
+
+      .form-toggle {
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        border: 2px solid transparent;
+      }
+
+      .form-toggle.active {
+        background: #000;
+        color: #fff;
+        border-color: #000;
+      }
+
+      .auth-card {
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .hidden-card {
+        display: none;
+        opacity: 0;
+      }
+
+      .step-dot {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #000;
+        background: #fff;
+      }
+      .step-dot.active {
+        background: var(--yellow);
+        transform: scale(1.3);
+      }
+      .step-content {
+        display: none;
+      }
+      .step-content.active {
+        display: block;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-6px);
+        }
+        40% {
+          transform: translateX(6px);
+        }
+        60% {
+          transform: translateX(-4px);
+        }
+        80% {
+          transform: translateX(4px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.4s ease;
+      }
+
+      .border-red-500 {
+        border-color: #ef4444 !important;
+      }
+
+      .file-dropzone {
+        border: 3px dashed #000;
+        padding: 2rem;
+        text-align: center;
+        background: #f9f9f9;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .file-dropzone:hover {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body class="bg-grid">
+    <div class="auth-container">
+      <!-- Lado Esquerdo: Hero/Branding -->
+      <div
+        class="p-12 bg-black border-r-[6px] border-[#000] fixed hidden lg:flex flex-col justify-between overflow-hidden h-full w-[45%]"
+      >
+        <div class="z-10 space-y-10">
+          <a
+            href="index.html"
+            class="bg-black border-2 border-white text-white px-3 py-1 text-2xl font-black tracking-tighter uppercase hover:bg-white hover:text-black transition-all"
+            >VEMPRAARENA</a
+          >
+          <div class="flex flex-col gap-6">
+            <h1 class="text-white text-7xl brutal-title leading-[0.9] italic">
+              Portal do <br /><span
+                class="text-black bg-governo-yellow px-2 py-4 inline-block"
+                >Promotor.</span
+              >
+            </h1>
+            <ul class="space-y-4 font-bold text-sm uppercase">
+              <li class="flex items-center gap-2 text-white">
+                <span class="bg-yellow-400 text-black px-1 brutal-border"
+                  >✓</span
+                >
+                Gestão de Pautas 2026/27
+              </li>
+              <li class="flex items-center gap-2 text-white">
+                <span class="bg-yellow-400 text-black px-1 brutal-border"
+                  >✓</span
+                >
+                Dashboard de Bilheteria
+              </li>
+              <li class="flex items-center gap-2 text-white">
+                <span class="bg-yellow-400 text-black px-1 brutal-border"
+                  >✓</span
+                >
+                Suporte Técnico Direto
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="z-10">
+          <div class="flex gap-4 mb-4 items-center">
+            <div
+              class="w-12 h-12 bg-governo-yellow brutal-border brutal-shadow flex items-center justify-center font-black"
+            >
+              10+
+            </div>
+            <p class="text-white font-bold text-xs uppercase leading-tight">
+              Anos de emoção <br />no Coração de PE
+            </p>
+          </div>
+        </div>
+
+        <!-- Elemento decorativo abstrato -->
+        <div class="absolute -bottom-20 -right-20 opacity-20">
+          <div class="w-96 h-96 border-[40px] border-black rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- Lado Direito: Formulários -->
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-6 md:p-12 w-[100%] lg:ml-[45%]"
+      >
+        <div class="w-full max-w-xl lg:max-w-md">
+          <!-- Toggle de Formulário -->
+          <div class="flex mb-4 brutal-border bg-white p-1 w-fit mx-auto">
+            <button
+              id="toggle-login"
+              onclick="toggleForm('login')"
+              class="form-toggle active"
+            >
+              Login
+            </button>
+            <button
+              id="toggle-register"
+              onclick="toggleForm('register')"
+              class="form-toggle"
+            >
+              Cadastro
+            </button>
+          </div>
+
+          <!-- Mensagem de Erro Geral -->
+          <div
+            id="error-message"
+            class="hidden mb-4 p-4 border-2 border-red-500 bg-red-100 text-red-700 font-bold text-xs uppercase brutal-shadow"
+          ></div>
+
+          <!-- CARD LOGIN -->
+          <div
+            id="login-card"
+            class="auth-card brutal-border bg-white p-8 md:p-10 brutal-shadow"
+          >
+            <h2 class="text-4xl brutal-title mb-2">Entrar</h2>
+            <p
+              class="font-bold text-gray-500 mb-8 uppercase text-xs tracking-widest italic"
+            >
+              Acesse sua conta corporativa.
+            </p>
+
+            <form id="loginForm" class="space-y-6">
+              <div class="space-y-1">
+                <label class="block font-black text-[10px] uppercase"
+                  >E-mail Corporativo</label
+                >
+                <input
+                  type="email"
+                  id="login-email"
+                  class="input-brutal"
+                  placeholder="exemplo@email.com"
+                  required
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block font-black text-[10px] uppercase"
+                  >Senha</label
+                >
+                <input
+                  type="password"
+                  id="login-senha"
+                  class="input-brutal"
+                  placeholder="••••••••"
+                  required
+                />
+                <a
+                  href="#"
+                  class="text-[10px] font-black underline uppercase w-full text-right block hover:text-gray-700 transition-all"
+                  >Esqueci a senha</a
+                >
+              </div>
+              <button type="submit" class="btn-brutal text-xl">
+                Acessar Conta →
+              </button>
+            </form>
+          </div>
+
+          <!-- CARD CADASTRO -->
+          <div
+            id="register-card"
+            class="auth-card hidden-card brutal-border bg-white p-8 md:p-10 brutal-shadow"
+          >
+            <h2 class="text-4xl brutal-title mb-2">Criar Conta</h2>
+            <p
+              class="font-bold text-gray-500 mb-8 uppercase text-xs tracking-widest italic"
+            >
+              Cadastre-se para acessar o portal.
+            </p>
+
+            <form id="registerForm">
+              <div class="flex justify-between mb-8">
+                <div class="flex gap-2">
+                  <div class="step-dot active" id="dot-1"></div>
+                  <div class="step-dot" id="dot-2"></div>
+                  <div class="step-dot" id="dot-3"></div>
+                </div>
+                <span id="step-label" class="text-[10px] font-black uppercase"
+                  >Passo 1: Identificação</span
+                >
+              </div>
+
+              <div id="step-1" class="step-content active space-y-6">
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >CNPJ *</label
+                  >
+                  <input
+                    type="text"
+                    name="cnpj"
+                    class="input-brutal"
+                    placeholder="00.000.000/0000-00"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Razão Social *</label
+                  >
+                  <input
+                    type="text"
+                    name="razaoSocial"
+                    class="input-brutal"
+                    placeholder="Nome da Empresa LTDA"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Nome Fantasia</label
+                  >
+                  <input
+                    type="text"
+                    name="nomeFantasia"
+                    class="input-brutal"
+                    placeholder="Como o público conhece sua empresa"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="btn-brutal text-xl"
+                  onclick="nextStep(2)"
+                >
+                  Próximo Passo →
+                </button>
+              </div>
+
+              <div id="step-2" class="step-content space-y-6">
+                <div class="flex gap-4">
+                  <div class="space-y-1">
+                    <label class="block font-black text-[10px] uppercase"
+                      >Telefone Fixo</label
+                    >
+                    <input
+                      type="text"
+                      name="telefoneFixo"
+                      class="input-brutal"
+                      placeholder="(00) 0000-0000"
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block font-black text-[10px] uppercase"
+                      >Whatsapp Negócios *</label
+                    >
+                    <input
+                      type="text"
+                      name="whatsappNegocios"
+                      class="input-brutal"
+                      placeholder="(00) 90000-0000"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Nome do Representante Legal *</label
+                  >
+                  <input
+                    type="text"
+                    name="nomeRepresentante"
+                    class="input-brutal"
+                    placeholder="Nome Completo do Responsável"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >E-mail Corporativo *</label
+                  >
+                  <input
+                    type="email"
+                    name="emailCorporativo"
+                    class="input-brutal"
+                    placeholder="exemplo@email.com"
+                    required
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-black text-[10px] uppercase"
+                    >Senha *</label
+                  >
+                  <input
+                    id="senha-promotor"
+                    name="senha"
+                    type="password"
+                    class="input-brutal"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <button
+                    type="button"
+                    class="btn-secondary text-xl"
+                    onclick="nextStep(1)"
+                  >
+                    Voltar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-brutal text-xl"
+                    onclick="nextStep(3)"
+                  >
+                    Próximo Passo →
+                  </button>
+                </div>
+              </div>
+
+              <div id="step-3" class="step-content space-y-6">
+                <div class="space-y-3">
+                  <div
+                    class="file-dropzone"
+                    onclick="document.getElementById('file-cartaoCnpj').click()"
+                  >
+                    <p class="text-[10px] font-black uppercase">
+                      Cartão CNPJ (PDF)
+                    </p>
+                    <p
+                      class="text-[8px] font-bold opacity-50"
+                      id="text-cartaoCnpj"
+                    >
+                      CLIQUE OU ARRASTE O ARQUIVO
+                    </p>
+                    <input
+                      type="file"
+                      name="cartaoCnpj"
+                      id="file-cartaoCnpj"
+                      accept=".pdf"
+                      class="hidden"
+                      onchange="updateFileName(this, 'text-cartaoCnpj')"
+                      required
+                    />
+                  </div>
+                  <div
+                    class="file-dropzone"
+                    onclick="
+                      document
+                        .getElementById('file-alteracaoContratual')
+                        .click()
+                    "
+                  >
+                    <p class="text-[10px] font-black uppercase">
+                      Última Alteração Contratual
+                    </p>
+                    <p
+                      class="text-[8px] font-bold opacity-50"
+                      id="text-alteracaoContratual"
+                    >
+                      DOCUMENTO COM O QUADRO SOCIETÁRIO
+                    </p>
+                    <input
+                      type="file"
+                      name="alteracaoContratual"
+                      id="file-alteracaoContratual"
+                      accept=".pdf"
+                      class="hidden"
+                      onchange="
+                        updateFileName(this, 'text-alteracaoContratual')
+                      "
+                      required
+                    />
+                  </div>
+                  <div
+                    class="file-dropzone"
+                    onclick="
+                      document.getElementById('file-documentoSocio').click()
+                    "
+                  >
+                    <p class="text-[10px] font-black uppercase">
+                      Documento de Identidade (Sócio)
+                    </p>
+                    <p
+                      class="text-[8px] font-bold opacity-50"
+                      id="text-documentoSocio"
+                    >
+                      RG, CNH OU PASSAPORTE
+                    </p>
+                    <input
+                      type="file"
+                      name="documentoSocio"
+                      id="file-documentoSocio"
+                      accept=".pdf"
+                      class="hidden"
+                      onchange="updateFileName(this, 'text-documentoSocio')"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="bg-yellow-100 border-2 border-black p-4">
+                  <p
+                    class="text-[9px] font-black uppercase leading-tight italic"
+                  >
+                    Importante: Seu cadastro passará por uma análise técnica e
+                    fiscal de até 72 horas úteis. O acesso ao calendário de
+                    pautas será liberado somente após a aprovação.
+                  </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <button
+                    type="button"
+                    class="btn-secondary text-xl"
+                    onclick="nextStep(2)"
+                  >
+                    Voltar
+                  </button>
+                  <button type="submit" class="btn-brutal text-xl">
+                    Finalizar Cadastro →
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Footer do Auth -->
+          <div class="mt-12 text-center">
+            <p class="text-[10px] font-black uppercase text-gray-400">
+              © 2026 ARENA PERNAMBUCO • GOVERNO DO ESTADO
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showError(message) {
+        const errorDiv = document.getElementById("error-message");
+        errorDiv.innerText = message;
+        errorDiv.classList.remove("hidden");
+      }
+
+      function hideError() {
+        const errorDiv = document.getElementById("error-message");
+        errorDiv.classList.add("hidden");
+        errorDiv.innerText = "";
+      }
+
+      function toggleForm(type) {
+        hideError();
+        const loginCard = document.getElementById("login-card");
+        const registerCard = document.getElementById("register-card");
+        const toggleLogin = document.getElementById("toggle-login");
+        const toggleRegister = document.getElementById("toggle-register");
+
+        if (type === "login") {
+          loginCard.classList.remove("hidden-card");
+          registerCard.classList.add("hidden-card");
+          toggleLogin.classList.add("active");
+          toggleRegister.classList.remove("active");
+        } else {
+          loginCard.classList.add("hidden-card");
+          registerCard.classList.remove("hidden-card");
+          toggleLogin.classList.remove("active");
+          toggleRegister.classList.add("active");
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("register") === "true") {
+          toggleForm("register");
+        }
+      });
+
+      function formatCNPJ(value) {
+        return value
+          .replace(/\D/g, "")
+          .slice(0, 14)
+          .replace(/^(\d{2})(\d)/, "$1.$2")
+          .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+          .replace(/\.(\d{3})(\d)/, ".$1/$2")
+          .replace(/(\d{4})(\d)/, "$1-$2");
+      }
+
+      function formatPhone(value) {
+        return value
+          .replace(/\D/g, "")
+          .slice(0, 10)
+          .replace(/^(\d{2})(\d)/, "($1) $2")
+          .replace(/(\d{4})(\d{1,4})$/, "$1-$2");
+      }
+
+      function formatWhatsApp(value) {
+        return value
+          .replace(/\D/g, "")
+          .slice(0, 11)
+          .replace(/^(\d{2})(\d)/, "($1) $2")
+          .replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+      }
+
+      // Aplica as máscaras nos inputs
+      document
+        .querySelector('[name="cnpj"]')
+        .addEventListener("input", function () {
+          this.value = formatCNPJ(this.value);
+        });
+
+      document
+        .querySelector('[name="telefoneFixo"]')
+        .addEventListener("input", function () {
+          this.value = formatPhone(this.value);
+        });
+
+      document
+        .querySelector('[name="whatsappNegocios"]')
+        .addEventListener("input", function () {
+          this.value = formatWhatsApp(this.value);
+        });
+
+      function validateStep(step) {
+        const errors = [];
+
+        if (step === 1) {
+          const cnpj = document.querySelector('[name="cnpj"]').value.trim();
+          const razaoSocial = document
+            .querySelector('[name="razaoSocial"]')
+            .value.trim();
+          if (!cnpj) errors.push("cnpj");
+          if (!razaoSocial) errors.push("razaoSocial");
+        }
+
+        if (step === 2) {
+          const whatsapp = document
+            .querySelector('[name="whatsappNegocios"]')
+            .value.trim();
+          const representante = document
+            .querySelector('[name="nomeRepresentante"]')
+            .value.trim();
+          const email = document
+            .querySelector('[name="emailCorporativo"]')
+            .value.trim();
+          const senha = document.querySelector('[name="senha"]').value.trim();
+          if (!whatsapp) errors.push("whatsappNegocios");
+          if (!representante) errors.push("nomeRepresentante");
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            errors.push("emailCorporativo");
+          if (!senha) errors.push("senha");
+        }
+
+        if (step === 3) {
+          const cartao =
+            document.getElementById("file-cartaoCnpj").files.length;
+          const alteracao = document.getElementById("file-alteracaoContratual")
+            .files.length;
+          const documento = document.getElementById("file-documentoSocio").files
+            .length;
+          if (!cartao) errors.push("file-cartaoCnpj");
+          if (!alteracao) errors.push("file-alteracaoContratual");
+          if (!documento) errors.push("file-documentoSocio");
+        }
+
+        return errors;
+      }
+
+      function highlightErrors(errors) {
+        // Remove erros anteriores
+        document
+          .querySelectorAll(".input-brutal, .file-dropzone")
+          .forEach((el) => {
+            el.classList.remove("border-red-500", "shake");
+          });
+
+        errors.forEach((name) => {
+          // Inputs de texto
+          const input = document.querySelector(`[name="${name}"]`);
+          if (input) {
+            input.classList.add("border-red-500", "shake");
+            input.addEventListener(
+              "animationend",
+              () => input.classList.remove("shake"),
+              { once: true },
+            );
+          }
+          // Dropzones de arquivo
+          const fileInput = document.getElementById(name);
+          if (fileInput) {
+            const dropzone = fileInput.closest(".file-dropzone");
+            if (dropzone) {
+              dropzone.classList.add("border-red-500", "shake");
+              dropzone.addEventListener(
+                "animationend",
+                () => dropzone.classList.remove("shake"),
+                { once: true },
+              );
+            }
+          }
+        });
+      }
+
+      function nextStep(step) {
+        // Se está avançando, valida o passo atual
+        const currentStep = parseInt(
+          [...document.querySelectorAll(".step-content")]
+            .find((s) => s.classList.contains("active"))
+            ?.id.replace("step-", "") || "1",
+        );
+
+        if (step > currentStep) {
+          const errors = validateStep(currentStep);
+          if (errors.length > 0) {
+            highlightErrors(errors);
+            return; // Bloqueia a navegação
+          }
+        }
+
+        // Esconde todos os passos
+        document
+          .querySelectorAll(".step-content")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".step-dot")
+          .forEach((d) => d.classList.remove("active"));
+
+        // Mostra o passo atual
+        document.getElementById("step-" + step).classList.add("active");
+
+        // Atualiza indicadores visuais
+        for (let i = 1; i <= step; i++) {
+          document.getElementById("dot-" + i).classList.add("active");
+        }
+
+        const labels = ["Identificação", "Contato", "Documentação"];
+        document.getElementById("step-label").innerText =
+          `Passo ${step}: ${labels[step - 1]}`;
+      }
+
+      function updateFileName(input, textId) {
+        const textElement = document.getElementById(textId);
+        if (input.files && input.files.length > 0) {
+          textElement.innerText = input.files[0].name;
+        } else {
+          if (textId === "text-cartaoCnpj")
+            textElement.innerText = "CLIQUE OU ARRASTE O ARQUIVO";
+          if (textId === "text-alteracaoContratual")
+            textElement.innerText = "DOCUMENTO COM O QUADRO SOCIETÁRIO";
+          if (textId === "text-documentoSocio")
+            textElement.innerText = "RG, CNH OU PASSAPORTE";
+        }
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          hideError();
+
+          const email = document.getElementById("login-email").value;
+          const senha = document.getElementById("login-senha").value;
+
+          try {
+            const response = await fetch(
+              "http://localhost:8080/api/promotores/login",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ emailCorporativo: email, senha }),
+              },
+            );
+
+            if (response.status === 200) {
+              sessionStorage.setItem("email", email);
+              sessionStorage.setItem("promotor_logado", "true");
+              window.location.href = "/business.html";
+            } else {
+              const errorText = await response.text();
+              showError(
+                errorText ||
+                  "Erro ao realizar login. Verifique suas credenciais.",
+              );
+            }
+          } catch (error) {
+            showError("Erro de conexão com o servidor.");
+          }
+        });
+
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          hideError();
+
+          const submitBtn = this.querySelector('button[type="submit"]');
+          const originalBtnText = submitBtn.innerText;
+
+          const formData = new FormData(this);
+          const fileFields = [
+            "cartaoCnpj",
+            "alteracaoContratual",
+            "documentoSocio",
+          ];
+          let hasError = false;
+
+          for (const field of fileFields) {
+            const file = formData.get(field);
+            if (file && file.size > 0) {
+              if (
+                file.type !== "application/pdf" &&
+                !file.name.toLowerCase().endsWith(".pdf")
+              ) {
+                showError(`O arquivo para ${field} deve ser um PDF.`);
+                hasError = true;
+                break;
+              }
+              if (file.size > 10 * 1024 * 1024) {
+                // 10MB
+                showError(`O arquivo para ${field} deve ter no máximo 10MB.`);
+                hasError = true;
+                break;
+              }
+            } else {
+              showError(`O arquivo para ${field} é obrigatório.`);
+              hasError = true;
+              break;
+            }
+          }
+
+          if (hasError) return;
+
+          submitBtn.innerText = "Processando...";
+          submitBtn.disabled = true;
+          submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+
+          try {
+            const response = await fetch(
+              "http://localhost:8080/api/promotores/cadastrar",
+              {
+                method: "POST",
+                body: formData, // o navegador define o Content-Type: multipart/form-data automaticamente
+              },
+            );
+
+            if (response.ok) {
+              hideError();
+              alert("Conta criada com sucesso!");
+              this.reset();
+              updateFileName(
+                document.getElementById("file-cartaoCnpj"),
+                "text-cartaoCnpj",
+              );
+              updateFileName(
+                document.getElementById("file-alteracaoContratual"),
+                "text-alteracaoContratual",
+              );
+              updateFileName(
+                document.getElementById("file-documentoSocio"),
+                "text-documentoSocio",
+              );
+              nextStep(1);
+              toggleForm("login");
+            } else {
+              const errorText = await response.text();
+              showError(errorText || "Erro ao realizar cadastro.");
+            }
+          } catch (error) {
+            showError("Erro de conexão com o servidor.");
+          } finally {
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+          }
+        });
+    </script>
+  </body>
+</html>
