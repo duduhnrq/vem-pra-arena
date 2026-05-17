@@ -1,0 +1,191 @@
+html {
+  scroll-behavior: smooth;
+  scroll-margin-top: 80px;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+h1,
+h2,
+h3,
+.brutal-title {
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+}
+
+.brutal-border {
+  border: 3px solid #000;
+}
+
+.brutal-shadow {
+  box-shadow: 6px 6px 0px #000;
+}
+
+.brutal-shadow-lg {
+  box-shadow: 12px 12px 0px #000;
+}
+
+.brutal-btn,
+.brutal-card,
+.brutal-input {
+  transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.brutal-btn:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px #000;
+}
+
+.btn-black-hover:hover {
+  background-color: #f4d03f;
+  color: #000;
+}
+
+.btn-yellow-hover:hover {
+  background-color: #3772ff;
+  color: #fff;
+}
+
+.btn-blue-hover:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.brutal-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.brutal-card:hover {
+  transform: translate(-5px, -5px);
+  box-shadow: 15px 15px 0px #000;
+}
+
+.bg-governo-blue {
+  background-color: #3772ff;
+}
+
+.hover\:bg-governo-blue:hover {
+  background-color: #3772ff;
+}
+
+.bg-governo-yellow {
+  background-color: #f4d03f;
+}
+
+.hover\:bg-governo-yellow:hover {
+  background-color: #f4d03f;
+}
+
+.border-governo-yellow {
+  border-color: #f4d03f;
+}
+
+.bg-governo-pink {
+  background-color: #ff6b6b;
+}
+
+.hover\:bg-governo-pink:hover {
+  background-color: #ff6b6b;
+}
+
+.border-governo-pink {
+  border-color: #ff6b6b;
+}
+
+.bg-governo-green {
+  background-color: #4ade80;
+}
+
+.hover\:bg-governo-green:hover {
+  background-color: #4ade80;
+}
+
+.bg-grid {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+    linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #000;
+  color: #fff;
+  padding: 10px 0;
+  border-top: 3px solid #000;
+  border-bottom: 3px solid #000;
+}
+
+.marquee div {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.hidden-event {
+  display: none;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.faq-answer {
+  display: none;
+}
+
+.faq-icon {
+  transition: transform 0.3s;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+}
+
+
+/* IA Chatbot Styles */
+.message-bubble {
+  max-width: 85%;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.ai-message {
+  background-color: #f4d03f;
+  color: #000;
+  align-self: flex-start;
+  border: 2px solid black;
+  box-shadow: 4px 4px 0px black;
+}
+
+.user-message {
+  background-color: #000;
+  color: #fff;
+  align-self: flex-end;
+  border: 2px solid black;
+  box-shadow: 4px 4px 0px black;
+}
+
+#chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 0;
+}

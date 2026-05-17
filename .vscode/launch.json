@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Rodar VemPraArena",
+            "request": "launch",
+            "mainClass": "com.vempraarena.plataforma.Application",
+            "projectName": "plataforma",
+            "env": {
+                "DB_URL": "jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:6543/postgres",
+                "DB_USERNAME": "postgres.pvatfkyvdgeuyzklozir",
+                "DB_PASSWORD": "ZEYubFW$9KbXc7c"
+            }
+        }
+    ]
+}
