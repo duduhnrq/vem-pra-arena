@@ -1,11 +1,786 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VemPraArena - Portal do Promotor</title>
-</head>
-<body>
-    
-</body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <style>
+      :root {
+        --blue: #3772ff;
+        --yellow: #f4d03f;
+        --black: #000000;
+        --white: #ffffff;
+        --gray: #e5e5e5;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f0f0;
+        color: var(--black);
+        margin: 0;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .brutal-border {
+        border: 3px solid var(--black);
+      }
+      .brutal-shadow {
+        box-shadow: 6px 6px 0px var(--black);
+      }
+      .brutal-title {
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 280px;
+        background: var(--white);
+        border-right: 4px solid var(--black);
+        display: flex;
+        flex-direction: column;
+        z-index: 50;
+      }
+      .nav-item {
+        padding: 1.25rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        border-bottom: 2px solid var(--black);
+        cursor: pointer;
+        transition: all 0.1s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-item:hover {
+        background-color: var(--yellow);
+      }
+      .nav-item.active {
+        background-color: var(--black);
+        color: var(--white);
+      }
+
+      /* Main Content Area */
+      .main-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem;
+        background-image: radial-gradient(var(--black) 1px, transparent 1px);
+        background-size: 30px 30px;
+        background-color: #f8f8f8;
+      }
+
+      /* View Containers */
+      .view-section {
+        display: none;
+      }
+      .view-section.active {
+        display: block;
+      }
+
+      /* Calendar Styles */
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+      }
+      .calendar-day {
+        aspect-ratio: 1/1;
+        border: 2px solid var(--black);
+        background: white;
+        padding: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: transform 0.1s;
+      }
+      .calendar-day:hover:not(.empty):not(.occupied) {
+        background-color: var(--yellow);
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0px #000;
+      }
+      .calendar-day.occupied {
+        background-color: #000;
+        color: white;
+        cursor: not-allowed;
+        opacity: 0.8;
+      }
+      .calendar-day.selected {
+        background-color: var(--blue);
+        color: white;
+      }
+      .calendar-day.empty {
+        border: none;
+        background: transparent;
+        cursor: default;
+      }
+
+      /* Tables and Lists */
+      .brutal-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+      }
+      .brutal-table th {
+        background: var(--black);
+        color: white;
+        padding: 12px;
+        text-align: left;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+      }
+      .brutal-table td {
+        border: 2px solid var(--black);
+        padding: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      /* Form Controls */
+      input,
+      select,
+      textarea {
+        border: 3px solid #000;
+        padding: 12px;
+        font-weight: 700;
+        width: 100%;
+        border-radius: 0;
+      }
+      input:focus {
+        outline: none;
+        background-color: var(--yellow);
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+        border: 2px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="p-6 border-bottom-4 border-black bg-white">
+        <span class="brutal-title text-xl leading-none">VEMPRAARENA</span>
+        <p class="text-xs brutal-title mt-2 text-gray-500">
+          Portal do Promotor
+        </p>
+      </div>
+
+      <nav class="flex-1">
+        <div
+          onclick="switchView('nova-pauta')"
+          class="nav-item active"
+          id="btn-nova-pauta"
+        >
+          <span>📅</span> NOVA SOLICITAÇÃO
+        </div>
+        <div
+          onclick="switchView('meus-eventos')"
+          class="nav-item"
+          id="btn-meus-eventos"
+        >
+          <span>🏟️</span> MEUS EVENTOS
+        </div>
+        <div
+          onclick="switchView('financeiro')"
+          class="nav-item"
+          id="btn-financeiro"
+        >
+          <span>💰</span> FINANCEIRO & NOTAS
+        </div>
+        <div onclick="switchView('perfil')" class="nav-item" id="btn-perfil">
+          <span>🏢</span> PERFIL DA EMPRESA
+        </div>
+      </nav>
+
+      <div class="p-4 mt-auto border-t-4 border-black bg-gray-50">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-blue-600 brutal-border flex items-center justify-center text-white font-black text-xs"
+          >
+            LP
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-[10px] font-black uppercase truncate">
+              Luan Promoções S.A.
+            </p>
+            <p class="text-[9px] font-bold text-blue-600 uppercase">
+              Parceiro VIP
+            </p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- VIEW: NOVA PAUTA (DASHBOARD OPERACIONAL) -->
+      <section id="view-nova-pauta" class="view-section active">
+        <header class="mb-8">
+          <h1 class="brutal-title text-4xl italic">Solicitar Nova Pauta</h1>
+          <p class="font-bold opacity-60">
+            Consulte datas e envie sua proposta técnica para a administração.
+          </p>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-8">
+          <div class="lg:col-span-8 space-y-8">
+            <!-- Calendário Dinâmico -->
+            <div class="bg-white brutal-border p-6 brutal-shadow">
+              <div class="flex justify-between items-center mb-6">
+                <h2
+                  class="brutal-title text-xl italic underline decoration-yellow-400"
+                >
+                  1. Consulta de Disponibilidade
+                </h2>
+                <div class="flex items-center gap-4">
+                  <button
+                    onclick="changeMonth(-1)"
+                    class="brutal-border p-2 hover:bg-black hover:text-white"
+                  >
+                    &lt;
+                  </button>
+                  <span
+                    id="calendar-month-year"
+                    class="font-black uppercase text-sm w-32 text-center"
+                    >Novembro 2026</span
+                  >
+                  <button
+                    onclick="changeMonth(1)"
+                    class="brutal-border p-2 hover:bg-black hover:text-white"
+                  >
+                    &gt;
+                  </button>
+                </div>
+              </div>
+
+              <div class="calendar-grid mb-6" id="calendar-body">
+                <!-- Injetado via JS -->
+              </div>
+
+              <div
+                class="flex flex-wrap gap-4 text-[10px] font-black uppercase"
+              >
+                <span class="flex items-center gap-2"
+                  ><div class="w-4 h-4 bg-white border-2 border-black"></div>
+                  Disponível</span
+                >
+                <span class="flex items-center gap-2"
+                  ><div class="w-4 h-4 bg-black border-2 border-black"></div>
+                  Ocupado / Manutenção</span
+                >
+                <span class="flex items-center gap-2"
+                  ><div class="w-4 h-4 bg-blue-600 border-2 border-black"></div>
+                  Selecionado</span
+                >
+              </div>
+            </div>
+
+            <!-- Formulário de Detalhes -->
+            <div class="bg-white brutal-border p-8 brutal-shadow">
+              <h2
+                class="brutal-title text-xl mb-6 italic underline decoration-yellow-400"
+              >
+                2. Detalhamento do Evento
+              </h2>
+              <form id="proposal-form" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-[10px] font-black uppercase mb-2"
+                      >Título do Evento</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Ex: Turnê Sandy & Junior 2026"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-black uppercase mb-2"
+                      >Categoria</label
+                    >
+                    <select>
+                      <option>Show Musical</option>
+                      <option>Partida de Futebol</option>
+                      <option>Evento Corporativo</option>
+                      <option>Religioso</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                  <div>
+                    <label class="block text-[10px] font-black uppercase mb-2"
+                      >Público Estimado</label
+                    >
+                    <input
+                      type="number"
+                      id="input-publico"
+                      value="5000"
+                      oninput="calculateEstimate()"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-black uppercase mb-2"
+                      >Horário Início</label
+                    >
+                    <input type="time" />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-black uppercase mb-2"
+                      >Tempo de Montagem (Dias)</label
+                    >
+                    <input type="number" value="1" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Rider Técnico e Observações</label
+                  >
+                  <textarea
+                    rows="4"
+                    placeholder="Descreva necessidades de palco, iluminação, e carga elétrica..."
+                  ></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Coluna de Cálculo e Submissão -->
+          <div class="lg:col-span-4">
+            <div class="sticky top-8 space-y-6">
+              <div class="bg-black text-white brutal-border p-6 brutal-shadow">
+                <h3 class="brutal-title text-lg mb-4 text-yellow-400">
+                  Estimativa Operacional
+                </h3>
+                <div class="space-y-3 mb-6">
+                  <div class="flex justify-between text-xs">
+                    <span class="opacity-50">Taxa de Ocupação (Pauta)</span>
+                    <span id="est-pauta">R$ 45.000,00</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="opacity-50">Brigada de Incêndio/Seg.</span>
+                    <span id="est-seguranca">R$ 12.000,00</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="opacity-50">Limpeza Técnica</span>
+                    <span id="est-limpeza">R$ 6.500,00</span>
+                  </div>
+                  <div
+                    class="border-t border-dashed border-gray-600 pt-3 flex justify-between font-black text-xl"
+                  >
+                    <span>TOTAL</span>
+                    <span id="est-total" class="text-yellow-400"
+                      >R$ 63.500,00</span
+                    >
+                  </div>
+                </div>
+                <button
+                  onclick="submitProposta()"
+                  class="w-full bg-blue-600 text-white p-4 font-black uppercase hover:bg-blue-700 brutal-border transition-colors"
+                >
+                  Enviar para Análise →
+                </button>
+              </div>
+
+              <div class="bg-white brutal-border p-4">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="w-3 h-3 bg-blue-600 animate-pulse"></div>
+                  <p class="text-[10px] font-black uppercase">
+                    Arena Assistant IA
+                  </p>
+                </div>
+                <p class="text-[11px] font-bold italic leading-tight">
+                  Sua solicitação coincide com o período de chuvas. Sugerimos
+                  prever cobertura extra para a área técnica de palco.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: MEUS EVENTOS (GESTÃO DE PORTFÓLIO) -->
+      <section id="view-meus-eventos" class="view-section">
+        <header class="mb-8 flex justify-between items-end">
+          <div>
+            <h1 class="brutal-title text-4xl italic">Meus Eventos</h1>
+            <p class="font-bold opacity-60">
+              Histórico de pautas e eventos agendados por sua empresa.
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="bg-white brutal-border px-4 py-2 font-black text-xs uppercase hover:bg-black hover:text-white"
+            >
+              Filtrar
+            </button>
+            <button
+              class="bg-white brutal-border px-4 py-2 font-black text-xs uppercase hover:bg-black hover:text-white"
+            >
+              Exportar PDF
+            </button>
+          </div>
+        </header>
+
+        <div class="grid gap-6">
+          <!-- Card Evento 1 -->
+          <div
+            class="bg-white brutal-border p-6 brutal-shadow flex flex-col md:flex-row justify-between items-center gap-6"
+          >
+            <div class="flex gap-6 items-center w-full">
+              <div
+                class="w-20 h-20 bg-black flex flex-col items-center justify-center text-white p-2"
+              >
+                <span class="text-[10px] font-black uppercase">OUT</span>
+                <span class="text-2xl font-black">25</span>
+              </div>
+              <div>
+                <h3 class="font-black text-xl uppercase italic">
+                  Náutico x Sport - Série B
+                </h3>
+                <p class="text-xs font-bold text-gray-500 uppercase">
+                  Campeonato Brasileiro 2026 • 16:00
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end"
+            >
+              <div class="text-right">
+                <p class="text-[10px] font-black opacity-40 uppercase">
+                  Status
+                </p>
+                <span class="status-badge bg-green-400">Confirmado</span>
+              </div>
+              <div class="text-right">
+                <p class="text-[10px] font-black opacity-40 uppercase">
+                  Público
+                </p>
+                <p class="font-black">32.400</p>
+              </div>
+              <button class="brutal-border p-3 hover:bg-yellow-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card Evento 2 -->
+          <div
+            class="bg-white brutal-border p-6 brutal-shadow flex flex-col md:flex-row justify-between items-center gap-6 opacity-80"
+          >
+            <div class="flex gap-6 items-center w-full">
+              <div
+                class="w-20 h-20 bg-gray-200 border-2 border-black flex flex-col items-center justify-center p-2"
+              >
+                <span class="text-[10px] font-black uppercase">DEZ</span>
+                <span class="text-2xl font-black">12</span>
+              </div>
+              <div>
+                <h3 class="font-black text-xl uppercase italic">
+                  Festival No Ar Coquetel Molotov
+                </h3>
+                <p class="text-xs font-bold text-gray-500 uppercase">
+                  Multi-palcos • 14:00
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end"
+            >
+              <div class="text-right">
+                <p class="text-[10px] font-black opacity-40 uppercase">
+                  Status
+                </p>
+                <span class="status-badge bg-yellow-400"
+                  >Em Análise Técnica</span
+                >
+              </div>
+              <div class="text-right">
+                <p class="text-[10px] font-black opacity-40 uppercase">
+                  Público
+                </p>
+                <p class="font-black">8.000</p>
+              </div>
+              <button class="brutal-border p-3 hover:bg-yellow-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: FINANCEIRO (CONTROLE DE CAIXA) -->
+      <section id="view-financeiro" class="view-section">
+        <header class="mb-8">
+          <h1 class="brutal-title text-4xl italic">Financeiro & Notas</h1>
+          <p class="font-bold opacity-60">
+            Gestão de faturas, repasses de bilheteria e taxas operacionais.
+          </p>
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white brutal-border p-6 brutal-shadow">
+            <p class="text-[10px] font-black uppercase opacity-50">
+              Total em Aberto
+            </p>
+            <p class="text-3xl font-black text-red-600">R$ 15.420,00</p>
+          </div>
+          <div class="bg-white brutal-border p-6 brutal-shadow">
+            <p class="text-[10px] font-black uppercase opacity-50">
+              Créditos de Bilheteria
+            </p>
+            <p class="text-3xl font-black text-blue-600">R$ 840.000,00</p>
+          </div>
+          <div class="bg-white brutal-border p-6 brutal-shadow">
+            <p class="text-[10px] font-black uppercase opacity-50">
+              Próximo Vencimento
+            </p>
+            <p class="text-3xl font-black">15/11/2026</p>
+          </div>
+        </div>
+
+        <div class="bg-white brutal-border brutal-shadow overflow-x-auto">
+          <table class="brutal-table">
+            <thead>
+              <tr>
+                <th>Protocolo</th>
+                <th>Evento</th>
+                <th>Data Ref.</th>
+                <th>Valor Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#FT-8892</td>
+                <td>Náutico x Sport</td>
+                <td>25/10/2026</td>
+                <td>R$ 45.000,00</td>
+                <td><span class="status-badge bg-green-400">PAGO</span></td>
+                <td>
+                  <button class="font-black text-[10px] underline">
+                    DANFE
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#FT-9102</td>
+                <td>Taxa Limpeza Ext.</td>
+                <td>26/10/2026</td>
+                <td>R$ 4.200,00</td>
+                <td>
+                  <span class="status-badge bg-yellow-400">PENDENTE</span>
+                </td>
+                <td>
+                  <button class="font-black text-[10px] underline">
+                    BOLETO
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      let currentYear = 2026;
+      let currentMonth = 10; // Novembro (Base 0)
+      const monthNames = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ];
+
+      // Função para trocar de visualização (Tabs)
+      function switchView(viewId) {
+        // Esconde todas as seções
+        document
+          .querySelectorAll(".view-section")
+          .forEach((section) => section.classList.remove("active"));
+        // Remove active dos botões
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        // Mostra a selecionada
+        document.getElementById("view-" + viewId).classList.add("active");
+        document.getElementById("btn-" + viewId).classList.add("active");
+      }
+
+      function renderCalendar() {
+        const calendarBody = document.getElementById("calendar-body");
+        const monthYearLabel = document.getElementById("calendar-month-year");
+
+        calendarBody.innerHTML = "";
+        monthYearLabel.innerText = `${monthNames[currentMonth]} ${currentYear}`;
+
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(
+          currentYear,
+          currentMonth + 1,
+          0,
+        ).getDate();
+
+        // Adiciona espaços vazios do início da semana
+        for (let i = 0; i < firstDay; i++) {
+          const empty = document.createElement("div");
+          empty.className = "calendar-day empty";
+          calendarBody.appendChild(empty);
+        }
+
+        // Adiciona os dias
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayEl = document.createElement("div");
+          dayEl.className = "calendar-day";
+          dayEl.innerText = day;
+
+          // Simulação de Ocupação (Ex: dia 5 e 25 sempre ocupados)
+          if (day === 5 || day === 25) {
+            dayEl.classList.add("occupied");
+            dayEl.title = "Data indisponível - Evento Confirmado";
+          } else {
+            dayEl.onclick = () => selectDate(dayEl);
+          }
+
+          calendarBody.appendChild(dayEl);
+        }
+      }
+
+      function changeMonth(delta) {
+        currentMonth += delta;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        renderCalendar();
+      }
+
+      function selectDate(element) {
+        document
+          .querySelectorAll(".calendar-day")
+          .forEach((d) => d.classList.remove("selected"));
+        element.classList.add("selected");
+      }
+
+      function calculateEstimate() {
+        const publico =
+          parseInt(document.getElementById("input-publico").value) || 0;
+
+        // Lógica de cálculo baseada no público (Escalabilidade)
+        let pautaBase = 45000;
+        if (publico > 25000) pautaBase = 80000;
+        if (publico > 40000) pautaBase = 120000;
+
+        const seguranca = Math.max(5000, publico * 1.5);
+        const limpeza = 4000 + publico * 0.5;
+        const total = pautaBase + seguranca + limpeza;
+
+        // Atualiza UI
+        document.getElementById("est-pauta").innerText =
+          formatCurrency(pautaBase);
+        document.getElementById("est-seguranca").innerText =
+          formatCurrency(seguranca);
+        document.getElementById("est-limpeza").innerText =
+          formatCurrency(limpeza);
+        document.getElementById("est-total").innerText = formatCurrency(total);
+      }
+
+      function formatCurrency(val) {
+        return val.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      }
+
+      function submitProposta() {
+        const btn = event.target;
+        btn.innerText = "PROCESSANDO...";
+        btn.disabled = true;
+
+        setTimeout(() => {
+          alert(
+            "SUCESSO! Sua proposta foi registrada sob o protocolo #PR-2026-" +
+              Math.floor(Math.random() * 9999) +
+              ". Você será notificado por e-mail quando a análise técnica for concluída.",
+          );
+          btn.innerText = "Enviar para Análise →";
+          btn.disabled = false;
+          switchView("meus-eventos");
+        }, 2000);
+      }
+
+      // Inicialização
+      window.onload = () => {
+        renderCalendar();
+        calculateEstimate();
+      };
+    </script>
+  </body>
 </html>
