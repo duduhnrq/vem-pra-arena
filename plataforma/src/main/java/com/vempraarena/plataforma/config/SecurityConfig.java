@@ -25,11 +25,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // O resto continua igual ao seu:
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth.html", "/index.html", "/css/**", "/images/**",
-                                "/api/usuarios/cadastrar", "/api/usuarios/login", "/api/promotores/**",
-                                "/api/events")
+                        .requestMatchers("/*.html", "/css/**", "/images/**",
+                                "/api/usuarios/**", "/api/promotores/**", "/api/events/**")
                         .permitAll()
                         .anyRequest().authenticated());
 
