@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -31,6 +32,9 @@ public class Application {
                 user.setNome("Torcedor Teste");
                 user.setEmail("teste@arena.com");
                 user.setSenha(passwordEncoder.encode("123456"));
+                user.setCpf("123.456.789-00");
+                user.setTelefone("(81) 99887-7665");
+                user.setDataNascimento(LocalDate.of(1990, 5, 15));
                 usuarioRepository.save(user);
             }
 

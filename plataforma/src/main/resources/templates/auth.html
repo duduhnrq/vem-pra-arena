@@ -526,6 +526,9 @@
               data.nome || email.split("@")[0],
             );
             localStorage.setItem("email_usuario", data.email || email);
+            localStorage.setItem("cpf_usuario", data.cpf || "");
+            localStorage.setItem("tel_usuario", data.telefone || "");
+            localStorage.setItem("nasc_usuario", data.dataNascimento || "");
 
             mostrarModal("success", {
               titulo: "Bem-vindo!",
