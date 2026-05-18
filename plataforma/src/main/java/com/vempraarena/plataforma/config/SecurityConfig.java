@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/*.html", "/css/**", "/images/**",
                                 "/api/usuarios/**", "/api/promotores/**", "/api/events/**",
-                                "/api/admin/cadastrar", "/api/admin/login")
+                                "/api/admin/**")
                         .permitAll()
                         .anyRequest().authenticated());
 
