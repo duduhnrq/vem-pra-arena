@@ -520,6 +520,7 @@
           if (res.ok) {
             const data = await res.json().catch(() => ({}));
             localStorage.setItem("esta_logado", "true");
+            localStorage.setItem("id_usuario", data.id); // Salva o ID do usuário
             localStorage.setItem(
               "nome_usuario",
               data.nome || email.split("@")[0],

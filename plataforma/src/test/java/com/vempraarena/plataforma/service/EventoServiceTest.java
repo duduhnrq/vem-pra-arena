@@ -30,8 +30,8 @@ class EventoServiceTest {
 
     @Test
     void testListarTodos() {
-        Evento e1 = new Evento("Jogo de Futebol", "Descrição 1", LocalDateTime.now(), "Arena");
-        Evento e2 = new Evento("Show Musical", "Descrição 2", LocalDateTime.now(), "Arena");
+        Evento e1 = new Evento("Jogo de Futebol", "Descrição 1", LocalDateTime.now(), "Arena", 45000, new java.math.BigDecimal("50.00"));
+        Evento e2 = new Evento("Show Musical", "Descrição 2", LocalDateTime.now(), "Arena", 30000, new java.math.BigDecimal("150.00"));
         
         when(eventoRepository.findAll()).thenReturn(Arrays.asList(e1, e2));
 
