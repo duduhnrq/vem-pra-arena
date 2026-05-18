@@ -28,8 +28,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth.html", "/index.html", "/css/**", "/images/**",
-                                "/api/usuarios/cadastrar", "/api/usuarios/login", "/api/promotores/cadastrar",
-                                "/api/promotores/login", "/api/events")
+                                "/api/usuarios/cadastrar", "/api/usuarios/login", "/api/promotores/**",
+                                "/api/events")
                         .permitAll()
                         .anyRequest().authenticated());
 

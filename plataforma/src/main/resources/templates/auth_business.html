@@ -343,7 +343,7 @@
               Cadastre-se para acessar o portal.
             </p>
 
-            <form id="registerForm">
+            <form id="registerForm" enctype="multipart/form-data">
               <div class="flex justify-between mb-8">
                 <div class="flex gap-2">
                   <div class="step-dot active" id="dot-1"></div>
@@ -839,7 +839,7 @@
             if (response.status === 200) {
               sessionStorage.setItem("email", email);
               sessionStorage.setItem("promotor_logado", "true");
-              window.location.href = "/business.html";
+              window.location.href = "business.html";
             } else {
               const errorText = await response.text();
               showError(
@@ -854,46 +854,24 @@
 
       document
         .getElementById("registerForm")
-        .addEventListener("submit", async function (e) {
-          e.preventDefault();
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
           hideError();
 
           const submitBtn = this.querySelector('button[type="submit"]');
           const originalBtnText = submitBtn.innerText;
 
           const formData = new FormData(this);
-          const fileFields = [
-            "cartaoCnpj",
-            "alteracaoContratual",
-            "documentoSocio",
-          ];
-          let hasError = false;
-
-          for (const field of fileFields) {
-            const file = formData.get(field);
-            if (file && file.size > 0) {
-              if (
-                file.type !== "application/pdf" &&
-                !file.name.toLowerCase().endsWith(".pdf")
-              ) {
-                showError(`O arquivo para ${field} deve ser um PDF.`);
-                hasError = true;
-                break;
-              }
-              if (file.size > 10 * 1024 * 1024) {
-                // 10MB
-                showError(`O arquivo para ${field} deve ter no máximo 10MB.`);
-                hasError = true;
-                break;
-              }
-            } else {
-              showError(`O arquivo para ${field} é obrigatório.`);
-              hasError = true;
-              break;
-            }
-          }
-
-          if (hasError) return;
+          const data = {
+            cnpj: formData.get("cnpj"),
+            razaoSocial: formData.get("razaoSocial"),
+            nomeFantasia: formData.get("nomeFantasia"),
+            telefoneFixo: formData.get("telefoneFixo"),
+            whatsappNegocios: formData.get("whatsappNegocios"),
+            nomeRepresentante: formData.get("nomeRepresentante"),
+            emailCorporativo: formData.get("emailCorporativo"),
+            senha: formData.get("senha")
+          };
 
           submitBtn.innerText = "Processando...";
           submitBtn.disabled = true;
@@ -904,7 +882,10 @@
               "http://localhost:8080/api/promotores/cadastrar",
               {
                 method: "POST",
-                body: formData, // o navegador define o Content-Type: multipart/form-data automaticamente
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
               },
             );
 

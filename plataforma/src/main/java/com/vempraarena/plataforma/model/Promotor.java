@@ -55,4 +55,13 @@ public class Promotor {
     private String caminhoAlteracaoContratual;
     
     private String caminhoDocumentoSocio;
+    
+    @jakarta.persistence.Transient
+    private org.springframework.web.multipart.MultipartFile cartaoCnpj;
+    
+    @jakarta.persistence.Transient
+    private org.springframework.web.multipart.MultipartFile alteracaoContratual;
+    
+    @jakarta.persistence.Transient
+    private org.springframework.web.multipart.MultipartFile documentoSocio;
 }
