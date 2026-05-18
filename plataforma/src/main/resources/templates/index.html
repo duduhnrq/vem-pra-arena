@@ -52,7 +52,10 @@
             >Contato</a
           >
         </div>
-        <div id="nav-auth-container" class="flex items-center space-x-4 relative">
+        <div
+          id="nav-auth-container"
+          class="flex items-center space-x-4 relative"
+        >
           <span
             id="user-greeting"
             class="font-black uppercase text-sm hidden"
@@ -332,144 +335,9 @@
           class="flex justify-between items-end mb-12 border-b-4 border-black pb-6"
         >
           <h2 class="text-5xl font-black uppercase italic">AGENDA OFICIAL</h2>
-          <div class="hidden md:block font-bold text-sm" id="event-count">
-            MOSTRANDO 3 DE 3 EVENTOS
-          </div>
+          <div class="hidden md:block font-bold text-sm" id="event-count"></div>
         </div>
-        <div class="grid md:grid-cols-3 gap-12" id="events-grid">
-          <!-- Evento 1 -->
-          <div
-            class="brutal-card brutal-border bg-white group cursor-pointer"
-            data-category="ESPORTE"
-            data-title="Náutico vs Sport clássico futebol"
-          >
-            <div
-              class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=800"
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-              <span
-                class="absolute top-4 left-4 brutal-border bg-governo-yellow px-3 py-1 font-black text-xs z-10 uppercase"
-                >Futebol</span
-              >
-            </div>
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-4">
-                <h3 class="text-3xl font-black leading-none">
-                  NÁUTICO <br />vs SPORT
-                </h3>
-                <div class="text-right">
-                  <span class="block font-black text-2xl uppercase">25</span>
-                  <span
-                    class="block font-bold text-xs uppercase bg-black text-white px-1"
-                    >OUTUBRO</span
-                  >
-                </div>
-              </div>
-              <p
-                class="font-bold text-gray-600 mb-8 border-l-4 border-governo-yellow pl-4 italic"
-              >
-                O clássico dos clássicos no gramado da Arena. Portões abrem às
-                14h.
-              </p>
-              <a
-                href="event_details.html"
-                class="flex w-full justify-center brutal-btn btn-black-hover brutal-border bg-black text-white py-4 font-black brutal-shadow uppercase"
-              >
-                VER EVENTO
-            </a>
-            </div>
-          </div>
-          <!-- Evento 2 -->
-          <div
-            class="brutal-card brutal-border bg-white group cursor-pointer"
-            data-category="SHOW"
-            data-title="Rec Summer Festival música show"
-          >
-            <div
-              class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=800"
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-              <span
-                class="absolute top-4 left-4 brutal-border bg-governo-pink text-white px-3 py-1 font-black text-xs z-10 uppercase"
-                >Música</span
-              >
-            </div>
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-4">
-                <h3 class="text-3xl font-black leading-none">
-                  REC SUMMER <br />FESTIVAL
-                </h3>
-                <div class="text-right">
-                  <span class="block font-black text-2xl uppercase">02</span>
-                  <span
-                    class="block font-bold text-xs uppercase bg-black text-white px-1"
-                    >NOVEMBRO</span
-                  >
-                </div>
-              </div>
-              <p
-                class="font-bold text-gray-600 mb-8 border-l-4 border-governo-pink pl-4 italic"
-              >
-                12 horas de música ininterrupta com os maiores artistas do
-                Brasil.
-              </p>
-              <button
-                class="w-full brutal-btn btn-black-hover brutal-border bg-black text-white py-4 font-black brutal-shadow uppercase"
-              >
-                VER EVENTO
-              </button>
-            </div>
-          </div>
-          <!-- Evento 3 -->
-          <div
-            class="brutal-card brutal-border bg-white group cursor-pointer"
-            data-category="TECNOLOGIA"
-            data-title="Feira de Inovação tecnologia"
-          >
-            <div
-              class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1725745095955-20f97f6a7423?auto=format&fit=crop&q=80&w=800"
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-              <span
-                class="absolute top-4 left-4 brutal-border bg-green-400 px-3 py-1 font-black text-xs z-10 uppercase"
-                >TECNOLOGIA</span
-              >
-            </div>
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-4">
-                <h3 class="text-3xl font-black leading-none">
-                  FEIRA DE <br />INOVAÇÃO
-                </h3>
-                <div class="text-right">
-                  <span class="block font-black text-2xl uppercase">10</span>
-                  <span
-                    class="block font-bold text-xs uppercase bg-black text-white px-1"
-                    >NOVEMBRO</span
-                  >
-                </div>
-              </div>
-              <p
-                class="font-bold text-gray-600 mb-8 border-l-4 border-green-400 pl-4 italic"
-              >
-                O maior encontro de tecnologia e cidades inteligentes do estado.
-              </p>
-              <button
-                class="w-full brutal-btn btn-black-hover brutal-border bg-black text-white py-4 font-black brutal-shadow uppercase"
-              >
-                VER EVENTO
-              </button>
-            </div>
-          </div>
-        </div>
+        <div class="grid md:grid-cols-3 gap-12" id="events-grid"></div>
         <!-- Mensagem quando não há eventos -->
         <div id="no-events-message" class="hidden text-center py-16">
           <div class="text-6xl mb-4">🔍</div>
@@ -995,23 +863,31 @@
       // Aplicar ambos os filtros
       function applyFilters() {
         const events = document.querySelectorAll("#events-grid > div");
+        const noMsg = document.getElementById("no-events-message");
+        const viewAll = document.getElementById("view-all-btn");
+        const countEl = document.getElementById("event-count");
+
+        // Se não há eventos carregados, mantém a mensagem e sai
+        if (events.length === 0) {
+          noMsg?.classList.remove("hidden");
+          viewAll?.classList.add("hidden");
+          if (countEl) countEl.textContent = "MOSTRANDO 0 EVENTOS";
+          return;
+        }
+
         let visibleCount = 0;
 
         events.forEach((event) => {
           const category = event.getAttribute("data-category") || "";
           const title = event.getAttribute("data-title") || "";
 
-          // Verificar categoria
           const categoryMatch =
             currentCategory === "all" || category === currentCategory;
-
-          // Verificar busca
           const searchMatch =
             currentSearch === "" ||
             title.toLowerCase().includes(currentSearch) ||
             category.toLowerCase().includes(currentSearch);
 
-          // Mostrar/ocultar
           if (categoryMatch && searchMatch) {
             event.style.display = "";
             visibleCount++;
@@ -1020,23 +896,16 @@
           }
         });
 
-        // Atualizar contador
-        const totalEvents = events.length;
-        const countElement = document.getElementById("event-count");
-        if (countElement) {
-          countElement.textContent = `MOSTRANDO ${visibleCount} DE ${totalEvents} EVENTOS`;
-        }
-
-        // Mostrar/ocultar mensagem de "nenhum evento encontrado"
-        const noEventsMsg = document.getElementById("no-events-message");
-        const viewAllBtn = document.getElementById("view-all-btn");
+        const total = events.length;
+        if (countEl)
+          countEl.textContent = `MOSTRANDO ${visibleCount} DE ${total} EVENTOS`;
 
         if (visibleCount === 0) {
-          noEventsMsg.classList.remove("hidden");
-          if (viewAllBtn) viewAllBtn.classList.add("hidden");
+          noMsg?.classList.remove("hidden");
+          viewAll?.classList.add("hidden");
         } else {
-          noEventsMsg.classList.add("hidden");
-          if (viewAllBtn) viewAllBtn.classList.remove("hidden");
+          noMsg?.classList.add("hidden");
+          viewAll?.classList.remove("hidden");
         }
       }
 
@@ -1169,6 +1038,116 @@
           datePopup.classList.add("hidden");
         }
       });
+
+      function renderEventosAprovados() {
+        const grid = document.getElementById("events-grid");
+        const countEl = document.getElementById("event-count");
+        const noMsg = document.getElementById("no-events-message");
+        const viewAll = document.getElementById("view-all-btn");
+
+        const todos = JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const aprovados = todos.filter((e) => {
+          const dataEvento = new Date(e.data + "T12:00:00");
+          return e.status === "confirmado" && dataEvento >= hoje;
+        });
+
+        const CATEGORIA_CONFIG = {
+          "Show Musical": {
+            label: "Música",
+            bg: "bg-governo-pink text-white",
+            border: "border-governo-pink",
+          },
+          "Partida de Futebol": {
+            label: "Esporte",
+            bg: "bg-governo-yellow",
+            border: "border-governo-yellow",
+          },
+          "Evento Corporativo": {
+            label: "Corporativo",
+            bg: "bg-governo-blue text-white",
+            border: "border-governo-blue",
+          },
+          Religioso: {
+            label: "Religioso",
+            bg: "bg-green-400",
+            border: "border-green-400",
+          },
+        };
+
+        grid.innerHTML = "";
+
+        if (aprovados.length === 0) {
+          noMsg?.classList.remove("hidden");
+          viewAll?.classList.add("hidden");
+          if (countEl) countEl.textContent = "MOSTRANDO 0 EVENTOS";
+          return;
+        }
+
+        noMsg?.classList.add("hidden");
+        viewAll?.classList.remove("hidden");
+
+        aprovados.forEach((ev) => {
+          const dataObj = new Date(ev.data + "T12:00:00");
+          const dia = String(dataObj.getDate()).padStart(2, "0");
+          const mesNome = dataObj
+            .toLocaleDateString("pt-BR", { month: "long" })
+            .toUpperCase();
+          const cfg = CATEGORIA_CONFIG[ev.categoria] || {
+            label: ev.categoria,
+            bg: "bg-gray-400",
+            border: "border-gray-400",
+          };
+          const imgSrc =
+            ev.imagem ||
+            "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800";
+          const dataAttr = ev.categoria.includes("Futebol")
+            ? "ESPORTE"
+            : ev.categoria.includes("Show")
+              ? "SHOW"
+              : ev.categoria.toUpperCase();
+
+          const card = document.createElement("div");
+          card.className =
+            "brutal-card brutal-border bg-white group cursor-pointer";
+          card.setAttribute("data-category", dataAttr);
+          card.setAttribute(
+            "data-title",
+            `${ev.titulo.toLowerCase()} ${ev.categoria.toLowerCase()}`,
+          );
+          card.innerHTML = `
+            <div class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden">
+              <img src="${imgSrc}"
+                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800'"/>
+              <span class="absolute top-4 left-4 brutal-border ${cfg.bg} px-3 py-1 font-black text-xs z-10 uppercase">
+                ${cfg.label}
+              </span>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-3xl font-black leading-none uppercase">${ev.titulo}</h3>
+                <div class="text-right shrink-0 ml-2">
+                  <span class="block font-black text-2xl">${dia}</span>
+                  <span class="block font-bold text-xs uppercase bg-black text-white px-1">${mesNome}</span>
+                </div>
+              </div>
+              <p class="font-bold text-gray-600 mb-8 border-l-4 ${cfg.border} pl-4 italic line-clamp-2">
+                ${ev.descricaoBreve || "Evento confirmado na Arena Pernambuco."}
+              </p>
+              <a href="event_details.html?id=${ev.id}" class="flex w-full justify-center brutal-btn btn-black-hover brutal-border bg-black text-white py-4 font-black brutal-shadow uppercase">
+                VER EVENTO
+              </a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        if (countEl)
+          countEl.textContent = `MOSTRANDO ${aprovados.length} DE ${aprovados.length} EVENTOS`;
+      }
 
       // Lógica do Chatbot de IA
       const chatWindow = document.getElementById("chat-window");
@@ -1343,6 +1322,8 @@
             );
           }
         }
+
+        renderEventosAprovados();
       });
     </script>
 

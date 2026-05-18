@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="stylesheet" href="../static/css/input.css" />
     <link rel="stylesheet" href="../static/css/custom.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="shortcut icon"
       href="../static/images/favicon.ico"
@@ -161,7 +162,7 @@
       }
       input:focus {
         outline: none;
-        background-color: var(--yellow);
+        background-color: rgb(250 204 21 / 0.15);
       }
 
       .status-badge {
@@ -308,13 +309,14 @@
                     <input
                       type="text"
                       placeholder="Ex: Turnê Sandy & Junior 2026"
+                      class="p-2"
                     />
                   </div>
                   <div>
                     <label class="block text-[10px] font-black uppercase mb-2"
                       >Categoria</label
                     >
-                    <select>
+                    <select class="p-2">
                       <option>Show Musical</option>
                       <option>Partida de Futebol</option>
                       <option>Evento Corporativo</option>
@@ -331,6 +333,7 @@
                       type="number"
                       id="input-publico"
                       value="5000"
+                      class="p-2"
                       oninput="calculateEstimate()"
                     />
                   </div>
@@ -338,14 +341,25 @@
                     <label class="block text-[10px] font-black uppercase mb-2"
                       >Horário Início</label
                     >
-                    <input type="time" />
+                    <input type="time" class="p-2" />
                   </div>
                   <div>
                     <label class="block text-[10px] font-black uppercase mb-2"
                       >Tempo de Montagem (Dias)</label
                     >
-                    <input type="number" value="1" />
+                    <input type="number" value="1" class="p-2" />
                   </div>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Identidade Visual / Poster do Evento (Proporção
+                    16:9)</label
+                  >
+                  <textarea
+                    rows="1"
+                    placeholder="Insira o URL da poster do evento..."
+                    class="p-2"
+                  ></textarea>
                 </div>
                 <div>
                   <label class="block text-[10px] font-black uppercase mb-2"
@@ -354,6 +368,7 @@
                   <textarea
                     rows="2"
                     placeholder="Descreva de forma breve o evento..."
+                    class="p-2"
                   ></textarea>
                 </div>
                 <div>
@@ -363,6 +378,7 @@
                   <textarea
                     rows="6"
                     placeholder="Forneça maiores detalhes sobre o evento..."
+                    class="p-2"
                   ></textarea>
                 </div>
                 <div>
@@ -372,6 +388,7 @@
                   <textarea
                     rows="4"
                     placeholder="Descreva necessidades de palco, iluminação, e carga elétrica..."
+                    class="p-2"
                   ></textarea>
                 </div>
               </form>
@@ -444,142 +461,9 @@
               Histórico de pautas e eventos agendados por sua empresa.
             </p>
           </div>
-          <div class="flex gap-2">
-            <button
-              class="bg-white brutal-border px-4 py-2 font-black text-xs uppercase hover:bg-black hover:text-white"
-            >
-              Filtrar
-            </button>
-            <button
-              class="bg-white brutal-border px-4 py-2 font-black text-xs uppercase hover:bg-black hover:text-white"
-            >
-              Exportar PDF
-            </button>
-          </div>
         </header>
-
-        <div class="grid gap-6">
-          <!-- Card Evento 1 -->
-          <div
-            class="bg-white brutal-border p-6 brutal-shadow flex flex-col md:flex-row justify-between items-center gap-6"
-          >
-            <div class="flex gap-6 items-center w-full">
-              <div
-                class="w-20 h-20 bg-black flex flex-col items-center justify-center text-white p-2"
-              >
-                <span class="text-[10px] font-black uppercase">OUT</span>
-                <span class="text-2xl font-black">25</span>
-              </div>
-              <div>
-                <h3 class="font-black text-xl uppercase italic">
-                  Náutico x Sport - Série B
-                </h3>
-                <p class="text-xs font-bold text-gray-500 uppercase">
-                  Campeonato Brasileiro 2026 • 16:00
-                </p>
-              </div>
-            </div>
-            <div
-              class="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end"
-            >
-              <div class="text-right">
-                <p class="text-[10px] font-black opacity-40 uppercase">
-                  Status
-                </p>
-                <span class="status-badge bg-green-400">Confirmado</span>
-              </div>
-              <div class="text-right">
-                <p class="text-[10px] font-black opacity-40 uppercase">
-                  Público
-                </p>
-                <p class="font-black">32.400</p>
-              </div>
-              <button class="brutal-border p-3 hover:bg-yellow-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Card Evento 2 -->
-          <div
-            class="bg-white brutal-border p-6 brutal-shadow flex flex-col md:flex-row justify-between items-center gap-6 opacity-80"
-          >
-            <div class="flex gap-6 items-center w-full">
-              <div
-                class="w-20 h-20 bg-gray-200 border-2 border-black flex flex-col items-center justify-center p-2"
-              >
-                <span class="text-[10px] font-black uppercase">DEZ</span>
-                <span class="text-2xl font-black">12</span>
-              </div>
-              <div>
-                <h3 class="font-black text-xl uppercase italic">
-                  Festival No Ar Coquetel Molotov
-                </h3>
-                <p class="text-xs font-bold text-gray-500 uppercase">
-                  Multi-palcos • 14:00
-                </p>
-              </div>
-            </div>
-            <div
-              class="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end"
-            >
-              <div class="text-right">
-                <p class="text-[10px] font-black opacity-40 uppercase">
-                  Status
-                </p>
-                <span class="status-badge bg-yellow-400"
-                  >Em Análise Técnica</span
-                >
-              </div>
-              <div class="text-right">
-                <p class="text-[10px] font-black opacity-40 uppercase">
-                  Público
-                </p>
-                <p class="font-black">8.000</p>
-              </div>
-              <button class="brutal-border p-3 hover:bg-yellow-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+        <div class="grid gap-6" id="meus-eventos-container">
+          <!-- Preenchido pelo JS -->
         </div>
       </section>
 
@@ -678,18 +562,17 @@
 
       // Função para trocar de visualização (Tabs)
       function switchView(viewId) {
-        // Esconde todas as seções
         document
           .querySelectorAll(".view-section")
-          .forEach((section) => section.classList.remove("active"));
-        // Remove active dos botões
+          .forEach((s) => s.classList.remove("active"));
         document
           .querySelectorAll(".nav-item")
-          .forEach((btn) => btn.classList.remove("active"));
-
-        // Mostra a selecionada
+          .forEach((b) => b.classList.remove("active"));
         document.getElementById("view-" + viewId).classList.add("active");
         document.getElementById("btn-" + viewId).classList.add("active");
+
+        // Atualiza a lista sempre que entrar na aba
+        if (viewId === "meus-eventos") renderMeusEventos();
       }
 
       document.addEventListener("DOMContentLoaded", () => {
@@ -799,21 +682,204 @@
         });
       }
 
+      // ─── Utilitários ──────────────────────────────────────────────
+      function getEventos() {
+        return JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
+      }
+
+      function saveEventos(eventos) {
+        localStorage.setItem("vpa_eventos", JSON.stringify(eventos));
+      }
+
+      function getStatusReal(evento) {
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const dataEvento = new Date(evento.data);
+        dataEvento.setHours(0, 0, 0, 0);
+
+        if (dataEvento < hoje && evento.status === "confirmado")
+          return "finalizado";
+        return evento.status;
+      }
+
+      // ─── Submissão da proposta ─────────────────────────────────────
       function submitProposta() {
         const btn = event.target;
+
+        // Valida data selecionada
+        const diaSelecionado = document.querySelector(".calendar-day.selected");
+        if (!diaSelecionado) {
+          alert("Selecione uma data no calendário antes de enviar.");
+          return;
+        }
+
+        // Coleta os campos do formulário
+        const form = document.getElementById("proposal-form");
+        const inputs = form.querySelectorAll("input, select, textarea");
+
+        const titulo = inputs[0].value.trim();
+        const categoria = inputs[1].value;
+        const publico = inputs[2].value;
+        const hora = inputs[3].value;
+        const diasMontagem = inputs[4].value;
+        const imagemUrl = inputs[5].value.trim();
+        const descBreve = inputs[6].value.trim();
+        const descDetalhada = inputs[7].value.trim();
+        const rider = inputs[8]?.value.trim() || "";
+
+        if (!titulo) {
+          alert("Informe o título do evento.");
+          return;
+        }
+        if (!hora) {
+          alert("Informe o horário de início.");
+          return;
+        }
+
+        // Monta a data com ano/mês atual do calendário
+        const dia = diaSelecionado.innerText.padStart(2, "0");
+        const mes = String(currentMonth + 1).padStart(2, "0");
+        const dataStr = `${currentYear}-${mes}-${dia}`;
+
+        const nomeEmpresa = localStorage.getItem("nome_empresa") || "Empresa";
+        const emailPromotor = sessionStorage.getItem("email") || "";
+
+        const novoEvento = {
+          id: Date.now(),
+          promotorEmail: emailPromotor,
+          promotorNome: nomeEmpresa,
+          titulo,
+          categoria,
+          publico,
+          hora,
+          diasMontagem,
+          imagem: imagemUrl,
+          descricaoBreve: descBreve,
+          descricaoDetalhada: descDetalhada,
+          rider,
+          data: dataStr,
+          status: "em_analise",
+          criadoEm: new Date().toISOString(),
+        };
+
+        const eventos = getEventos();
+        eventos.push(novoEvento);
+        saveEventos(eventos);
+
         btn.innerText = "PROCESSANDO...";
         btn.disabled = true;
 
         setTimeout(() => {
           alert(
-            "SUCESSO! Sua proposta foi registrada sob o protocolo #PR-2026-" +
-              Math.floor(Math.random() * 9999) +
-              ". Você será notificado por e-mail quando a análise técnica for concluída.",
+            `Proposta "${titulo}" enviada! Protocolo #PR-${novoEvento.id}. Você será notificado após análise.`,
           );
           btn.innerText = "Enviar para Análise →";
           btn.disabled = false;
+          form.querySelectorAll("input, textarea").forEach((i) => {
+            if (i.type !== "number") i.value = "";
+          });
+          document
+            .querySelectorAll(".calendar-day")
+            .forEach((d) => d.classList.remove("selected"));
           switchView("meus-eventos");
-        }, 2000);
+          renderMeusEventos();
+        }, 1500);
+      }
+
+      // ─── Renderiza "Meus Eventos" ──────────────────────────────────
+      const STATUS_CONFIG = {
+        em_analise: {
+          label: "Em Análise Técnica",
+          bg: "bg-yellow-400",
+          text: "text-black",
+        },
+        confirmado: {
+          label: "Confirmado",
+          bg: "bg-green-400",
+          text: "text-black",
+        },
+        rejeitado: { label: "Rejeitado", bg: "bg-red-500", text: "text-white" },
+        finalizado: {
+          label: "Finalizado",
+          bg: "bg-gray-400",
+          text: "text-black",
+        },
+      };
+
+      function renderMeusEventos() {
+        const emailPromotor = sessionStorage.getItem("email") || "";
+        const todos = getEventos().filter(
+          (e) => e.promotorEmail === emailPromotor,
+        );
+        const container = document.getElementById("meus-eventos-container");
+        if (!container) return;
+
+        if (todos.length === 0) {
+          container.innerHTML = `
+      <div class="p-8 text-center border-2 border-black border-dashed font-bold opacity-50">
+        Nenhum evento enviado ainda. Use "Nova Solicitação" para começar.
+      </div>`;
+          return;
+        }
+
+        container.innerHTML = "";
+
+        // Ordena: mais recentes primeiro
+        todos.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+        todos.forEach((ev) => {
+          const status = getStatusReal(ev);
+          const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.em_analise;
+          const dataFormatada = new Date(
+            ev.data + "T12:00:00",
+          ).toLocaleDateString("pt-BR");
+          const [ano, mes, dia] = ev.data.split("-");
+          const mesNome = [
+            "JAN",
+            "FEV",
+            "MAR",
+            "ABR",
+            "MAI",
+            "JUN",
+            "JUL",
+            "AGO",
+            "SET",
+            "OUT",
+            "NOV",
+            "DEZ",
+          ][parseInt(mes) - 1];
+
+          const opacidade =
+            status === "finalizado" || status === "rejeitado"
+              ? "opacity-60 grayscale"
+              : "";
+          const bgData = status === "finalizado" ? "bg-gray-400" : "bg-black";
+
+          const card = document.createElement("div");
+          card.className = `bg-white brutal-border brutal-shadow flex flex-col md:flex-row ${opacidade}`;
+          card.innerHTML = `
+      <div class="${bgData} text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black shrink-0">
+        <span class="text-[10px] font-black uppercase">${mesNome}</span>
+        <span class="text-3xl brutal-title">${dia}</span>
+        <span class="text-[9px] opacity-60">${ano}</span>
+      </div>
+      <div class="p-6 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <span class="text-[9px] font-black uppercase text-blue-600">${ev.categoria}</span>
+          <h3 class="brutal-title text-xl mt-1">${ev.titulo}</h3>
+          <p class="text-xs font-bold text-gray-500 uppercase mt-1">
+            🕐 ${ev.hora}h &nbsp;•&nbsp; 👥 ${parseInt(ev.publico).toLocaleString("pt-BR")} pax
+          </p>
+        </div>
+        <div class="flex flex-col items-end gap-2 shrink-0">
+          <span class="status-badge ${cfg.bg} ${cfg.text}">${cfg.label}</span>
+          <span class="text-[9px] font-black text-gray-400 uppercase">
+            Enviado em ${new Date(ev.criadoEm).toLocaleDateString("pt-BR")}
+          </span>
+        </div>
+      </div>`;
+          container.appendChild(card);
+        });
       }
 
       // Inicialização
