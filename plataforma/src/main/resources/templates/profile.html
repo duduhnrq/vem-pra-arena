@@ -500,6 +500,12 @@
             alert("Nome e e-mail são obrigatórios.");
             return;
           }
+          
+          if (!novoEmail.includes("@")) {
+          alert("Formato inválido: O e-mail precisa conter um '@'.");
+          restaurarBotao(btn, originalText);
+          return;
+        }
 
           localStorage.setItem("nome_usuario", novoNome);
           localStorage.setItem("email_usuario", novoEmail);
