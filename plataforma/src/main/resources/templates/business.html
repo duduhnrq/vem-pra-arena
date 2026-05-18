@@ -212,17 +212,18 @@
       <div class="p-4 mt-auto border-t-4 border-black bg-gray-50">
         <div class="flex items-center gap-3">
           <div
+            id="profile-icon"
             class="w-10 h-10 bg-blue-600 brutal-border flex items-center justify-center text-white font-black text-xs"
-          >
-            LP
-          </div>
+          ></div>
           <div class="overflow-hidden">
-            <p class="text-[10px] font-black uppercase truncate">
-              Luan Promoções S.A.
-            </p>
-            <p class="text-[9px] font-bold text-blue-600 uppercase">
-              Parceiro VIP
-            </p>
+            <p
+              id="profile-name"
+              class="text-[10px] font-black uppercase truncate"
+            ></p>
+            <p
+              id="enterprise-name"
+              class="text-[9px] font-bold text-blue-600 uppercase"
+            ></p>
           </div>
         </div>
       </div>
@@ -348,6 +349,24 @@
                 </div>
                 <div>
                   <label class="block text-[10px] font-black uppercase mb-2"
+                    >Descrição Breve (Exibida no Card Principal)</label
+                  >
+                  <textarea
+                    rows="2"
+                    placeholder="Descreva de forma breve o evento..."
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Descrição Detalhada (Página Exclusiva do Evento)</label
+                  >
+                  <textarea
+                    rows="6"
+                    placeholder="Forneça maiores detalhes sobre o evento..."
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
                     >Rider Técnico e Observações</label
                   >
                   <textarea
@@ -396,7 +415,10 @@
                 </button>
               </div>
 
-              <div id="assistant-card" class="bg-white brutal-border p-4 hidden">
+              <div
+                id="assistant-card"
+                class="bg-white brutal-border p-4 hidden"
+              >
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-3 h-3 bg-blue-600 animate-pulse"></div>
                   <p class="text-[10px] font-black uppercase">
@@ -669,6 +691,22 @@
         document.getElementById("view-" + viewId).classList.add("active");
         document.getElementById("btn-" + viewId).classList.add("active");
       }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const nomeRepresentante =
+          localStorage.getItem("nome_representante") || "Representante";
+        const nomeEmpresa =
+          localStorage.getItem("nome_empresa") || "Empresa LTDA";
+
+        const profileIcon = document.getElementById("profile-icon");
+        const profileName = document.getElementById("profile-name");
+        const enterpriseName = document.getElementById("enterprise-name");
+
+        if (profileIcon)
+          profileIcon.textContent = nomeRepresentante.charAt(0).toUpperCase();
+        if (profileName) profileName.textContent = nomeRepresentante;
+        if (enterpriseName) enterpriseName.textContent = nomeEmpresa;
+      });
 
       function renderCalendar() {
         const calendarBody = document.getElementById("calendar-body");

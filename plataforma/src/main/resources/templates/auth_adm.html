@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso ADM - VemPraArena</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <style>
+      :root {
+        --blue: #3772ff;
+        --yellow: #f4d03f;
+        --pink: #ff6b6b;
+        --green: #4ade80;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f0f0;
+        color: #000;
+        background-image: radial-gradient(#000 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+      .brutal-title {
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+      .brutal-border {
+        border: 4px solid #000;
+      }
+      .brutal-shadow {
+        box-shadow: 8px 8px 0px #000;
+      }
+      .brutal-shadow-sm {
+        box-shadow: 4px 4px 0px #000;
+      }
+
+      .brutal-btn {
+        transition: all 0.1s;
+        cursor: pointer;
+      }
+      .brutal-btn:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0px #000;
+      }
+      .brutal-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px #000;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <!-- TELA DE LOGIN ADM -->
+    <main
+      id="view-login"
+      class="flex-grow flex flex-col items-center justify-center p-4"
+    >
+      <div
+        class="w-full max-w-md bg-white brutal-border brutal-shadow p-8 relative"
+      >
+        <div
+          class="absolute -top-4 -right-4 bg-black text-white px-3 py-1 font-black text-xs rotate-6 brutal-border"
+        >
+          ACESSO RESTRITO
+        </div>
+
+        <div class="mb-8 text-center">
+          <div class="bg-black text-white p-3 brutal-border inline-block mb-4">
+            <span class="brutal-title text-xl leading-none">VEMPRAARENA</span>
+          </div>
+          <h1 class="text-3xl brutal-title italic">Portal do Gestor</h1>
+          <p class="font-bold text-xs uppercase text-gray-500 mt-1">
+            Arena Pernambuco • Secretaria de Esportes
+          </p>
+        </div>
+
+        <form onsubmit="handleLogin(event)" class="space-y-6">
+          <div>
+            <label class="block font-black text-[10px] uppercase mb-1"
+              >Matrícula do Servidor</label
+            >
+            <input
+              type="text"
+              value="GOV-2026-9918"
+              class="w-full p-3 brutal-border font-bold outline-none focus:bg-[#F4D03F]"
+              required
+            />
+          </div>
+          <div>
+            <label class="block font-black text-[10px] uppercase mb-1"
+              >Chave de Segurança</label
+            >
+            <input
+              type="password"
+              value="••••••••"
+              class="w-full p-3 brutal-border font-bold outline-none focus:bg-[#F4D03F]"
+              required
+            />
+          </div>
+
+          <div
+            class="bg-red-50 brutal-border border-dashed p-3 text-[10px] font-bold text-red-700"
+          >
+            ⚠️ Conexão segura de conformidade (Compliance). Toda ação nesta
+            central gera logs auditáveis pela Controladoria Geral do Estado.
+          </div>
+
+          <button
+            type="submit"
+            class="w-full brutal-btn bg-black text-white py-4 font-black uppercase text-lg tracking-wider"
+          >
+            Entrar na Central →
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer
+      class="border-t-[3px] border-black bg-white p-6 text-center text-xs font-black uppercase opacity-50 mt-auto"
+    >
+      Governo do Estado de Pernambuco • Portal de Experiências da Arena • 2026
+    </footer>
+
+    <script>
+      function handleLogin(e) {
+        e.preventDefault();
+        // Redirecionamento real para a tela do Dashboard de Homologação
+        window.location.href = "adm.html";
+      }
+    </script>
+  </body>
+</html>
