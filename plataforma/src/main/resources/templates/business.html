@@ -396,7 +396,7 @@
                 </button>
               </div>
 
-              <div class="bg-white brutal-border p-4">
+              <div id="assistant-card" class="bg-white brutal-border p-4 hidden">
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-3 h-3 bg-blue-600 animate-pulse"></div>
                   <p class="text-[10px] font-black uppercase">
@@ -727,6 +727,8 @@
           .querySelectorAll(".calendar-day")
           .forEach((d) => d.classList.remove("selected"));
         element.classList.add("selected");
+        const assistantCard = document.getElementById("assistant-card");
+        assistantCard.classList.remove("hidden");
       }
 
       function calculateEstimate() {
