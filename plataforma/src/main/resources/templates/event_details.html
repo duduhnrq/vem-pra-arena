@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VemPraArena</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/input.css" />
+    <link rel="stylesheet" href="../static/css/custom.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <style>
+        :root {
+            --blue: #3772FF;
+            --yellow: #F4D03F;
+            --pink: #FF6B6B;
+            --green: #4ADE80;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f0f0;
+            color: #000;
+            background-image: radial-gradient(#000 1.2px, transparent 1.2px);
+            background-size: 25px 25px;
+        }
+        .brutal-title { font-weight: 900; text-transform: uppercase; }
+        .brutal-border { border: 4px solid #000; }
+        .brutal-shadow { box-shadow: 8px 8px 0px #000; }
+        .brutal-shadow-sm { box-shadow: 4px 4px 0px #000; }
+
+        .brutal-btn { transition: all 0.1s; cursor: pointer; }
+        .brutal-btn:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0px #000; }
+        .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
+
+        .sector-pill {
+            border: 3px solid #000;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .sector-pill:hover {
+            transform: translateY(-2px);
+        }
+        .sector-pill.active {
+            background-color: #000 !important;
+            color: #fff !important;
+            box-shadow: 4px 4px 0px var(--blue);
+        }
+    </style>
+  </head>
+  <body class="bg-grid">
+    <!-- Navegação -->
+    <nav class="top-0 z-50 bg-white border-b-[3px] border-black p-4 relative">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a
+          href="index.html"
+          class="bg-white brutal-border px-3 py-1 text-2xl font-black tracking-tighter uppercase hover:bg-black hover:text-white transition-all"
+          >VEMPRAARENA</a
+        >
+        <div class="md:flex hidden space-x-6 font-black uppercase text-sm">
+          <a
+            href="#explorar"
+            class="px-2 py-1 hover:bg-black hover:text-white transition-all"
+            >Explorar</a
+          >
+          <a
+            href="#eventos"
+            class="px-2 py-1 hover:bg-black hover:text-white transition-all"
+            >Eventos</a
+          >
+          <a
+            href="#faq"
+            class="px-2 py-1 hover:bg-black hover:text-white transition-all"
+            >Dúvidas</a
+          >
+          <a
+            href="#contato"
+            class="px-2 py-1 hover:bg-black hover:text-white transition-all"
+            >Contato</a
+          >
+        </div>
+        <div
+          id="nav-auth-container"
+          class="flex items-center space-x-4 relative"
+        >
+          <span
+            id="user-greeting"
+            class="font-black uppercase text-sm hidden"
+          ></span>
+          <button
+            id="btn-profile"
+            class="brutal-btn btn-yellow-hover brutal-border bg-governo-pink text-white w-12 h-12 rounded-full font-black brutal-shadow uppercase text-xl hidden"
+          ></button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- COLUNA ESQUERDA (Info Geral do Evento) -->
+        <section class="lg:col-span-8 space-y-8">
+            <!-- Header do Evento -->
+            <div class="bg-white brutal-border p-6 md:p-8 brutal-shadow relative overflow-hidden">
+                <span id="event-category" class="absolute top-4 right-4 brutal-border px-4 py-1 text-xs font-black uppercase bg-[#F4D03F] rotate-[2deg]">CATEGORIA</span>
+                <div class="space-y-4">
+                    <h1 id="event-title" class="brutal-title text-4xl md:text-6xl leading-[0.9] italic max-w-2xl">CARREGANDO EVENTO...</h1>
+                    <div class="flex flex-wrap gap-4 text-xs font-black uppercase text-gray-600 border-t-2 border-black pt-4">
+                        <p class="flex items-center gap-1">📅 <span id="event-date">--/--/----</span></p>
+                        <p class="flex items-center gap-1">⏰ <span id="event-time">--:--</span></p>
+                        <p class="flex items-center gap-1">📍 Arena Pernambuco</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Imagem Cover e Descrição -->
+            <div class="brutal-border bg-white p-4 brutal-shadow">
+                <div class="h-[350px] brutal-border bg-gray-200 overflow-hidden mb-6">
+                    <img id="event-cover" src="" alt="Capa do Evento" class="w-full h-full object-cover grayscale contrast-125">
+                </div>
+
+                <!-- Painel de Destaque de Informações Cruciais (Estilo Suíço/Brutalista) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="brutal-border p-4 bg-[#3772FF] text-white brutal-shadow-sm">
+                        <p class="font-black text-xs uppercase tracking-wider opacity-80">📅 Data do Evento</p>
+                        <p id="event-detail-date" class="text-xl font-black mt-1 leading-tight">--/--/----</p>
+                    </div>
+                    <div class="brutal-border p-4 bg-[#F4D03F] text-black brutal-shadow-sm">
+                        <p class="font-black text-xs uppercase tracking-wider opacity-80">⏰ Cronograma & Horários</p>
+                        <p id="event-detail-time" class="text-xl font-black mt-1 leading-tight">--:--</p>
+                    </div>
+                    <div class="brutal-border p-4 bg-[#FF6B6B] text-white brutal-shadow-sm">
+                        <p class="font-black text-xs uppercase tracking-wider opacity-80">📍 Localização & Portão</p>
+                        <p class="text-xl font-black mt-1 leading-tight">Arena PE • São Lourenço</p>
+                    </div>
+                </div>
+
+                <h3 class="brutal-title text-xl mb-4 border-b-2 border-black pb-2 inline-block">Sobre o Evento</h3>
+                <p id="event-description" class="font-medium text-lg leading-relaxed text-gray-800">
+                    Carregando detalhes...
+                </p>
+            </div>
+
+            <!-- Manual de Segurança e Compliance Técnico -->
+            <div class="bg-white brutal-border p-6 brutal-shadow">
+                <h3 class="brutal-title text-xl mb-4 border-b-2 border-black pb-2 inline-block">Informações Úteis & Segurança</h3>
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div class="space-y-3">
+                        <p class="font-black text-xs uppercase text-red-500">❌ Proibido no Estádio</p>
+                        <ul class="text-xs font-bold space-y-1 text-gray-700">
+                            <li>• Guarda-chuva com ponta metálica</li>
+                            <li>• Alimentos e bebidas de fora do estádio</li>
+                            <li>• Sinalizadores e fogos de artifício</li>
+                            <li>• Capacetes e objetos cortantes</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="font-black text-xs uppercase text-green-600">✅ Recomendações</p>
+                        <ul class="text-xs font-bold space-y-1 text-gray-700">
+                            <li>• Chegue com no mínimo 2h de antecedência</li>
+                            <li>• Tenha seu QR Code salvo no smartphone</li>
+                            <li>• Abertura dos portões ocorre 3h antes do início</li>
+                            <li>• Classificação indicativa: Verificar no bilhete</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLUNA DIREITA (Calculadora de Bilheteria & Checkout) -->
+        <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+            <div class="bg-white brutal-border p-6 brutal-shadow">
+                <h3 class="brutal-title text-2xl mb-6 border-b-4 border-black pb-2">Garantir Lugar</h3>
+
+                <!-- Etapa 1: Selecionar Setor -->
+                <div class="space-y-3 mb-6">
+                    <label class="block font-black text-xs uppercase italic">1. Escolha o Setor</label>
+                    <div class="grid grid-cols-2 gap-2" id="sectors-container">
+                        <!-- Setores gerados dinamicamente com base no evento -->
+                    </div>
+                </div>
+
+                <!-- Etapa 2: Selecionar Tipo de Ingresso -->
+                <div class="space-y-3 mb-6">
+                    <label class="block font-black text-xs uppercase italic">2. Tipo de Bilhete</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setTicketType('inteira')" id="btn-type-inteira" class="sector-pill active p-3 text-center font-black text-xs uppercase bg-white">
+                            Inteira
+                        </button>
+                        <button onclick="setTicketType('meia')" id="btn-type-meia" class="sector-pill p-3 text-center font-black text-xs uppercase bg-white">
+                            Meia-Entrada
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Etapa 3: Quantidade -->
+                <div class="space-y-3 mb-6">
+                    <label class="block font-black text-xs uppercase italic">3. Quantidade</label>
+                    <div class="flex items-center justify-between brutal-border p-2 bg-gray-50">
+                        <button onclick="adjustQuantity(-1)" class="w-10 h-10 bg-black text-white font-black text-lg brutal-border hover:bg-[#FF6B6B]">-</button>
+                        <span id="ticket-quantity" class="font-black text-xl">1</span>
+                        <button onclick="adjustQuantity(1)" class="w-10 h-10 bg-black text-white font-black text-lg brutal-border hover:bg-[#4ADE80]">+</button>
+                    </div>
+                </div>
+
+                <!-- Resumo Financeiro -->
+                <div class="border-t-4 border-black pt-4 space-y-3">
+                    <div class="flex justify-between font-bold text-xs">
+                        <span>Preço Unitário</span>
+                        <span id="unit-price">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-xs text-gray-500">
+                        <span>Taxa de Serviço</span>
+                        <span id="service-tax">R$ 4,00</span>
+                    </div>
+                    <div class="flex justify-between items-end border-t-2 border-black border-dashed pt-3">
+                        <span class="font-black uppercase text-sm">Total Geral</span>
+                        <span id="total-price" class="text-3xl font-black text-[#3772FF]">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <!-- CTA De Checkout -->
+                <button onclick="executeReservation()" class="w-full mt-6 brutal-btn bg-[#3772FF] text-white brutal-border py-4 font-black uppercase text-lg text-center tracking-wider hover:bg-black hover:text-white">
+                    Confirmar Reserva →
+                </button>
+            </div>
+
+            <!-- Gamificação Teaser -->
+            <div class="brutal-border bg-[#F4D03F] p-4 brutal-shadow text-xs font-bold leading-tight">
+                <span class="block font-black text-sm uppercase mb-1">⚡ Ganhe Pontos extra!</span>
+                Comprando agora você ganha <span class="underline">200 pontos</span> de Sócio Arena por antecedência!
+            </div>
+        </aside>
+    </main>
+
+    <!-- Modal Customizado Brutal (Substituto de Alert) -->
+    <div id="confirmation-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4">
+        <div class="bg-white brutal-border brutal-shadow-lg w-full max-w-md p-8 relative">
+            <span class="text-5xl block mb-4">🏆</span>
+            <h3 class="text-3xl brutal-title mb-2">Sucesso total!</h3>
+            <p class="font-bold text-sm text-gray-700 mb-6">
+                Sua reserva foi processada e os detalhes foram salvos em seu painel de cidadão.
+            </p>
+            <div class="p-4 bg-gray-50 border-2 border-black border-dashed mb-6 text-xs font-bold">
+                <p class="uppercase">Dados da Reserva:</p>
+                <p id="res-detail-event">Evento: --</p>
+                <p id="res-detail-seats">Assentos: --</p>
+                <p id="res-detail-value">Valor: --</p>
+            </div>
+            <button onclick="closeConfirmationModal()" class="w-full brutal-border bg-black text-white py-3 font-black uppercase text-sm hover:bg-[#3772FF] transition-colors">
+                Ver Meus Ingressos
+            </button>
+        </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const userGreeting = document.getElementById("user-greeting");
+        const btnProfile = document.getElementById("btn-profile");
+        const navContainer = document.getElementById("nav-auth-container");
+
+        const estaLogado = localStorage.getItem("esta_logado") === "true";
+
+        if (estaLogado) {
+          const nomeUsuario =
+            localStorage.getItem("nome_usuario") || "Torcedor";
+          const emailUsuario = localStorage.getItem("email_usuario") || "";
+
+          userGreeting.textContent = `Olá, ${nomeUsuario}!`;
+          userGreeting.classList.remove("hidden");
+
+          btnProfile.textContent = nomeUsuario.charAt(0).toUpperCase();
+          btnProfile.classList.remove("hidden");
+
+          // Injeta o dropdown
+          if (!document.getElementById("profile-dropdown")) {
+            navContainer.insertAdjacentHTML(
+              "beforeend",
+              `
+                <div id="profile-dropdown"
+                  class="absolute right-0 top-12 mt-2 w-56 bg-white brutal-border brutal-shadow hidden z-50"
+                >
+                  <div class="p-3 border-b-2 border-black bg-gray-50">
+                    <p class="text-xs font-black text-gray-400 uppercase">Bem-vindo</p>
+                    <p class="text-xs font-bold truncate">${emailUsuario}</p>
+                  </div>
+                  <a href="profile.html" class="block p-3 font-black text-xs uppercase hover:bg-governo-blue hover:text-white border-b-2 border-black">👤 Meu Perfil</a>
+                  <a href="profile.html?tickets=true" class="block p-3 font-black text-xs uppercase hover:bg-governo-blue hover:text-white border-b-2 border-black">🎫 Meus Ingressos</a>
+                  <a href="favorites.html" class="block p-3 font-black text-xs uppercase hover:bg-governo-blue hover:text-white border-b-2 border-black">⭐ Favoritos</a>
+                  <button id="btn-logout-dropdown" class="block w-full text-left p-3 font-black text-xs uppercase hover:bg-governo-pink hover:text-white">🚪 Sair</button>
+                </div>
+              `,
+            );
+
+            const dropdown = document.getElementById("profile-dropdown");
+
+            // Abre/fecha ao clicar no botão de perfil
+            btnProfile.addEventListener("click", (e) => {
+              e.stopPropagation();
+              dropdown.classList.toggle("hidden");
+            });
+
+            // Fecha ao clicar fora
+            document.addEventListener("click", (e) => {
+              if (!dropdown.contains(e.target) && e.target !== btnProfile) {
+                dropdown.classList.add("hidden");
+              }
+            });
+
+            // Logout
+            document
+              .getElementById("btn-logout-dropdown")
+              .addEventListener("click", () => {
+                localStorage.removeItem("esta_logado");
+                localStorage.removeItem("nome_usuario");
+                localStorage.removeItem("email_usuario");
+                window.location.reload();
+              });
+          }
+        } else {
+          userGreeting.classList.add("hidden");
+          btnProfile.classList.add("hidden");
+
+          if (!document.getElementById("btn-login-header")) {
+            navContainer.insertAdjacentHTML(
+              "beforeend",
+              `
+                <div id="auth-buttons" class="flex items-center gap-2">
+                  <a href="auth.html" id="btn-login-header"
+                    class="px-4 py-2 font-black uppercase text-sm hover:bg-black hover:text-white transition-all brutal-border">
+                    Entrar
+                  </a>
+                  <a href="auth.html?register=true"
+                    class="brutal-btn bg-black text-white px-4 py-2 font-black uppercase text-sm brutal-border brutal-shadow-sm hover:bg-governo-blue transition-all">
+                    Cadastrar
+                  </a>
+                </div>
+              `,
+            );
+          }
+        }
+      });
+
+      // Banco de Dados em Memória (Mocked Database para Escalabilidade)
+        const dbEventos = {
+            1: {
+                id: 1,
+                titulo: "Náutico vs Sport",
+                data: "25 de Outubro de 2026",
+                hora: "16:00",
+                categoria: "Esporte",
+                imagem: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
+                descricao: "O maior Clássico dos Clássicos do futebol pernambucano chega para paralisar o estado na Arena Pernambuco. Válido pela rodada decisiva do campeonato, esta disputa acirrada promete casa cheia na maior estrutura multiuso de Pernambuco. Prepare sua camisa e seu grito: os portões do estádio serão abertos a partir das 13:00h para o controle rigoroso de fluxo e segurança das torcidas organizadas, com linhas de ônibus exclusivas saindo diretamente do TIP e do metrô Cosme e Damião.",
+                setores: {
+                    "Norte": 40,
+                    "Sul": 40,
+                    "Leste": 60,
+                    "Oeste VIP": 120
+                }
+            },
+            2: {
+                id: 2,
+                titulo: "Rec Summer Fest",
+                data: "02 de Novembro de 2026",
+                hora: "20:00",
+                categoria: "Música",
+                imagem: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1000",
+                descricao: "O maior festival de música de Pernambuco aporta na área externa e interna da Arena Pernambuco. Com uma mega infraestrutura dividida em 3 palcos alternativos, praças de alimentação típicas do Recife Antigo, e mais de 12 horas consecutivas de apresentações musicais de artistas de renome nacional e internacional. A abertura dos portões gerais para acesso à pista ocorre rigorosamente às 17:00h. Use transporte público: haverá reforço no metrô e circulares diretas ao longo de todo o evento.",
+                setores: {
+                    "Pista": 80,
+                    "Frontstage": 150,
+                    "Camarote Individual": 300,
+                    "Área Premium": 450
+                }
+            },
+            3: {
+                id: 3,
+                titulo: "Arena Tech Summit",
+                data: "15 de Dezembro de 2026",
+                hora: "09:00",
+                categoria: "Tecnologia",
+                imagem: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1000",
+                descricao: "O maior ecossistema de inovação e tecnologia do Nordeste se reúne nos auditórios premium e camarotes de negócios da Arena Pernambuco. Um dia intensivo de palestras com referências globais de inteligência artificial, engenharia de software e Web3, além de uma feira exclusiva de startups locais. O credenciamento técnico inicia às 08:00h no hall principal de acesso Oeste da Arena. O ingresso corporativo inclui acesso livre aos painéis, espaço de coworking e coffee break completo.",
+                setores: {
+                    "Estudante": 20,
+                    "Profissional": 50,
+                    "Pass Corporativo": 150
+                }
+            },
+            4: {
+                id: 4,
+                titulo: "Visita Guiada (Tour)",
+                data: "Todos os Sábados",
+                hora: "10:00 ou 14:00",
+                categoria: "Tour",
+                imagem: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000",
+                descricao: "Descubra o coração do gigante de São Lourenço da Mata em uma experiência imersiva guiada por historiadores e especialistas. Conheça as salas de imprensa, sinta a emoção de passar pelos vestiários oficiais onde grandes astros mundiais se prepararam, caminhe pelo túnel de acesso e pise na grama oficial com padrão FIFA. O tour tem duração aproximada de 1h30m, com pontos de partida às 10:00h e às 14:00h no Portão A.",
+                setores: {
+                    "Tour Geral": 25,
+                    "Tour VIP + Campo": 40
+                }
+            }
+        };
+
+        // Estado do Formulário de Compra
+        let currentEvent = null;
+        let selectedSector = "";
+        let selectedType = "inteira";
+        let quantity = 1;
+
+        // Inicializador de Página
+        window.onload = function() {
+            // Ler parâmetro 'id' da URL
+            const params = new URLSearchParams(window.location.search);
+            const eventId = params.get('id') || 1;
+
+            currentEvent = dbEventos[eventId] || dbEventos[1];
+            renderEventDetails();
+        };
+
+        // Renderizador de Elementos na UI
+        function renderEventDetails() {
+            document.getElementById('event-title').innerText = currentEvent.titulo;
+            document.getElementById('event-category').innerText = currentEvent.categoria;
+            document.getElementById('event-date').innerText = currentEvent.data;
+            document.getElementById('event-time').innerText = currentEvent.hora;
+            document.getElementById('event-description').innerText = currentEvent.descricao;
+            document.getElementById('event-cover').src = currentEvent.imagem;
+
+            // Injeta dados no novo painel destacado de informações
+            document.getElementById('event-detail-date').innerText = currentEvent.data;
+            document.getElementById('event-detail-time').innerText = `${currentEvent.hora}h (Portões: ${parseInt(currentEvent.hora) - 3}:00h)`;
+
+            // Criar botões de setores
+            const container = document.getElementById('sectors-container');
+            container.innerHTML = "";
+            
+            let firstSector = true;
+            for (let name in currentEvent.setores) {
+                const price = currentEvent.setores[name];
+                const btn = document.createElement('button');
+                btn.className = `sector-pill p-3 text-left bg-white font-bold text-xs flex flex-col justify-between ${firstSector ? 'active' : ''}`;
+                btn.innerHTML = `
+                    <span class="uppercase opacity-60">${name}</span>
+                    <span class="text-sm font-black mt-1">R$ ${price.toFixed(2)}</span>
+                `;
+                btn.onclick = () => selectSector(name, btn);
+                container.appendChild(btn);
+
+                if (firstSector) {
+                    selectedSector = name;
+                    firstSector = false;
+                }
+            }
+            updatePricing();
+        }
+
+        // Selecionador de Setores
+        function selectSector(sectorName, element) {
+            selectedSector = sectorName;
+            document.querySelectorAll('.sector-pill').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            updatePricing();
+        }
+
+        // Definidor de Tipo (Meia ou Inteira)
+        function setTicketType(type) {
+            selectedType = type;
+            document.getElementById('btn-type-inteira').classList.toggle('active', type === 'inteira');
+            document.getElementById('btn-type-meia').classList.toggle('active', type === 'meia');
+            updatePricing();
+        }
+
+        // Ajustador de Quantidade (+/-)
+        function adjustQuantity(delta) {
+            quantity = Math.max(1, quantity + delta);
+            document.getElementById('ticket-quantity').innerText = quantity;
+            updatePricing();
+        }
+
+        // Calculador de Preço
+        function updatePricing() {
+            if (!currentEvent || !selectedSector) return;
+
+            let basePrice = currentEvent.setores[selectedSector];
+            if (selectedType === "meia") {
+                basePrice = basePrice / 2;
+            }
+
+            const tax = 4.00;
+            const total = (basePrice * quantity) + tax;
+
+            document.getElementById('unit-price').innerText = `R$ ${basePrice.toFixed(2)}`;
+            document.getElementById('total-price').innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        // Executar Confirmação de Reserva
+        function executeReservation() {
+            let basePrice = currentEvent.setores[selectedSector];
+            if (selectedType === "meia") basePrice = basePrice / 2;
+            const total = (basePrice * quantity) + 4.00;
+
+            document.getElementById('res-detail-event').innerText = `Evento: ${currentEvent.titulo}`;
+            document.getElementById('res-detail-seats').innerText = `Acesso: Setor ${selectedSector} (${quantity}x ${selectedType.toUpperCase()})`;
+            document.getElementById('res-detail-value').innerText = `Total Pago: R$ ${total.toFixed(2)}`;
+
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+            document.getElementById('confirmation-modal').classList.add('flex');
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmation-modal').classList.remove('flex');
+            document.getElementById('confirmation-modal').classList.add('hidden');
+            // Redireciona para o perfil na aba de ingressos
+            window.location.href = "perfil-usuario.html";
+        }
+    </script>
+  </body>
+</html>
