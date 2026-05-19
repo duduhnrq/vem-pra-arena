@@ -240,10 +240,10 @@
     <!-- MODAL CUSTOMIZADO (Detalhes do Evento para Homologação) -->
     <div
       id="proposal-modal"
-      class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4"
+      class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-8 overflow-auto"
     >
       <div
-        class="bg-white brutal-border brutal-shadow w-full max-w-xl p-8 relative"
+        class="bg-white brutal-border brutal-shadow w-full max-w-xl p-8 relative m-auto"
       >
         <button
           onclick="closeModal()"
@@ -369,158 +369,14 @@
     </footer>
 
     <script>
-      // Banco de dados em memória inicializado com suporte a descrições escaláveis
-      const propostas = [
-        {
-          id: 101,
-          promotor: "Sport Club do Recife",
-          titulo: "Sport vs Coritiba",
-          data: "2026-10-28",
-          hora: "21:00",
-          categoria: "Esporte",
-          publico: "35000",
-          imagem:
-            "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=500",
-          descricaoBreve:
-            "O clássico de gigantes no gramado da Arena. Portões abrem às 19h.",
-          descricaoDetalhada:
-            "O maior Clássico dos Clássicos do futebol pernambucano chega para paralisar o estado na Arena Pernambuco. Válido pela rodada decisiva do campeonato, esta disputa acirrada promete casa cheia na maior estrutura multiuso de Pernambuco. Prepare sua camisa e seu grito: os portões do estádio serão abertos a partir das 13:00h para o controle rigoroso de fluxo e segurança das torcidas organizadas, com linhas de ônibus exclusivas saindo diretamente do TIP e do metrô Cosme e Damião.",
-        },
-        {
-          id: 102,
-          promotor: "Luan Promoções Ltda",
-          titulo: "Reggae Pernambucano Festival",
-          data: "2026-11-14",
-          hora: "19:00",
-          categoria: "Música",
-          publico: "18000",
-          imagem:
-            "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=500",
-          descricaoBreve:
-            "A vibração positiva do reggae toma conta da área externa da Arena.",
-          descricaoDetalhada:
-            "Show musical em formato multi-palco cobrindo a área da pista principal e a praça externa de alimentação da Arena Pernambuco com grandes nomes do reggae regional de Pernambuco. Abertura dos portões às 17h.",
-        },
-        {
-          id: 103,
-          promotor: "Clube Náutico Capibaribe",
-          titulo: "Náutico vs Confiança",
-          data: "2026-11-22",
-          hora: "16:00",
-          categoria: "Esporte",
-          publico: "22000",
-          imagem:
-            "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=500",
-          descricaoBreve:
-            "Jogo decisivo do Timbu rumo ao topo. Garanta seu ingresso.",
-          descricaoDetalhada:
-            "Jogo decisivo do campeonato nacional de clubes. Necessidade de isolamento completo das divisas de segurança nos portões de entrada Oeste para garantir fluxo constante de torcedores de Pernambuco.",
-        },
-      ];
-
-      const eventosAtivos = [
-        {
-          id: 1,
-          titulo: "Náutico vs Sport",
-          data: "25 de Outubro de 2026",
-          categoria: "Esporte",
-          publico: "42000",
-          descricaoBreve: "O maior clássico pernambucano na Arena.",
-          descricaoDetalhada:
-            "O clássico dos clássicos com toda a infraestrutura montada para mobilidade segura no metrô e circulares diretas.",
-        },
-        {
-          id: 2,
-          titulo: "Rec Summer Fest",
-          data: "02 de Novembro de 2026",
-          categoria: "Música",
-          publico: "25000",
-          descricaoBreve: "O festival de música mais quente de PE.",
-          descricaoDetalhada:
-            "A maior experiência de festival de música com dezenas de artistas nacionais se apresentando no centro de PE.",
-        },
-      ];
-
-      // Redireciona o logout real de volta ao login de administração
+      // Redireciona o logout
       function handleLogout() {
         window.location.href = "auth_adm.html";
       }
 
-      // Sistema de Modal
       let activeProposalId = null;
 
-      function openDetails(id) {
-        const prop = propostas.find((p) => p.id === id);
-        if (!prop) return;
-
-        activeProposalId = id;
-        document.getElementById("modal-title").innerText = prop.titulo;
-        document.getElementById("modal-promoter").innerText =
-          `PROMOTOR: ${prop.promotor}`;
-        document.getElementById("modal-image-preview").src = prop.imagem;
-        document.getElementById("modal-date").innerText = prop.data;
-        document.getElementById("modal-time").innerText = `${prop.hora}h`;
-        document.getElementById("modal-public").innerText =
-          `${parseInt(prop.publico).toLocaleString("pt-BR")} pessoas`;
-        document.getElementById("modal-desc-breve").innerText =
-          prop.descricaoBreve;
-        document.getElementById("modal-desc-detalhada").innerText =
-          prop.descricaoDetalhada;
-        document.getElementById("modal-category").innerText = prop.categoria;
-
-        // Altera impacto logístico dependendo do público
-        const logisticsText =
-          parseInt(prop.publico) > 25000
-            ? "Impacto Crítico: Este evento requer policiamento ostensivo (BPCHOQUE), fechamento de vias e suporte do metrô de Recife."
-            : "Impacto Moderado: Recomenda-se equipe de segurança básica da própria Arena e sinalização local de trânsito.";
-        document.getElementById("modal-logistics").innerText = logisticsText;
-
-        // Configura botões do modal
-        document.getElementById("modal-btn-approve").onclick = () => {
-          approveProposal(id);
-          closeModal();
-        };
-        document.getElementById("modal-btn-reject").onclick = () => {
-          rejectProposal(id);
-          closeModal();
-        };
-
-        document.getElementById("proposal-modal").classList.remove("hidden");
-        document.getElementById("proposal-modal").classList.add("flex");
-      }
-
-      function closeModal() {
-        document.getElementById("proposal-modal").classList.remove("flex");
-        document.getElementById("proposal-modal").classList.add("hidden");
-      }
-
-      // Função para mostrar aviso amigável sem quebrar o layout
-      function showCustomNotice(text) {
-        const noticeDiv = document.createElement("div");
-        noticeDiv.className =
-          "fixed bottom-6 left-6 z-[120] brutal-border bg-[#F4D03F] p-4 brutal-shadow max-w-sm font-bold text-sm text-black flex items-start gap-3 transition-transform translate-y-20";
-        noticeDiv.innerHTML = `
-                <span>📢</span>
-                <div>
-                    <p class="uppercase font-black text-xs border-b border-black pb-1 mb-1">Aviso da Central</p>
-                    <p>${text}</p>
-                </div>
-            `;
-        document.body.appendChild(noticeDiv);
-
-        // Animação entrada
-        setTimeout(() => {
-          noticeDiv.style.transform = "translateY(0)";
-        }, 50);
-
-        // Animação saída
-        setTimeout(() => {
-          noticeDiv.style.transform = "translateY(150px)";
-          setTimeout(() => noticeDiv.remove(), 300);
-        }, 6000);
-      }
-
-      // ─── Lê/salva eventos do localStorage ─────────────────────────
+      // ─── localStorage ──────────────────────────────────────────────
       function getEventos() {
         return JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
       }
@@ -538,120 +394,7 @@
         }
       }
 
-      // ─── Aprovação e rejeição ──────────────────────────────────────
-      function approveProposal(id) {
-        const eventos = getEventos();
-        const ev = eventos.find((e) => e.id === id);
-        if (!ev) return;
-
-        updateStatus(id, "confirmado");
-
-        // Adiciona à lista de ativos para exibir no painel
-        eventosAtivos.push({
-          id: ev.id,
-          titulo: ev.titulo,
-          data: new Date(ev.data + "T12:00:00").toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          }),
-          categoria: ev.categoria,
-          publico: ev.publico,
-          descricaoBreve: ev.descricaoBreve,
-          descricaoDetalhada: ev.descricaoDetalhada,
-        });
-
-        showCustomNotice(
-          `🏆 "${ev.titulo}" homologado e ativo na Landing Page.`,
-        );
-        renderDashboard();
-      }
-
-      function rejectProposal(id) {
-        const eventos = getEventos();
-        const ev = eventos.find((e) => e.id === id);
-        if (!ev) return;
-
-        updateStatus(id, "rejeitado");
-        showCustomNotice(
-          `❌ Proposta de "${ev.titulo}" rejeitada. E-mail enviado ao promotor.`,
-        );
-        renderDashboard();
-      }
-
-      // ─── Renderiza o dashboard ADM ────────────────────────────────
-      function renderDashboard() {
-        const todos = getEventos();
-        // Apenas em análise aparecem na fila
-        const pendentes = todos.filter((e) => e.status === "em_analise");
-
-        const container = document.getElementById("proposals-container");
-        container.innerHTML = "";
-
-        document.getElementById("pending-count").innerText =
-          `${pendentes.length} PENDENTE${pendentes.length !== 1 ? "S" : ""}`;
-
-        if (pendentes.length === 0) {
-          container.innerHTML = `
-      <div class="p-8 text-center border-2 border-black border-dashed font-bold">
-        🎉 Nenhuma pauta aguardando análise técnica no momento.
-      </div>`;
-        } else {
-          pendentes.forEach((prop) => {
-            const div = document.createElement("div");
-            div.className =
-              "brutal-border p-4 bg-gray-50 hover:bg-white transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4";
-            const dataFmt = new Date(
-              prop.data + "T12:00:00",
-            ).toLocaleDateString("pt-BR");
-            div.innerHTML = `
-        <div>
-          <p class="text-[9px] font-black uppercase text-[#3772FF]">${prop.promotorNome}</p>
-          <h3 class="text-xl font-black uppercase mt-1">${prop.titulo}</h3>
-          <div class="flex gap-4 text-[10px] font-bold text-gray-600 uppercase mt-2">
-            <span>📅 ${dataFmt}</span>
-            <span>👥 ${parseInt(prop.publico).toLocaleString("pt-BR")} pax</span>
-            <span>🏷️ ${prop.categoria}</span>
-          </div>
-        </div>
-        <div class="flex gap-2 w-full md:w-auto">
-          <button onclick="openDetails(${prop.id})" class="flex-1 md:flex-initial brutal-border bg-white hover:bg-[#F4D03F] px-4 py-2 font-black uppercase text-xs">Analisar</button>
-          <button onclick="rejectProposal(${prop.id})" class="brutal-border bg-[#FF6B6B] text-white p-2 hover:bg-black transition-colors" title="Rejeitar">✕</button>
-          <button onclick="approveProposal(${prop.id})" class="brutal-btn bg-[#4ADE80] text-black px-4 py-2 text-xs font-black brutal-border">Aprovar ✓</button>
-        </div>`;
-            container.appendChild(div);
-          });
-        }
-
-        // Eventos confirmados no painel inferior
-        const confirmados = todos.filter((e) => e.status === "confirmado");
-        const approvedContainer = document.getElementById("approved-container");
-        approvedContainer.innerHTML = "";
-
-        if (confirmados.length === 0) {
-          approvedContainer.innerHTML = `<p class="text-xs font-bold text-gray-400 col-span-2">Nenhum evento ativo no portal ainda.</p>`;
-        }
-
-        confirmados.forEach((ev) => {
-          const dataFmt = new Date(ev.data + "T12:00:00").toLocaleDateString(
-            "pt-BR",
-            { day: "2-digit", month: "long", year: "numeric" },
-          );
-          const card = document.createElement("div");
-          card.className = "brutal-border p-4 bg-white relative";
-          card.innerHTML = `
-      <span class="absolute top-2 right-2 text-[10px] bg-black text-white px-2 py-0.5 border border-black font-black uppercase">${ev.categoria}</span>
-      <h4 class="font-black text-lg uppercase truncate pr-16">${ev.titulo}</h4>
-      <p class="text-xs font-bold text-gray-500 mt-1">📅 ${dataFmt}</p>
-      <div class="flex justify-between items-end mt-4 border-t-2 border-black border-dashed pt-2">
-        <span class="text-[9px] font-black uppercase text-green-600">● ATIVO NO PORTAL</span>
-        <span class="text-[10px] font-bold">Público: ${parseInt(ev.publico).toLocaleString("pt-BR")}</span>
-      </div>`;
-          approvedContainer.appendChild(card);
-        });
-      }
-
-      // ─── Abre modal de detalhes (agora com dados do localStorage) ──
+      // ─── Modal de detalhes ─────────────────────────────────────────
       function openDetails(id) {
         const prop = getEventos().find((e) => e.id === id);
         if (!prop) return;
@@ -674,7 +417,6 @@
         document.getElementById("modal-desc-detalhada").innerText =
           prop.descricaoDetalhada || "—";
         document.getElementById("modal-category").innerText = prop.categoria;
-
         document.getElementById("modal-logistics").innerText =
           parseInt(prop.publico) > 25000
             ? "Impacto Crítico: requer policiamento ostensivo, fechamento de vias e suporte do metrô."
@@ -693,10 +435,137 @@
         document.getElementById("proposal-modal").classList.add("flex");
       }
 
-      // Auto-inicialização ao carregar o documento
-      window.onload = function () {
+      function closeModal() {
+        document.getElementById("proposal-modal").classList.remove("flex");
+        document.getElementById("proposal-modal").classList.add("hidden");
+      }
+
+      // ─── Aprovação e rejeição ──────────────────────────────────────
+      function approveProposal(id) {
+        const ev = getEventos().find((e) => e.id === id);
+        if (!ev) return;
+        updateStatus(id, "confirmado");
+        showCustomNotice(
+          `🏆 "${ev.titulo}" homologado e ativo na Landing Page.`,
+        );
         renderDashboard();
-      };
+      }
+
+      function rejectProposal(id) {
+        const ev = getEventos().find((e) => e.id === id);
+        if (!ev) return;
+        updateStatus(id, "rejeitado");
+        showCustomNotice(
+          `❌ Proposta de "${ev.titulo}" rejeitada. E-mail enviado ao promotor.`,
+        );
+        renderDashboard();
+      }
+
+      // ─── Toast de aviso ────────────────────────────────────────────
+      function showCustomNotice(text) {
+        const div = document.createElement("div");
+        div.className =
+          "fixed bottom-6 left-6 z-[120] brutal-border bg-[#F4D03F] p-4 brutal-shadow max-w-sm font-bold text-sm text-black flex items-start gap-3 transition-all duration-300 translate-y-20 opacity-0";
+        div.innerHTML = `
+          <span>📢</span>
+          <div>
+            <p class="uppercase font-black text-xs border-b border-black pb-1 mb-1">Aviso da Central</p>
+            <p>${text}</p>
+          </div>
+        `;
+        document.body.appendChild(div);
+
+        setTimeout(() => {
+          div.classList.remove("translate-y-20", "opacity-0");
+          div.classList.add("translate-y-0", "opacity-100");
+        }, 50);
+
+        setTimeout(() => {
+          div.classList.add("translate-y-20", "opacity-0");
+          setTimeout(() => div.remove(), 300);
+        }, 5000);
+      }
+
+      // ─── Renderiza dashboard ───────────────────────────────────────
+      function renderDashboard() {
+        const todos = getEventos();
+        const pendentes = todos.filter((e) => e.status === "em_analise");
+        const container = document.getElementById("proposals-container");
+
+        document.getElementById("pending-count").innerText =
+          `${pendentes.length} PENDENTE${pendentes.length !== 1 ? "S" : ""}`;
+
+        container.innerHTML = "";
+
+        if (pendentes.length === 0) {
+          container.innerHTML = `
+            <div class="p-8 text-center border-2 border-black border-dashed font-bold">
+              🎉 Nenhuma pauta aguardando análise técnica no momento.
+            </div>
+          `;
+        } else {
+          pendentes.forEach((prop) => {
+            const dataFmt = new Date(
+              prop.data + "T12:00:00",
+            ).toLocaleDateString("pt-BR");
+            const div = document.createElement("div");
+            div.className =
+              "brutal-border p-4 bg-gray-50 hover:bg-white transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4";
+            div.innerHTML = `
+              <div>
+                <p class="text-[9px] font-black uppercase text-[#3772FF]">${prop.promotorNome}</p>
+                <h3 class="text-xl font-black uppercase mt-1">${prop.titulo}</h3>
+                <div class="flex gap-4 text-[10px] font-bold text-gray-600 uppercase mt-2">
+                  <span>📅 ${dataFmt}</span>
+                  <span>👥 ${parseInt(prop.publico).toLocaleString("pt-BR")} pax</span>
+                  <span>🏷️ ${prop.categoria}</span>
+                </div>
+              </div>
+              <div class="flex gap-2 w-full md:w-auto">
+                <button onclick="openDetails(${prop.id})" class="flex-1 md:flex-initial brutal-border bg-white hover:bg-[#F4D03F] px-4 py-2 font-black uppercase text-xs">Analisar</button>
+                <button onclick="rejectProposal(${prop.id})" class="brutal-border bg-[#FF6B6B] text-white p-2 hover:bg-black transition-colors" title="Rejeitar">✕</button>
+                <button onclick="approveProposal(${prop.id})" class="brutal-btn bg-[#4ADE80] text-black px-4 py-2 text-xs font-black brutal-border">Aprovar ✓</button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        }
+
+        // Eventos confirmados
+        const confirmados = todos.filter((e) => e.status === "confirmado");
+        const approvedContainer = document.getElementById("approved-container");
+        approvedContainer.innerHTML = "";
+
+        if (confirmados.length === 0) {
+          approvedContainer.innerHTML = `<p class="text-xs font-bold text-gray-400 col-span-2">Nenhum evento ativo no portal ainda.</p>`;
+          return;
+        }
+
+        confirmados.forEach((ev) => {
+          const dataFmt = new Date(ev.data + "T12:00:00").toLocaleDateString(
+            "pt-BR",
+            {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            },
+          );
+          const card = document.createElement("div");
+          card.className = "brutal-border p-4 bg-white relative";
+          card.innerHTML = `
+            <span class="absolute top-2 right-2 text-[10px] bg-black text-white px-2 py-0.5 border border-black font-black uppercase">${ev.categoria}</span>
+            <h4 class="font-black text-lg uppercase truncate pr-16">${ev.titulo}</h4>
+            <p class="text-xs font-bold text-gray-500 mt-1">📅 ${dataFmt}</p>
+            <div class="flex justify-between items-end mt-4 border-t-2 border-black border-dashed pt-2">
+              <span class="text-[9px] font-black uppercase text-green-600">● ATIVO NO PORTAL</span>
+              <span class="text-[10px] font-bold">Público: ${parseInt(ev.publico).toLocaleString("pt-BR")}</span>
+            </div>
+          `;
+          approvedContainer.appendChild(card);
+        });
+      }
+
+      window.onload = () => renderDashboard();
     </script>
   </body>
 </html>

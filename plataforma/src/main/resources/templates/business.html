@@ -706,14 +706,15 @@
       function submitProposta() {
         const btn = event.target;
 
-        // Valida data selecionada
         const diaSelecionado = document.querySelector(".calendar-day.selected");
         if (!diaSelecionado) {
-          alert("Selecione uma data no calendário antes de enviar.");
+          mostrarModal("error", {
+            titulo: "Data não selecionada",
+            sub: "Selecione uma data no calendário antes de enviar.",
+          });
           return;
         }
 
-        // Coleta os campos do formulário
         const form = document.getElementById("proposal-form");
         const inputs = form.querySelectorAll("input, select, textarea");
 
@@ -728,15 +729,20 @@
         const rider = inputs[8]?.value.trim() || "";
 
         if (!titulo) {
-          alert("Informe o título do evento.");
+          mostrarModal("error", {
+            titulo: "Campo obrigatório",
+            sub: "Informe o título do evento.",
+          });
           return;
         }
         if (!hora) {
-          alert("Informe o horário de início.");
+          mostrarModal("error", {
+            titulo: "Campo obrigatório",
+            sub: "Informe o horário de início.",
+          });
           return;
         }
 
-        // Monta a data com ano/mês atual do calendário
         const dia = diaSelecionado.innerText.padStart(2, "0");
         const mes = String(currentMonth + 1).padStart(2, "0");
         const dataStr = `${currentYear}-${mes}-${dia}`;
@@ -762,27 +768,36 @@
           criadoEm: new Date().toISOString(),
         };
 
-        const eventos = getEventos();
-        eventos.push(novoEvento);
-        saveEventos(eventos);
+        // Mostra loading
+        mostrarModal("loading", {
+          titulo: "Enviando Proposta",
+          sub: "Registrando sua solicitação...",
+        });
 
-        btn.innerText = "PROCESSANDO...";
         btn.disabled = true;
 
         setTimeout(() => {
-          alert(
-            `Proposta "${titulo}" enviada! Protocolo #PR-${novoEvento.id}. Você será notificado após análise.`,
-          );
-          btn.innerText = "Enviar para Análise →";
+          const eventos = getEventos();
+          eventos.push(novoEvento);
+          saveEventos(eventos);
+
           btn.disabled = false;
+
           form.querySelectorAll("input, textarea").forEach((i) => {
             if (i.type !== "number") i.value = "";
           });
           document
             .querySelectorAll(".calendar-day")
             .forEach((d) => d.classList.remove("selected"));
-          switchView("meus-eventos");
-          renderMeusEventos();
+
+          mostrarModal("success", {
+            titulo: "Proposta Enviada!",
+            sub: `Protocolo #PR-${novoEvento.id}. Você será notificado após a análise técnica.`,
+            callback: () => {
+              switchView("meus-eventos");
+              renderMeusEventos();
+            },
+          });
         }, 1500);
       }
 
@@ -858,32 +873,124 @@
           const card = document.createElement("div");
           card.className = `bg-white brutal-border brutal-shadow flex flex-col md:flex-row ${opacidade}`;
           card.innerHTML = `
-      <div class="${bgData} text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black shrink-0">
-        <span class="text-[10px] font-black uppercase">${mesNome}</span>
-        <span class="text-3xl brutal-title">${dia}</span>
-        <span class="text-[9px] opacity-60">${ano}</span>
-      </div>
-      <div class="p-6 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <span class="text-[9px] font-black uppercase text-blue-600">${ev.categoria}</span>
-          <h3 class="brutal-title text-xl mt-1">${ev.titulo}</h3>
-          <p class="text-xs font-bold text-gray-500 uppercase mt-1">
-            🕐 ${ev.hora}h &nbsp;•&nbsp; 👥 ${parseInt(ev.publico).toLocaleString("pt-BR")} pax
-          </p>
-        </div>
-        <div class="flex flex-col items-end gap-2 shrink-0">
-          <span class="status-badge ${cfg.bg} ${cfg.text}">${cfg.label}</span>
-          <span class="text-[9px] font-black text-gray-400 uppercase">
-            Enviado em ${new Date(ev.criadoEm).toLocaleDateString("pt-BR")}
-          </span>
-        </div>
-      </div>`;
+            <div class="${bgData} text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black shrink-0">
+              <span class="text-[10px] font-black uppercase">${mesNome}</span>
+              <span class="text-3xl brutal-title">${dia}</span>
+              <span class="text-[9px] opacity-60">${ano}</span>
+            </div>
+            <div class="p-6 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <span class="text-[9px] font-black uppercase text-blue-600">${ev.categoria}</span>
+                <h3 class="brutal-title text-xl mt-1">${ev.titulo}</h3>
+                <p class="text-xs font-bold text-gray-500 uppercase mt-1">
+                  🕐 ${ev.hora}h &nbsp;•&nbsp; 👥 ${parseInt(ev.publico).toLocaleString("pt-BR")} pax
+                </p>
+              </div>
+              <div class="flex flex-col items-end gap-2 shrink-0">
+                <span class="status-badge ${cfg.bg} ${cfg.text}">${cfg.label}</span>
+                <span class="text-[9px] font-black text-gray-400 uppercase">
+                  Enviado em ${new Date(ev.criadoEm).toLocaleDateString("pt-BR")}
+                </span>
+              </div>
+            </div>`;
           container.appendChild(card);
         });
       }
 
+      // ─── Sistema de Modais ─────────────────────────────────────────────────────────
+
+      function criarModalHTML() {
+        if (document.getElementById("modal-overlay")) return;
+
+        document.body.insertAdjacentHTML(
+          "beforeend",
+          `
+            <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center">
+
+              <!-- Modal: Processando -->
+              <div id="modal-loading" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
+                <div class="w-14 h-14 border-[5px] border-black border-t-blue-600 rounded-full animate-spin"></div>
+                <div class="text-center">
+                  <p id="modal-loading-title" class="brutal-title text-xl">Processando</p>
+                  <p id="modal-loading-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-1">Aguarde um momento...</p>
+                </div>
+              </div>
+
+              <!-- Modal: Sucesso -->
+              <div id="modal-success" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
+                <div class="w-16 h-16 bg-green-400 brutal-border flex items-center justify-center text-3xl">✓</div>
+                <div class="text-center">
+                  <p id="modal-success-title" class="brutal-title text-xl">Sucesso!</p>
+                  <p id="modal-success-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-2 leading-relaxed"></p>
+                </div>
+                <button onclick="fecharModal()" class="w-full bg-black text-white p-3 font-black uppercase text-sm brutal-border hover:bg-blue-600 transition-colors">OK →</button>
+              </div>
+
+              <!-- Modal: Erro / Aviso -->
+              <div id="modal-error" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
+                <div class="w-16 h-16 bg-red-400 brutal-border flex items-center justify-center text-3xl">✕</div>
+                <div class="text-center">
+                  <p id="modal-error-title" class="brutal-title text-xl">Atenção</p>
+                  <p id="modal-error-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-2 leading-relaxed"></p>
+                </div>
+                <button onclick="fecharModal()" class="w-full bg-black text-white p-3 font-black uppercase text-sm brutal-border hover:bg-red-500 transition-colors">Entendi →</button>
+              </div>
+
+            </div>
+          `,
+        );
+
+        // Fecha ao clicar no overlay
+        document
+          .getElementById("modal-overlay")
+          .addEventListener("click", (e) => {
+            if (e.target === document.getElementById("modal-overlay"))
+              fecharModal();
+          });
+      }
+
+      function mostrarModal(tipo, { titulo, sub, callback } = {}) {
+        const overlay = document.getElementById("modal-overlay");
+        document
+          .querySelectorAll(".modal-box")
+          .forEach((m) => m.classList.add("hidden"));
+
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+
+        const box = document.getElementById(`modal-${tipo}`);
+        box.classList.remove("hidden");
+
+        if (titulo)
+          document.getElementById(`modal-${tipo}-title`).textContent = titulo;
+        if (sub) document.getElementById(`modal-${tipo}-sub`).textContent = sub;
+
+        // Callback executado ao fechar modal de sucesso
+        if (tipo === "success" && callback) {
+          const btn = box.querySelector("button");
+          btn.onclick = () => {
+            fecharModal();
+            callback();
+          };
+        }
+      }
+
+      function fecharModal() {
+        const overlay = document.getElementById("modal-overlay");
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        document
+          .querySelectorAll(".modal-box")
+          .forEach((m) => m.classList.add("hidden"));
+
+        // Reseta o botão do sucesso para o padrão
+        const btnSucesso = document.querySelector("#modal-success button");
+        if (btnSucesso) btnSucesso.onclick = fecharModal;
+      }
+
       // Inicialização
       window.onload = () => {
+        criarModalHTML();
         renderCalendar();
         calculateEstimate();
       };
