@@ -502,64 +502,57 @@
         Religioso: { Geral: 30, VIP: 80 },
       };
 
-      window.onload = function () {
+      window.onload = async function () {
         const params = new URLSearchParams(window.location.search);
-        const eventId = parseInt(params.get("id"));
+        const eventId = params.get("id");
 
-        const todos = JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
-        const evDinamico = todos.find((e) => e.id === eventId);
-
-        if (evDinamico) {
-          currentEvent = {
-            id: evDinamico.id,
-            titulo: evDinamico.titulo,
-            data: new Date(evDinamico.data + "T12:00:00").toLocaleDateString(
-              "pt-BR",
-              {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              },
-            ),
-            hora: evDinamico.hora,
-            categoria: evDinamico.categoria,
-            imagem:
-              evDinamico.imagem ||
-              "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
-            descricao:
-              evDinamico.descricaoDetalhada ||
-              evDinamico.descricaoBreve ||
-              "Detalhes em breve.",
-            setores: SETORES_POR_CATEGORIA[evDinamico.categoria] || {
-              Geral: 50,
-              VIP: 100,
-            },
-          };
-        } else {
-          // Evento não encontrado
-          document.getElementById("event-title").innerText =
-            "Evento não encontrado.";
-          document.getElementById("event-description").innerText =
-            "Este evento não existe ou foi removido.";
+        if (!eventId) {
+          document.getElementById("event-title").innerText = "ID do evento não fornecido.";
           return;
         }
 
-        renderEventDetails();
+        try {
+          const response = await fetch(`/api/events/${eventId}`);
+          if (!response.ok) throw new Error("Evento não encontrado");
+          
+          const eventData = await response.json();
+          
+          currentEvent = {
+            id: eventData.id,
+            titulo: eventData.nome,
+            data: new Date(eventData.dataHora).toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+            }),
+            hora: new Date(eventData.dataHora).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }),
+            categoria: "Arena Eventos", // Categoria padrão ou vinda do backend se houver
+            imagem: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
+            descricao: eventData.descricao || "Detalhes em breve.",
+            setores: {
+              "Geral": eventData.preco,
+              "VIP": eventData.preco * 2
+            }
+          };
+
+          renderEventDetails();
+        } catch (error) {
+          console.error("Erro ao carregar evento:", error);
+          document.getElementById("event-title").innerText = "Erro ao carregar evento.";
+          document.getElementById("event-description").innerText = error.message;
+        }
       };
 
       function renderEventDetails() {
         document.getElementById("event-title").innerText = currentEvent.titulo;
-        document.getElementById("event-category").innerText =
-          currentEvent.categoria;
+        document.getElementById("event-category").innerText = currentEvent.categoria;
         document.getElementById("event-date").innerText = currentEvent.data;
         document.getElementById("event-time").innerText = currentEvent.hora;
-        document.getElementById("event-description").innerText =
-          currentEvent.descricao;
+        document.getElementById("event-description").innerText = currentEvent.descricao;
         document.getElementById("event-cover").src = currentEvent.imagem;
-        document.getElementById("event-detail-date").innerText =
-          currentEvent.data;
-        document.getElementById("event-detail-time").innerText =
-          `${currentEvent.hora}h (Portões: ${String(parseInt(currentEvent.hora) - 3).padStart(2, "0")}:00h)`;
+        document.getElementById("event-detail-date").innerText = currentEvent.data;
+        document.getElementById("event-detail-time").innerText = 
+          `${currentEvent.hora} (Abertura portões 3h antes)`;
 
         const container = document.getElementById("sectors-container");
         container.innerHTML = "";
@@ -622,22 +615,57 @@
           `R$ ${total.toFixed(2)}`;
       }
 
-      function executeReservation() {
+      async function executeReservation() {
+        const estaLogado = localStorage.getItem("esta_logado") === "true";
+        if (!estaLogado) {
+          alert("Por favor, faça login para comprar ingressos.");
+          window.location.href = "auth.html";
+          return;
+        }
+
+        const usuarioId = localStorage.getItem("id_usuario"); // Assumindo que o ID do usuário está salvo no login
+        if (!usuarioId) {
+          alert("Erro de autenticação. Por favor, faça login novamente.");
+          return;
+        }
+
         let basePrice = currentEvent.setores[selectedSector];
         if (selectedType === "meia") basePrice = basePrice / 2;
         const total = basePrice * quantity + 4.0;
 
-        document.getElementById("res-detail-event").innerText =
-          `Evento: ${currentEvent.titulo}`;
-        document.getElementById("res-detail-seats").innerText =
-          `Acesso: Setor ${selectedSector} (${quantity}x ${selectedType.toUpperCase()})`;
-        document.getElementById("res-detail-value").innerText =
-          `Total Pago: R$ ${total.toFixed(2)}`;
+        try {
+          const response = await fetch('/api/ingressos/comprar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              usuarioId: usuarioId,
+              eventoId: currentEvent.id
+            })
+          });
 
-        document
-          .getElementById("confirmation-modal")
-          .classList.remove("hidden");
-        document.getElementById("confirmation-modal").classList.add("flex");
+          if (!response.ok) {
+            const errorMsg = await response.text();
+            throw new Error(errorMsg || "Erro ao processar compra");
+          }
+
+          const ingresso = await response.json();
+
+          document.getElementById("res-detail-event").innerText =
+            `Evento: ${currentEvent.titulo}`;
+          document.getElementById("res-detail-seats").innerText =
+            `Acesso: Setor ${selectedSector} (${quantity}x ${selectedType.toUpperCase()})`;
+          document.getElementById("res-detail-value").innerText =
+            `Total Pago: R$ ${total.toFixed(2)}`;
+
+          document
+            .getElementById("confirmation-modal")
+            .classList.remove("hidden");
+          document.getElementById("confirmation-modal").classList.add("flex");
+        } catch (error) {
+          alert("Erro na compra: " + error.message);
+        }
       }
 
       function closeConfirmationModal() {

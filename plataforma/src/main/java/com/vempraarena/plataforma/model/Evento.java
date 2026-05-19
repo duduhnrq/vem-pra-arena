@@ -2,6 +2,9 @@ package com.vempraarena.plataforma.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,13 +27,23 @@ public class Evento {
 
     private String local;
 
+    @NotNull(message = "A capacidade máxima é obrigatória")
+    @PositiveOrZero(message = "A capacidade deve ser zero ou positiva")
+    private Integer capacidadeMaxima;
+
+    @NotNull(message = "O preço é obrigatório")
+    @PositiveOrZero(message = "O preço deve ser zero ou positivo")
+    private BigDecimal preco;
+
     public Evento() {}
 
-    public Evento(String nome, String descricao, LocalDateTime dataHora, String local) {
+    public Evento(String nome, String descricao, LocalDateTime dataHora, String local, Integer capacidadeMaxima, BigDecimal preco) {
         this.nome = nome;
         this.descricao = descricao;
         this.dataHora = dataHora;
         this.local = local;
+        this.capacidadeMaxima = capacidadeMaxima;
+        this.preco = preco;
     }
 
     public UUID getId() {
@@ -71,5 +84,21 @@ public class Evento {
 
     public void setLocal(String local) {
         this.local = local;
+    }
+
+    public Integer getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
+
+    public void setCapacidadeMaxima(Integer capacidadeMaxima) {
+        this.capacidadeMaxima = capacidadeMaxima;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 }

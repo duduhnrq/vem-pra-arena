@@ -520,11 +520,15 @@
           if (res.ok) {
             const data = await res.json().catch(() => ({}));
             localStorage.setItem("esta_logado", "true");
+            localStorage.setItem("id_usuario", data.id); // Salva o ID do usuário
             localStorage.setItem(
               "nome_usuario",
               data.nome || email.split("@")[0],
             );
             localStorage.setItem("email_usuario", data.email || email);
+            localStorage.setItem("cpf_usuario", data.cpf || "");
+            localStorage.setItem("tel_usuario", data.telefone || "");
+            localStorage.setItem("nasc_usuario", data.dataNascimento || "");
 
             mostrarModal("success", {
               titulo: "Bem-vindo!",

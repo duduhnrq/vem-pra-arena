@@ -472,7 +472,7 @@
         if (campos.telefone && telUsuario) campos.telefone.value = telUsuario;
 
         // ─── Tabs ─────────────────────────────────────────────────────────
-        window.switchTab = function (tab) {
+        window.switchTab = async function (tab) {
           document
             .querySelectorAll(".tab-content")
             .forEach((s) => s.classList.add("hidden"));
@@ -487,14 +487,97 @@
 
           if (content) content.classList.remove("hidden");
           if (navBtn) navBtn.classList.add("active", "bg-black", "text-white");
+
+          if (tab === 'ingressos') {
+            await carregarIngressos();
+          }
         };
 
+        async function carregarIngressos() {
+            const container = document.getElementById('content-ingressos');
+            const usuarioId = localStorage.getItem('id_usuario');
+            
+            if (!usuarioId) {
+                container.innerHTML = '<p class="font-bold p-4 bg-red-100 brutal-border">Faça login para ver seus ingressos.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/ingressos/usuario/${usuarioId}`);
+                const ingressos = await response.json();
+                
+                container.innerHTML = '<h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>';
+                
+                if (ingressos.length === 0) {
+                    container.innerHTML += '<p class="font-bold opacity-60">Você ainda não possui ingressos.</p>';
+                    return;
+                }
+
+                ingressos.forEach(ing => {
+                    const dataObj = new Date(ing.evento.dataHora);
+                    const dia = String(dataObj.getDate()).padStart(2, '0');
+                    const mes = dataObj.toLocaleDateString('pt-BR', { month: 'short' }).toUpperCase();
+                    
+                    const ticketHtml = `
+                        <div class="bg-white brutal-border brutal-shadow flex flex-col md:flex-row mb-6">
+                            <div class="bg-black text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black">
+                            <span class="text-[10px] font-black uppercase">${mes}</span>
+                            <span class="text-3xl brutal-title">${dia}</span>
+                            </div>
+                            <div class="p-6 flex-1">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                <span class="bg-yellow-400 border-2 border-black px-2 py-0.5 text-xs font-black uppercase">EVENTO</span>
+                                <h3 class="brutal-title text-xl mt-1">${ing.evento.nome}</h3>
+                                </div>
+                                <span class="text-xs font-black text-blue-600">#${ing.id.substring(0, 8).toUpperCase()}</span>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-bold uppercase">
+                                <div>
+                                <p class="text-gray-400">Status</p>
+                                <p>${ing.status}</p>
+                                </div>
+                                <div>
+                                <p class="text-gray-400">Local</p>
+                                <p>${ing.evento.local || 'ARENA PE'}</p>
+                                </div>
+                                <div>
+                                <p class="text-gray-400">Data Compra</p>
+                                <p>${new Date(ing.dataCompra).toLocaleDateString()}</p>
+                                </div>
+                                <button class="brutal-btn brutal-border bg-black text-white p-2 font-black hover:bg-governo-blue">
+                                ACESSAR QR
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += ticketHtml;
+                });
+                
+                // Atualiza o contador na sidebar
+                const tabIngBtn = document.getElementById('tab-ingressos');
+                if (tabIngBtn) {
+                    tabIngBtn.innerHTML = `<span>🎫</span> Meus Ingressos (${ingressos.length})`;
+                }
+
+            } catch (error) {
+                console.error("Erro ao carregar ingressos:", error);
+                container.innerHTML += '<p class="text-red-500 font-bold">Erro ao carregar ingressos.</p>';
+            }
+        }
+
         // ─── Salvar alterações ────────────────────────────────────────────
-        window.salvarDados = function () {
+        window.salvarDados = async function () {
+          const btn = event.target;
+          const originalText = btn.innerText;
+          
           const novoNome = campos.nome?.value.trim();
           const novoEmail = campos.email?.value.trim();
+          const novoCpf = campos.cpf?.value.trim();
           const novoTel = campos.telefone?.value.trim();
           const novoNasc = campos.nascimento?.value;
+          const usuarioId = localStorage.getItem('id_usuario');
 
           if (!novoNome || !novoEmail) {
             alert("Nome e e-mail são obrigatórios.");
@@ -502,22 +585,66 @@
           }
           
           if (!novoEmail.includes("@")) {
-          alert("Formato inválido: O e-mail precisa conter um '@'.");
-          restaurarBotao(btn, originalText);
-          return;
-        }
+            alert("Formato inválido: O e-mail precisa conter um '@'.");
+            return;
+          }
 
-          localStorage.setItem("nome_usuario", novoNome);
-          localStorage.setItem("email_usuario", novoEmail);
-          localStorage.setItem("tel_usuario", novoTel);
-          localStorage.setItem("nasc_usuario", novoNasc);
+          if (!usuarioId) {
+            alert("Erro: Usuário não identificado. Faça login novamente.");
+            return;
+          }
 
-          // Atualiza sidebar sem recarregar
-          if (profileIcon)
-            profileIcon.textContent = novoNome.charAt(0).toUpperCase();
-          if (profileName) profileName.textContent = novoNome;
+          // Trata campos vazios como null para evitar erro de parse no backend
+          const payload = {
+              nome: novoNome,
+              email: novoEmail,
+              cpf: novoCpf || null,
+              telefone: novoTel || null,
+              dataNascimento: novoNasc || null
+          };
 
-          mostrarToast("Alterações salvas com sucesso!");
+          console.log("Enviando atualização:", payload);
+
+          btn.innerText = "SALVANDO...";
+          btn.disabled = true;
+
+          try {
+            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorMsg = await response.text();
+                console.error("Erro do servidor:", errorMsg);
+                throw new Error(errorMsg || "Erro ao atualizar dados");
+            }
+
+            const usuarioAtualizado = await response.json();
+            console.log("Usuário atualizado com sucesso:", usuarioAtualizado);
+
+            localStorage.setItem("nome_usuario", usuarioAtualizado.nome);
+            localStorage.setItem("email_usuario", usuarioAtualizado.email);
+            localStorage.setItem("cpf_usuario", usuarioAtualizado.cpf || "");
+            localStorage.setItem("tel_usuario", usuarioAtualizado.telefone || "");
+            localStorage.setItem("nasc_usuario", usuarioAtualizado.dataNascimento || "");
+
+            // Atualiza sidebar sem recarregar
+            if (profileIcon)
+              profileIcon.textContent = usuarioAtualizado.nome.charAt(0).toUpperCase();
+            if (profileName) profileName.textContent = usuarioAtualizado.nome;
+
+            mostrarToast("Alterações salvas com sucesso!");
+          } catch (error) {
+            console.error("Erro na requisição:", error);
+            alert("Erro ao salvar: " + error.message);
+          } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+          }
         };
 
         // ─── Toast de confirmação ─────────────────────────────────────────

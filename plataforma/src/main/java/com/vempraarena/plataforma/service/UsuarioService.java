@@ -57,6 +57,18 @@ public class UsuarioService {
             usuario.setSenha(passwordEncoder.encode(dadosAtualizados.getSenha()));
         }
 
+        if (dadosAtualizados.getCpf() != null && !dadosAtualizados.getCpf().isBlank()) {
+            usuario.setCpf(dadosAtualizados.getCpf());
+        }
+
+        if (dadosAtualizados.getTelefone() != null && !dadosAtualizados.getTelefone().isBlank()) {
+            usuario.setTelefone(dadosAtualizados.getTelefone());
+        }
+
+        if (dadosAtualizados.getDataNascimento() != null) {
+            usuario.setDataNascimento(dadosAtualizados.getDataNascimento());
+        }
+
         return usuarioRepository.save(usuario);
     }
 }
