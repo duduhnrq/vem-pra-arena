@@ -219,19 +219,13 @@
                 <label class="block font-black text-[10px] uppercase mb-1"
                   >Nome Completo</label
                 >
-                <input
-                  type="text"
-                  class="input-brutal"
-                />
+                <input type="text" class="input-brutal" />
               </div>
               <div>
                 <label class="block font-black text-[10px] uppercase mb-1"
                   >E-mail</label
                 >
-                <input
-                  type="email"
-                  class="input-brutal"
-                />
+                <input type="email" class="input-brutal" />
               </div>
             </div>
 
@@ -488,37 +482,42 @@
           if (content) content.classList.remove("hidden");
           if (navBtn) navBtn.classList.add("active", "bg-black", "text-white");
 
-          if (tab === 'ingressos') {
+          if (tab === "ingressos") {
             await carregarIngressos();
           }
         };
 
         async function carregarIngressos() {
-            const container = document.getElementById('content-ingressos');
-            const usuarioId = localStorage.getItem('id_usuario');
-            
-            if (!usuarioId) {
-                container.innerHTML = '<p class="font-bold p-4 bg-red-100 brutal-border">Faça login para ver seus ingressos.</p>';
-                return;
+          const container = document.getElementById("content-ingressos");
+          const usuarioId = localStorage.getItem("id_usuario");
+
+          if (!usuarioId) {
+            container.innerHTML =
+              '<p class="font-bold p-4 bg-red-100 brutal-border">Faça login para ver seus ingressos.</p>';
+            return;
+          }
+
+          try {
+            const response = await fetch(`/api/ingressos/usuario/${usuarioId}`);
+            const ingressos = await response.json();
+
+            container.innerHTML =
+              '<h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>';
+
+            if (ingressos.length === 0) {
+              container.innerHTML +=
+                '<p class="font-bold opacity-60">Você ainda não possui ingressos.</p>';
+              return;
             }
 
-            try {
-                const response = await fetch(`/api/ingressos/usuario/${usuarioId}`);
-                const ingressos = await response.json();
-                
-                container.innerHTML = '<h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>';
-                
-                if (ingressos.length === 0) {
-                    container.innerHTML += '<p class="font-bold opacity-60">Você ainda não possui ingressos.</p>';
-                    return;
-                }
+            ingressos.forEach((ing) => {
+              const dataObj = new Date(ing.evento.dataHora);
+              const dia = String(dataObj.getDate()).padStart(2, "0");
+              const mes = dataObj
+                .toLocaleDateString("pt-BR", { month: "short" })
+                .toUpperCase();
 
-                ingressos.forEach(ing => {
-                    const dataObj = new Date(ing.evento.dataHora);
-                    const dia = String(dataObj.getDate()).padStart(2, '0');
-                    const mes = dataObj.toLocaleDateString('pt-BR', { month: 'short' }).toUpperCase();
-                    
-                    const ticketHtml = `
+              const ticketHtml = `
                         <div class="bg-white brutal-border brutal-shadow flex flex-col md:flex-row mb-6">
                             <div class="bg-black text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black">
                             <span class="text-[10px] font-black uppercase">${mes}</span>
@@ -539,7 +538,7 @@
                                 </div>
                                 <div>
                                 <p class="text-gray-400">Local</p>
-                                <p>${ing.evento.local || 'ARENA PE'}</p>
+                                <p>${ing.evento.local || "ARENA PE"}</p>
                                 </div>
                                 <div>
                                 <p class="text-gray-400">Data Compra</p>
@@ -552,38 +551,38 @@
                             </div>
                         </div>
                     `;
-                    container.innerHTML += ticketHtml;
-                });
-                
-                // Atualiza o contador na sidebar
-                const tabIngBtn = document.getElementById('tab-ingressos');
-                if (tabIngBtn) {
-                    tabIngBtn.innerHTML = `<span>🎫</span> Meus Ingressos (${ingressos.length})`;
-                }
+              container.innerHTML += ticketHtml;
+            });
 
-            } catch (error) {
-                console.error("Erro ao carregar ingressos:", error);
-                container.innerHTML += '<p class="text-red-500 font-bold">Erro ao carregar ingressos.</p>';
+            // Atualiza o contador na sidebar
+            const tabIngBtn = document.getElementById("tab-ingressos");
+            if (tabIngBtn) {
+              tabIngBtn.innerHTML = `<span>🎫</span> Meus Ingressos (${ingressos.length})`;
             }
+          } catch (error) {
+            console.error("Erro ao carregar ingressos:", error);
+            container.innerHTML +=
+              '<p class="text-red-500 font-bold">Erro ao carregar ingressos.</p>';
+          }
         }
 
         // ─── Salvar alterações ────────────────────────────────────────────
         window.salvarDados = async function () {
           const btn = event.target;
           const originalText = btn.innerText;
-          
+
           const novoNome = campos.nome?.value.trim();
           const novoEmail = campos.email?.value.trim();
           const novoCpf = campos.cpf?.value.trim();
           const novoTel = campos.telefone?.value.trim();
           const novoNasc = campos.nascimento?.value;
-          const usuarioId = localStorage.getItem('id_usuario');
+          const usuarioId = localStorage.getItem("id_usuario");
 
           if (!novoNome || !novoEmail) {
             alert("Nome e e-mail são obrigatórios.");
             return;
           }
-          
+
           if (!novoEmail.includes("@")) {
             alert("Formato inválido: O e-mail precisa conter um '@'.");
             return;
@@ -596,11 +595,11 @@
 
           // Trata campos vazios como null para evitar erro de parse no backend
           const payload = {
-              nome: novoNome,
-              email: novoEmail,
-              cpf: novoCpf || null,
-              telefone: novoTel || null,
-              dataNascimento: novoNasc || null
+            nome: novoNome,
+            email: novoEmail,
+            cpf: novoCpf || null,
+            telefone: novoTel || null,
+            dataNascimento: novoNasc || null,
           };
 
           console.log("Enviando atualização:", payload);
@@ -609,33 +608,56 @@
           btn.disabled = true;
 
           try {
-            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch(
+              `http://localhost:8080/api/usuarios/${usuarioId}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              },
+            );
 
             if (!response.ok) {
-                const errorMsg = await response.text();
-                console.error("Erro do servidor:", errorMsg);
-                throw new Error(errorMsg || "Erro ao atualizar dados");
+              const errorMsg = await response.text();
+              throw new Error(errorMsg || "Erro ao atualizar dados");
             }
 
-            const usuarioAtualizado = await response.json();
-            console.log("Usuário atualizado com sucesso:", usuarioAtualizado);
+            let usuarioAtualizado = {};
+            const responseText = await response.text();
+            if (responseText) {
+              try {
+                usuarioAtualizado = JSON.parse(responseText);
+              } catch {
+              }
+            }
 
-            localStorage.setItem("nome_usuario", usuarioAtualizado.nome);
-            localStorage.setItem("email_usuario", usuarioAtualizado.email);
-            localStorage.setItem("cpf_usuario", usuarioAtualizado.cpf || "");
-            localStorage.setItem("tel_usuario", usuarioAtualizado.telefone || "");
-            localStorage.setItem("nasc_usuario", usuarioAtualizado.dataNascimento || "");
+            localStorage.setItem(
+              "nome_usuario",
+              usuarioAtualizado.nome || novoNome,
+            );
+            localStorage.setItem(
+              "email_usuario",
+              usuarioAtualizado.email || novoEmail,
+            );
+            localStorage.setItem(
+              "cpf_usuario",
+              usuarioAtualizado.cpf || novoCpf || "",
+            );
+            localStorage.setItem(
+              "tel_usuario",
+              usuarioAtualizado.telefone || novoTel || "",
+            );
+            localStorage.setItem(
+              "nasc_usuario",
+              usuarioAtualizado.dataNascimento || novoNasc || "",
+            );
 
-            // Atualiza sidebar sem recarregar
             if (profileIcon)
-              profileIcon.textContent = usuarioAtualizado.nome.charAt(0).toUpperCase();
-            if (profileName) profileName.textContent = usuarioAtualizado.nome;
+              profileIcon.textContent = (usuarioAtualizado.nome || novoNome)
+                .charAt(0)
+                .toUpperCase();
+            if (profileName)
+              profileName.textContent = usuarioAtualizado.nome || novoNome;
 
             mostrarToast("Alterações salvas com sucesso!");
           } catch (error) {
@@ -674,19 +696,6 @@
           }, 3000);
         }
       });
-
-      function salvarDados() {
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "SALVANDO...";
-        btn.disabled = true;
-
-        setTimeout(() => {
-          alert("DADOS ATUALIZADOS COM SUCESSO!");
-          btn.innerText = originalText;
-          btn.disabled = false;
-        }, 1000);
-      }
     </script>
   </body>
 </html>

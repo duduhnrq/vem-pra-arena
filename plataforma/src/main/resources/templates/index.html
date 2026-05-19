@@ -1040,112 +1040,114 @@
         }
       });
 
-      async function renderEventosAprovados() {
+      function renderEventosAprovados() {
         const grid = document.getElementById("events-grid");
         const countEl = document.getElementById("event-count");
         const noMsg = document.getElementById("no-events-message");
         const viewAll = document.getElementById("view-all-btn");
 
-        try {
-          const response = await fetch('/api/events');
-          if (!response.ok) throw new Error("Erro ao carregar eventos");
-          
-          const aprovados = await response.json();
-          
-          const CATEGORIA_CONFIG = {
-            "Show Musical": {
-              label: "Música",
-              bg: "bg-governo-pink text-white",
-              border: "border-governo-pink",
-            },
-            "Partida de Futebol": {
-              label: "Esporte",
-              bg: "bg-governo-yellow",
-              border: "border-governo-yellow",
-            },
-            "Evento Corporativo": {
-              label: "Corporativo",
-              bg: "bg-governo-blue text-white",
-              border: "border-governo-blue",
-            },
-            Religioso: {
-              label: "Religioso",
-              bg: "bg-green-400",
-              border: "border-green-400",
-            },
-          };
+        const todos = JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
 
-          grid.innerHTML = "";
+        const aprovados = todos.filter((e) => {
+          const dataEvento = new Date(e.data + "T12:00:00");
+          return e.status === "confirmado" && dataEvento >= hoje;
+        });
 
-          if (!aprovados || aprovados.length === 0) {
-            noMsg?.classList.remove("hidden");
-            viewAll?.classList.add("hidden");
-            if (countEl) countEl.textContent = "MOSTRANDO 0 EVENTOS";
-            return;
-          }
+        const CATEGORIA_CONFIG = {
+          "Show Musical": {
+            label: "Música",
+            bg: "bg-governo-pink text-white",
+            border: "border-governo-pink",
+            dataAttr: "SHOW",
+          },
+          "Partida de Futebol": {
+            label: "Esporte",
+            bg: "bg-governo-yellow",
+            border: "border-governo-yellow",
+            dataAttr: "ESPORTE",
+          },
+          "Evento Corporativo": {
+            label: "Corporativo",
+            bg: "bg-governo-blue text-white",
+            border: "border-governo-blue",
+            dataAttr: "TECNOLOGIA",
+          },
+          Religioso: {
+            label: "Religioso",
+            bg: "bg-green-400",
+            border: "border-green-400",
+            dataAttr: "CULTURA",
+          },
+        };
 
-          noMsg?.classList.add("hidden");
-          viewAll?.classList.remove("hidden");
+        grid.innerHTML = "";
 
-          aprovados.forEach((ev) => {
-            const dataObj = new Date(ev.dataHora);
-            const dia = String(dataObj.getDate()).padStart(2, "0");
-            const mesNome = dataObj
-              .toLocaleDateString("pt-BR", { month: "long" })
-              .toUpperCase();
-            
-            const categoriaLabel = "Arena PE"; // Simplificando categorias por enquanto
-            const cfg = {
-              label: categoriaLabel,
-              bg: "bg-governo-blue text-white",
-              border: "border-governo-blue",
-            };
-
-            const imgSrc = "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800";
-            const dataAttr = "ARENA";
-
-            const card = document.createElement("div");
-            card.className =
-              "brutal-card brutal-border bg-white group cursor-pointer";
-            card.setAttribute("data-category", dataAttr);
-            card.setAttribute(
-              "data-title",
-              `${ev.nome.toLowerCase()}`,
-            );
-            card.innerHTML = `
-              <div class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden">
-                <img src="${imgSrc}"
-                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                  onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800'"/>
-                <span class="absolute top-4 left-4 brutal-border ${cfg.bg} px-3 py-1 font-black text-xs z-10 uppercase">
-                  ${cfg.label}
-                </span>
-              </div>
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-4">
-                  <h3 class="text-3xl font-black leading-none uppercase">${ev.nome}</h3>
-                  <div class="text-right shrink-0 ml-2">
-                    <span class="block font-black text-2xl">${dia}</span>
-                    <span class="block font-bold text-xs uppercase bg-black text-white px-1">${mesNome}</span>
-                  </div>
-                </div>
-                <p class="font-bold text-gray-600 mb-8 border-l-4 ${cfg.border} pl-4 italic line-clamp-2">
-                  ${ev.descricao || "Evento confirmado na Arena Pernambuco."}
-                </p>
-                <a href="event_details.html?id=${ev.id}" class="flex w-full justify-center brutal-btn btn-black-hover brutal-border bg-black text-white py-4 font-black brutal-shadow uppercase">
-                  VER EVENTO
-                </a>
-              </div>
-            `;
-            grid.appendChild(card);
-          });
-
-          if (countEl)
-            countEl.textContent = `MOSTRANDO ${aprovados.length} DE ${aprovados.length} EVENTOS`;
-        } catch (error) {
-          console.error("Erro ao renderizar eventos:", error);
-          grid.innerHTML = `<p class="text-center font-bold text-red-500 col-span-3">Erro ao carregar eventos da Arena.</p>`;
+        if (aprovados.length === 0) {
+          noMsg?.classList.remove("hidden");
+          viewAll?.classList.add("hidden");
+          if (countEl) countEl.textContent = "MOSTRANDO 0 EVENTOS";
+          return;
         }
+
+        noMsg?.classList.add("hidden");
+        viewAll?.classList.remove("hidden");
+
+        aprovados.forEach((ev) => {
+          const dataObj = new Date(ev.data + "T12:00:00");
+          const dia = String(dataObj.getDate()).padStart(2, "0");
+          const mesNome = dataObj
+            .toLocaleDateString("pt-BR", { month: "long" })
+            .toUpperCase();
+          const cfg = CATEGORIA_CONFIG[ev.categoria] || {
+            label: ev.categoria,
+            bg: "bg-gray-400",
+            border: "border-gray-400",
+            dataAttr: "OUTROS",
+          };
+          const imgSrc =
+            ev.imagem ||
+            "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800";
+
+          const card = document.createElement("div");
+          card.className =
+            "brutal-card brutal-border bg-white group cursor-pointer";
+          card.setAttribute("data-category", cfg.dataAttr);
+          card.setAttribute(
+            "data-title",
+            `${ev.titulo.toLowerCase()} ${ev.categoria.toLowerCase()}`,
+          );
+          card.innerHTML = `
+      <div class="h-64 border-b-[3px] border-black bg-gray-200 relative overflow-hidden">
+        <img src="${imgSrc}"
+          class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+          onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800'"/>
+        <span class="absolute top-4 left-4 brutal-border ${cfg.bg} px-3 py-1 font-black text-xs z-10 uppercase">
+          ${cfg.label}
+        </span>
+      </div>
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-3xl font-black leading-none uppercase">${ev.titulo}</h3>
+          <div class="text-right shrink-0 ml-2">
+            <span class="block font-black text-2xl">${dia}</span>
+            <span class="block font-bold text-xs uppercase bg-black text-white px-1">${mesNome}</span>
+          </div>
+        </div>
+        <p class="font-bold text-gray-600 mb-8 border-l-4 ${cfg.border} pl-4 italic line-clamp-2">
+          ${ev.descricaoBreve || "Evento confirmado na Arena Pernambuco."}
+        </p>
+        <a href="event_details.html?id=${ev.id}" class="flex w-full justify-center brutal-btn btn-black-hover brutal-border bg-black text-white py-4 font-black brutal-shadow uppercase">
+          VER EVENTO
+        </a>
+      </div>
+    `;
+          grid.appendChild(card);
+        });
+
+        if (countEl)
+          countEl.textContent = `MOSTRANDO ${aprovados.length} DE ${aprovados.length} EVENTOS`;
       }
 
       // Lógica do Chatbot de IA
