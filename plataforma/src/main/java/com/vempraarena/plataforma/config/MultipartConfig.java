@@ -18,8 +18,8 @@ public class MultipartConfig {
         }
         
         // long maxFileSize, long maxRequestSize, int fileSizeThreshold
-        long maxFileSize = 100 * 1024 * 1024; // 100MB
-        long maxRequestSize = 100 * 1024 * 1024; // 100MB
+        long maxFileSize = 10 * 1024 * 1024; // 10MB
+        long maxRequestSize = 10 * 1024 * 1024; // 10MB
         int fileSizeThreshold = 0;
         
         return new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
