@@ -1,8 +1,3 @@
-Mano, o que aconteceu aí foi que na hora de você copiar e colar o texto anterior, o bloco de código do "Passo 1" ficou sem o fechamento (as três crases `````), o que acabou "engolindo" todo o resto da formatação para baixo e transformando os links e títulos em texto bagunçado.
-
-Eu ajustei 100% da formatação. Só clicar no botão de **"Copiar código"** (Copy code) no canto superior direito desse bloco preto aqui embaixo e colar direto no seu arquivo `README.md` que vai ficar perfeito:
-
-```markdown
 # VemPraArena 🏟️
 
 O **VemPraArena** é uma plataforma GovTech desenvolvida para conectar os cidadãos à programação da Arena Pernambuco, facilitando a descoberta de eventos e otimizando a ocupação do equipamento público.
