@@ -150,6 +150,3 @@ Os fluxos de navegação completos e as integrações validadas ponta a ponta es
 
 *Este projeto compõe o portfólio e a avaliação oficial da disciplina de Programação Orientada a Objetos (POO).*
 
-```
-
-```
