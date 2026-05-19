@@ -26,6 +26,11 @@ O projeto visa reduzir a subutilização da Arena Pernambuco através de uma sol
 
 ---
 
+### 🐛 Rastreamento de Bugs e Tarefas (Issue Tracker)
+Como parte do gerenciamento ágil e documentação do sistema, a equipe utiliza ativamente o ecossistema de **Issues** do GitHub para catalogar novas funcionalidades (features), relatar erros (bugs) e acompanhar o progresso de resolução de conflitos de arquitetura:
+
+![Quadro de Issues do GitHub](./docs/print-issues.png.png)
+
 ## ⚙️ Como Rodar o Projeto Localmente
 
 Siga o passo a passo abaixo para configurar o ambiente de desenvolvimento e executar a aplicação.
