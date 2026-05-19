@@ -35,9 +35,9 @@ O protótipo de baixa fidelidade foca na estrutura da informação e no fluxo de
 * 📌 **[Acesse aqui o Protótipo de Baixa Fidelidade](https://www.figma.com/proto/VjPOLNdwJL7iIhuIHU6qJJ/VemPraArena?node-id=30-317&t=xqTDZgPZaEAn8JhZ-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2)**
 
 ### 🎬 Apresentação  (Canal com todos os Screencast)
-No vídeo abaixo, apresentamos o fluxo de navegação contemplando as histórias de usuário implementadas recentemente.
+No canal abaixo, apresentamos o fluxo de navegação contemplando as histórias de usuário implementadas recentemente.
 
-* 🎥 **[Assista ao vídeo no YouTube](https://www.youtube.com/watch?si=rtgCtEo-YtJ4olWc&v=FEn-dxPlGSY&feature=youtu.be)**
+* 🎥 **[Acesse o canal no YouTube](https://www.youtube.com/@VEMPRAARENA)**
 
 ---
 
