@@ -20,7 +20,7 @@ O projeto visa reduzir a subutilização da Arena Pernambuco através de uma sol
 
 ---
 
-## 📂 Entrega 01: Planejamento, User Stories e Prototipagem
+## 📂 Planejamento, User Stories e Prototipagem
 
 Esta entrega foca na definição dos requisitos de negócio e na experiência do usuário (UX) através de protótipos de baixa fidelidade.
 
