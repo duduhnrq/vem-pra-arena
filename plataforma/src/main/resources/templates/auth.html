@@ -320,18 +320,17 @@
                   />
                 </div>
               </div>
-              <div
-                class="flex items-start gap-3 p-3 bg-gray-50 border-2 border-black border-dashed"
-              >
+              <div class="flex items-center gap-3 p-4 bg-yellow-400 brutal-border brutal-shadow-sm transition-all">
                 <input
                   type="checkbox"
-                  class="w-5 h-5 mt-1 brutal-border cursor-pointer"
+                  id="aceitouTermos"
+                  name="aceitouTermos"
+                  class="w-6 h-6 brutal-border cursor-pointer accent-black bg-white focus:ring-black focus:ring-2 focus:outline-none"
                   required
                 />
-                <p class="text-[10px] font-bold leading-tight">
-                  Declaro ser maior de 18 anos e aceito os termos de privacidade
-                  e uso de dados da Arena.
-                </p>
+                <label for="aceitouTermos" class="text-[10px] font-black uppercase leading-tight cursor-pointer">
+                  Declaro que li e aceito os <a href="/termos" target="_blank" class="underline hover:text-gray-700">Termos de Uso</a> e a <a href="/privacidade" target="_blank" class="underline hover:text-gray-700">Política de Privacidade (LGPD)</a>.
+                </label>
               </div>
               <button type="submit" class="btn-brutal text-xl">
                 Finalizar Cadastro →
@@ -567,6 +566,7 @@
         const confirmarSenha = document.querySelectorAll(
           '#register-card input[type="password"]',
         )[1].value;
+        const aceitouTermos = document.getElementById("aceitouTermos").checked;
 
         if (senha !== confirmarSenha) {
           mostrarModal("error", {
@@ -587,7 +587,7 @@
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ nome, email, senha }),
+              body: JSON.stringify({ nome, email, senha, aceitouTermos }),
             },
           );
 

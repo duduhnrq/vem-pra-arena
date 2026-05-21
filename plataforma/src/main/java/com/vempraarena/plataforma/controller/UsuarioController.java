@@ -1,5 +1,6 @@
 package com.vempraarena.plataforma.controller;
 
+import com.vempraarena.plataforma.dto.UsuarioResponseDTO;
 import com.vempraarena.plataforma.model.Usuario;
 import com.vempraarena.plataforma.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class UsuarioController {
     public ResponseEntity<?> cadastrar(@Valid @RequestBody Usuario usuario) {
         try {
             Usuario usuarioSalvo = usuarioService.cadastrarUsuario(usuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
+            return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioResponseDTO.fromEntity(usuarioSalvo));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -33,7 +34,7 @@ public class UsuarioController {
     public ResponseEntity<?> login(@RequestBody Usuario usuario) {
         try {
             Usuario usuarioAutenticado = usuarioService.autenticar(usuario.getEmail(), usuario.getSenha());
-            return ResponseEntity.ok(usuarioAutenticado);
+            return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(usuarioAutenticado));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
@@ -43,9 +44,19 @@ public class UsuarioController {
     public ResponseEntity<?> atualizar(@PathVariable UUID id, @RequestBody Usuario usuario) {
         try {
             Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
-            return ResponseEntity.ok(usuarioAtualizado);
+            return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(usuarioAtualizado));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable UUID id) {
+        try {
+            usuarioService.deletarUsuario(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

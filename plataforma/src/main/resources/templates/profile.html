@@ -399,6 +399,26 @@
                 </button>
               </div>
             </div>
+
+            <div class="border-t-4 border-black pt-8 mt-8">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <h3 class="font-black uppercase text-sm text-red-600">
+                    Zona de Perigo (LGPD)
+                  </h3>
+                  <p class="text-xs font-bold text-gray-500 max-w-sm">
+                    Exerça seu direito ao esquecimento. Ao excluir sua conta, todos os seus dados pessoais, histórico e ingressos serão removidos permanentemente.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onclick="excluirConta()"
+                  class="bg-red-500 text-white brutal-border px-6 py-3 font-black text-[10px] md:text-xs uppercase brutal-shadow hover:bg-red-700 hover:-translate-y-1 transition-all"
+                >
+                  Excluir Minha Conta Permanentemente
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -666,6 +686,35 @@
           } finally {
             btn.innerText = originalText;
             btn.disabled = false;
+          }
+        };
+
+        // ─── Excluir Conta (LGPD) ─────────────────────────────────────────
+        window.excluirConta = async function () {
+          const confirmacao = confirm("Tem certeza? Esta ação apagará todos os seus dados e não pode ser desfeita.");
+          if (!confirmacao) return;
+
+          const usuarioId = localStorage.getItem("id_usuario");
+          if (!usuarioId) {
+            alert("Erro: Usuário não identificado.");
+            return;
+          }
+
+          try {
+            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioId}`, {
+              method: "DELETE"
+            });
+
+            if (response.status === 204) {
+              alert("Sua conta foi excluída permanentemente.");
+              localStorage.clear();
+              window.location.href = "index.html";
+            } else {
+              alert("Erro ao excluir conta. Verifique sua conexão ou tente novamente mais tarde.");
+            }
+          } catch (error) {
+            console.error("Erro na requisição:", error);
+            alert("Erro ao conectar com o servidor.");
           }
         };
 

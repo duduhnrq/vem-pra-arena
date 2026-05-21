@@ -5,6 +5,8 @@ import com.vempraarena.plataforma.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UsuarioService {
 
@@ -17,10 +19,15 @@ public class UsuarioService {
     }
 
     public Usuario cadastrarUsuario(Usuario usuario) {
+        if (usuario.getAceitouTermos() == null || !usuario.getAceitouTermos()) {
+            throw new IllegalArgumentException("É obrigatório aceitar os termos de uso e a política de privacidade.");
+        }
+
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
             throw new IllegalArgumentException("E-mail já está em uso.");
         }
 
+        usuario.setDataAceiteTermos(LocalDateTime.now());
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
@@ -70,5 +77,12 @@ public class UsuarioService {
         }
 
         return usuarioRepository.save(usuario);
+    }
+
+    public void deletarUsuario(java.util.UUID id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new IllegalArgumentException("Usuário não encontrado.");
+        }
+        usuarioRepository.deleteById(id);
     }
 }

@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -41,6 +42,12 @@ public class Usuario {
     private String telefone;
 
     private LocalDate dataNascimento;
+
+    @Column(nullable = false)
+    private Boolean aceitouTermos;
+
+    @Column(nullable = false)
+    private LocalDateTime dataAceiteTermos;
 
     public Usuario() {
     }
@@ -105,5 +112,21 @@ public class Usuario {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public Boolean getAceitouTermos() {
+        return aceitouTermos;
+    }
+
+    public void setAceitouTermos(Boolean aceitouTermos) {
+        this.aceitouTermos = aceitouTermos;
+    }
+
+    public LocalDateTime getDataAceiteTermos() {
+        return dataAceiteTermos;
+    }
+
+    public void setDataAceiteTermos(LocalDateTime dataAceiteTermos) {
+        this.dataAceiteTermos = dataAceiteTermos;
     }
 }
