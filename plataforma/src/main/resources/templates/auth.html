@@ -591,17 +591,21 @@
             },
           );
 
-          if (res.status === 201) {
+          const responseText = await res.text();
+
+          if (res.ok) {
+            // Limpa o formulário de cadastro
+            document.querySelector('#register-card form').reset();
+            
             mostrarModal("success", {
               titulo: "Conta Criada!",
               sub: "Seu cadastro foi realizado com sucesso.",
               redirect: () => toggleForm("login"),
             });
           } else {
-            const msg = await res.text();
             mostrarModal("error", {
               titulo: "Erro no Cadastro",
-              sub: msg || "Não foi possível criar sua conta.",
+              sub: responseText || "Não foi possível criar sua conta.",
             });
           }
         } catch (err) {
