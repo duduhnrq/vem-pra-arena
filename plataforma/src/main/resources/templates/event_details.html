@@ -512,26 +512,27 @@
         }
 
         try {
-          const response = await fetch(`/api/events/${eventId}`);
+          const response = await fetch(`http://localhost:8080/api/eventos/${eventId}`);
           if (!response.ok) throw new Error("Evento não encontrado");
           
           const eventData = await response.json();
+          const dataHora = new Date(eventData.dataHora);
           
           currentEvent = {
             id: eventData.id,
             titulo: eventData.nome,
-            data: new Date(eventData.dataHora).toLocaleDateString("pt-BR", {
+            data: dataHora.toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
             }),
-            hora: new Date(eventData.dataHora).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }),
-            categoria: "Arena Eventos", // Categoria padrão ou vinda do backend se houver
-            imagem: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
-            descricao: eventData.descricao || "Detalhes em breve.",
+            hora: dataHora.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }),
+            categoria: eventData.categoria || "Arena Eventos",
+            imagem: eventData.imagemUrl || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
+            descricao: eventData.descricaoDetalhada || eventData.descricaoBreve || "Detalhes em breve.",
             setores: {
-              "Geral": eventData.preco,
-              "VIP": eventData.preco * 2
+              "Geral": parseFloat(eventData.preco) || 100,
+              "VIP": (parseFloat(eventData.preco) || 100) * 1.5
             }
           };
 

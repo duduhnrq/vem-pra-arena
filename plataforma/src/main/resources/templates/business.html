@@ -425,7 +425,8 @@
                   </div>
                 </div>
                 <button
-                  onclick="submitProposta()"
+                  type="button"
+                  onclick="submitProposta(event)"
                   class="w-full bg-blue-600 text-white p-4 font-black uppercase hover:bg-blue-700 brutal-border transition-colors"
                 >
                   Enviar para Análise →
@@ -540,11 +541,136 @@
           </table>
         </div>
       </section>
+
+      <section id="view-perfil" class="view-section">
+        <header class="mb-8 flex flex-col gap-2">
+          <h1 class="brutal-title text-4xl italic">Perfil da Empresa</h1>
+          <p class="font-bold opacity-60">
+            Atualize seus dados cadastrais e informações de contato.
+          </p>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-8">
+          <div class="lg:col-span-8 bg-white brutal-border p-8 brutal-shadow">
+            <h2 class="brutal-title text-2xl mb-6">Dados da Empresa</h2>
+            <form
+              id="profile-form"
+              class="space-y-6"
+              onsubmit="salvarDadosPerfil(event)"
+            >
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Nome Fantasia</label
+                  >
+                  <input type="text" name="nomeFantasia" class="p-2" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Razão Social</label
+                  >
+                  <input type="text" name="razaoSocial" class="p-2" />
+                </div>
+              </div>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >CNPJ</label
+                  >
+                  <input type="text" name="cnpj" class="p-2" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >E-mail Corporativo</label
+                  >
+                  <input type="email" name="emailCorporativo" class="p-2" />
+                </div>
+              </div>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Telefone Fixo</label
+                  >
+                  <input type="text" name="telefoneFixo" class="p-2" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-black uppercase mb-2"
+                    >Whatsapp Negócios</label
+                  >
+                  <input type="text" name="whatsappNegocios" class="p-2" />
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] font-black uppercase mb-2"
+                  >Nome do Representante Legal</label
+                >
+                <input type="text" name="nomeRepresentante" class="p-2" />
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white p-4 font-black uppercase hover:bg-blue-700 brutal-border transition-colors"
+              >
+                Salvar Alterações
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-4 space-y-6">
+            <div class="bg-white brutal-border p-6 brutal-shadow">
+              <h3 class="brutal-title text-xl mb-4">Resumo do Perfil</h3>
+              <div class="space-y-3 text-[13px] font-bold">
+                <p>
+                  <span class="uppercase opacity-60">Representante:</span>
+                  <span id="perfil-resp">—</span>
+                </p>
+                <p>
+                  <span class="uppercase opacity-60">Empresa:</span>
+                  <span id="perfil-empresa">—</span>
+                </p>
+                <p>
+                  <span class="uppercase opacity-60">Razão Social:</span>
+                  <span id="perfil-razao">—</span>
+                </p>
+                <p>
+                  <span class="uppercase opacity-60">CNPJ:</span>
+                  <span id="perfil-cnpj">—</span>
+                </p>
+                <p>
+                  <span class="uppercase opacity-60">Telefone:</span>
+                  <span id="perfil-telefone">—</span>
+                </p>
+                <p>
+                  <span class="uppercase opacity-60">WhatsApp:</span>
+                  <span id="perfil-whatsapp">—</span>
+                </p>
+                <p>
+                  <span class="uppercase opacity-60">E-mail:</span>
+                  <span id="perfil-email">—</span>
+                </p>
+              </div>
+            </div>
+            <div class="bg-white brutal-border p-6 brutal-shadow">
+              <h3 class="brutal-title text-xl mb-4">Dicas Rápidas</h3>
+              <ul class="text-[12px] font-bold space-y-3">
+                <li>
+                  Atualize seus dados sempre que houver alteração de contato.
+                </li>
+                <li>O e-mail corporativo é usado para autenticação.</li>
+                <li>
+                  Mantenha o WhatsApp de negócios atualizado para notificações.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script>
+      const API_URL = "http://localhost:8080/api";
+      let currentPromotorId = null;
       let currentYear = 2026;
-      let currentMonth = 10; // Novembro (Base 0)
+      let currentMonth = 10;
       const monthNames = [
         "Janeiro",
         "Fevereiro",
@@ -560,7 +686,6 @@
         "Dezembro",
       ];
 
-      // Função para trocar de visualização (Tabs)
       function switchView(viewId) {
         document
           .querySelectorAll(".view-section")
@@ -570,62 +695,322 @@
           .forEach((b) => b.classList.remove("active"));
         document.getElementById("view-" + viewId).classList.add("active");
         document.getElementById("btn-" + viewId).classList.add("active");
-
-        // Atualiza a lista sempre que entrar na aba
         if (viewId === "meus-eventos") renderMeusEventos();
+        if (viewId === "perfil") renderPerfil();
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const nomeRepresentante =
-          localStorage.getItem("nome_representante") || "Representante";
-        const nomeEmpresa =
-          localStorage.getItem("nome_empresa") || "Empresa LTDA";
+      function deriveNameFromEmail(email) {
+        if (!email) return null;
+        const localPart = email.split("@")[0] || "Representante";
+        return localPart
+          .replace(/[._\-]/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+      }
 
+      function normalizarStorage(valor) {
+        return valor && valor !== "undefined" && valor !== "null"
+          ? valor
+          : null;
+      }
+
+      function preencherPerfilResumo(promotor) {
+        document.getElementById("perfil-resp").textContent =
+          promotor.nomeRepresentante || "—";
+        document.getElementById("perfil-empresa").textContent =
+          promotor.nomeFantasia || "—";
+        document.getElementById("perfil-razao").textContent =
+          promotor.razaoSocial || "—";
+        document.getElementById("perfil-cnpj").textContent =
+          promotor.cnpj || "—";
+        document.getElementById("perfil-telefone").textContent =
+          promotor.telefoneFixo || "—";
+        document.getElementById("perfil-whatsapp").textContent =
+          promotor.whatsappNegocios || "—";
+        document.getElementById("perfil-email").textContent =
+          promotor.emailCorporativo || "—";
+      }
+
+      function setProfileInfo(nomeRepresentante, nomeEmpresa) {
         const profileIcon = document.getElementById("profile-icon");
         const profileName = document.getElementById("profile-name");
         const enterpriseName = document.getElementById("enterprise-name");
 
+        const storedNome =
+          nomeRepresentante ||
+          normalizarStorage(localStorage.getItem("nome_representante")) ||
+          normalizarStorage(sessionStorage.getItem("nome_representante"));
+        const storedEmail =
+          normalizarStorage(localStorage.getItem("email")) ||
+          normalizarStorage(sessionStorage.getItem("email"));
+        const nomeFinal =
+          storedNome || deriveNameFromEmail(storedEmail) || "Representante";
+        const empresaFinal =
+          nomeEmpresa ||
+          normalizarStorage(localStorage.getItem("nome_empresa")) ||
+          normalizarStorage(sessionStorage.getItem("nome_empresa")) ||
+          "Empresa LTDA";
+
         if (profileIcon)
-          profileIcon.textContent = nomeRepresentante.charAt(0).toUpperCase();
-        if (profileName) profileName.textContent = nomeRepresentante;
-        if (enterpriseName) enterpriseName.textContent = nomeEmpresa;
+          profileIcon.textContent = nomeFinal.charAt(0).toUpperCase();
+        if (profileName) profileName.textContent = nomeFinal;
+        if (enterpriseName) enterpriseName.textContent = empresaFinal;
+      }
+
+      function getPerfilFromStorage() {
+        return {
+          nomeFantasia:
+            normalizarStorage(localStorage.getItem("nome_empresa")) ||
+            normalizarStorage(sessionStorage.getItem("nome_empresa")) ||
+            "",
+          razaoSocial:
+            normalizarStorage(localStorage.getItem("razao_social")) ||
+            normalizarStorage(sessionStorage.getItem("razao_social")) ||
+            "",
+          cnpj:
+            normalizarStorage(localStorage.getItem("cnpj")) ||
+            normalizarStorage(sessionStorage.getItem("cnpj")) ||
+            "",
+          telefoneFixo:
+            normalizarStorage(localStorage.getItem("telefone_fixo")) ||
+            normalizarStorage(sessionStorage.getItem("telefone_fixo")) ||
+            "",
+          whatsappNegocios:
+            normalizarStorage(localStorage.getItem("whatsapp_negocios")) ||
+            normalizarStorage(sessionStorage.getItem("whatsapp_negocios")) ||
+            "",
+          nomeRepresentante:
+            normalizarStorage(localStorage.getItem("nome_representante")) ||
+            normalizarStorage(sessionStorage.getItem("nome_representante")) ||
+            "",
+          emailCorporativo:
+            normalizarStorage(localStorage.getItem("email")) ||
+            normalizarStorage(sessionStorage.getItem("email")) ||
+            "",
+        };
+      }
+
+      function preencherPerfilFormulario(promotor = {}) {
+        const form = document.getElementById("profile-form");
+        if (!form) return;
+        const storagePerfil = getPerfilFromStorage();
+
+        form.querySelector('[name="nomeFantasia"]').value =
+          promotor.nomeFantasia || storagePerfil.nomeFantasia;
+        form.querySelector('[name="razaoSocial"]').value =
+          promotor.razaoSocial || storagePerfil.razaoSocial;
+        form.querySelector('[name="cnpj"]').value =
+          promotor.cnpj || storagePerfil.cnpj;
+        form.querySelector('[name="emailCorporativo"]').value =
+          promotor.emailCorporativo || storagePerfil.emailCorporativo;
+        form.querySelector('[name="telefoneFixo"]').value =
+          promotor.telefoneFixo || storagePerfil.telefoneFixo;
+        form.querySelector('[name="whatsappNegocios"]').value =
+          promotor.whatsappNegocios || storagePerfil.whatsappNegocios;
+        form.querySelector('[name="nomeRepresentante"]').value =
+          promotor.nomeRepresentante || storagePerfil.nomeRepresentante;
+      }
+
+      async function carregarPerfilPromotor() {
+        try {
+          const response = await fetch(`${API_URL}/promotores/perfil`, {
+            credentials: "include",
+          });
+          if (response.ok) {
+            const promotor = await response.json();
+            currentPromotorId = promotor.id;
+            setProfileInfo(promotor.nomeRepresentante, promotor.nomeFantasia);
+            preencherPerfilResumo(promotor);
+            localStorage.setItem("promotor_id", promotor.id);
+            localStorage.setItem(
+              "nome_representante",
+              promotor.nomeRepresentante,
+            );
+            localStorage.setItem("nome_empresa", promotor.nomeFantasia);
+            localStorage.setItem("razao_social", promotor.razaoSocial);
+            localStorage.setItem("cnpj", promotor.cnpj);
+            localStorage.setItem("telefone_fixo", promotor.telefoneFixo);
+            localStorage.setItem(
+              "whatsapp_negocios",
+              promotor.whatsappNegocios,
+            );
+            localStorage.setItem("email", promotor.emailCorporativo);
+            sessionStorage.setItem("promotor_id", promotor.id);
+            sessionStorage.setItem(
+              "nome_representante",
+              promotor.nomeRepresentante,
+            );
+            sessionStorage.setItem("nome_empresa", promotor.nomeFantasia);
+            sessionStorage.setItem("razao_social", promotor.razaoSocial);
+            sessionStorage.setItem("cnpj", promotor.cnpj);
+            sessionStorage.setItem("telefone_fixo", promotor.telefoneFixo);
+            sessionStorage.setItem(
+              "whatsapp_negocios",
+              promotor.whatsappNegocios,
+            );
+            sessionStorage.setItem("email", promotor.emailCorporativo);
+            if (
+              document
+                .getElementById("view-perfil")
+                .classList.contains("active")
+            ) {
+              preencherPerfilFormulario(promotor);
+            }
+          } else {
+            currentPromotorId =
+              currentPromotorId ||
+              Number(
+                normalizarStorage(localStorage.getItem("promotor_id")) ||
+                  normalizarStorage(sessionStorage.getItem("promotor_id")),
+              );
+            setProfileInfo();
+            preencherPerfilFormulario();
+          }
+        } catch (e) {
+          currentPromotorId =
+            currentPromotorId ||
+            Number(
+              normalizarStorage(localStorage.getItem("promotor_id")) ||
+                normalizarStorage(sessionStorage.getItem("promotor_id")),
+            );
+          setProfileInfo();
+          preencherPerfilFormulario();
+        }
+      }
+
+      async function renderPerfil() {
+        const form = document.getElementById("profile-form");
+        if (!form) return;
+
+        try {
+          const response = await fetch(`${API_URL}/promotores/perfil`, {
+            credentials: "include",
+          });
+          if (response.ok) {
+            const promotor = await response.json();
+            currentPromotorId = promotor.id;
+            preencherPerfilResumo(promotor);
+            preencherPerfilFormulario(promotor);
+          } else {
+            console.log(
+              "Não foi possível carregar o perfil para edição. Usando dados locais.",
+            );
+            preencherPerfilResumo(getPerfilFromStorage());
+            preencherPerfilFormulario();
+          }
+        } catch (error) {
+          console.log("Erro ao carregar o perfil de edição", error);
+          preencherPerfilResumo(getPerfilFromStorage());
+          preencherPerfilFormulario();
+        }
+      }
+
+      async function salvarDadosPerfil(event) {
+        event.preventDefault();
+        if (!currentPromotorId) {
+          mostrarModal("error", {
+            titulo: "Erro",
+            sub: "Identificador do promotor não encontrado.",
+          });
+          return;
+        }
+
+        const form = document.getElementById("profile-form");
+        const data = {
+          cnpj: form.querySelector('[name="cnpj"]').value.trim(),
+          razaoSocial: form.querySelector('[name="razaoSocial"]').value.trim(),
+          nomeFantasia: form
+            .querySelector('[name="nomeFantasia"]')
+            .value.trim(),
+          telefoneFixo: form
+            .querySelector('[name="telefoneFixo"]')
+            .value.trim(),
+          whatsappNegocios: form
+            .querySelector('[name="whatsappNegocios"]')
+            .value.trim(),
+          nomeRepresentante: form
+            .querySelector('[name="nomeRepresentante"]')
+            .value.trim(),
+          emailCorporativo: form
+            .querySelector('[name="emailCorporativo"]')
+            .value.trim(),
+        };
+
+        try {
+          const response = await fetch(
+            `${API_URL}/promotores/${currentPromotorId}`,
+            {
+              method: "PUT",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            },
+          );
+
+          if (!response.ok) {
+            throw new Error(await response.text());
+          }
+
+          const updated = await response.json();
+          setProfileInfo(updated.nomeRepresentante, updated.nomeFantasia);
+          preencherPerfilResumo(updated);
+          localStorage.setItem("nome_representante", updated.nomeRepresentante);
+          localStorage.setItem("nome_empresa", updated.nomeFantasia);
+          localStorage.setItem("email", updated.emailCorporativo);
+          sessionStorage.setItem(
+            "nome_representante",
+            updated.nomeRepresentante,
+          );
+          sessionStorage.setItem("nome_empresa", updated.nomeFantasia);
+          sessionStorage.setItem("email", updated.emailCorporativo);
+
+          mostrarModal("success", {
+            titulo: "Perfil atualizado",
+            sub: "Seus dados foram salvos com sucesso.",
+          });
+        } catch (error) {
+          mostrarModal("error", {
+            titulo: "Erro ao salvar",
+            sub: error.message || "Tente novamente.",
+          });
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        setProfileInfo();
+        carregarPerfilPromotor();
+        if (
+          document.getElementById("view-perfil")?.classList.contains("active")
+        ) {
+          renderPerfil();
+        }
       });
 
       function renderCalendar() {
         const calendarBody = document.getElementById("calendar-body");
         const monthYearLabel = document.getElementById("calendar-month-year");
-
         calendarBody.innerHTML = "";
         monthYearLabel.innerText = `${monthNames[currentMonth]} ${currentYear}`;
-
         const firstDay = new Date(currentYear, currentMonth, 1).getDay();
         const daysInMonth = new Date(
           currentYear,
           currentMonth + 1,
           0,
         ).getDate();
-
-        // Adiciona espaços vazios do início da semana
         for (let i = 0; i < firstDay; i++) {
           const empty = document.createElement("div");
           empty.className = "calendar-day empty";
           calendarBody.appendChild(empty);
         }
-
-        // Adiciona os dias
         for (let day = 1; day <= daysInMonth; day++) {
           const dayEl = document.createElement("div");
           dayEl.className = "calendar-day";
           dayEl.innerText = day;
-
-          // Simulação de Ocupação (Ex: dia 5 e 25 sempre ocupados)
           if (day === 5 || day === 25) {
             dayEl.classList.add("occupied");
-            dayEl.title = "Data indisponível - Evento Confirmado";
+            dayEl.title = "Data indisponível";
           } else {
             dayEl.onclick = () => selectDate(dayEl);
           }
-
           calendarBody.appendChild(dayEl);
         }
       }
@@ -648,24 +1033,18 @@
           .querySelectorAll(".calendar-day")
           .forEach((d) => d.classList.remove("selected"));
         element.classList.add("selected");
-        const assistantCard = document.getElementById("assistant-card");
-        assistantCard.classList.remove("hidden");
+        document.getElementById("assistant-card").classList.remove("hidden");
       }
 
       function calculateEstimate() {
         const publico =
           parseInt(document.getElementById("input-publico").value) || 0;
-
-        // Lógica de cálculo baseada no público (Escalabilidade)
         let pautaBase = 45000;
         if (publico > 25000) pautaBase = 80000;
         if (publico > 40000) pautaBase = 120000;
-
         const seguranca = Math.max(5000, publico * 1.5);
         const limpeza = 4000 + publico * 0.5;
         const total = pautaBase + seguranca + limpeza;
-
-        // Atualiza UI
         document.getElementById("est-pauta").innerText =
           formatCurrency(pautaBase);
         document.getElementById("est-seguranca").innerText =
@@ -682,126 +1061,126 @@
         });
       }
 
-      // ─── Utilitários ──────────────────────────────────────────────
-      function getEventos() {
-        return JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
-      }
-
-      function saveEventos(eventos) {
+      function saveEventoLocal(evento) {
+        const eventos = JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
+        eventos.push(evento);
         localStorage.setItem("vpa_eventos", JSON.stringify(eventos));
       }
 
-      function getStatusReal(evento) {
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-        const dataEvento = new Date(evento.data);
-        dataEvento.setHours(0, 0, 0, 0);
-
-        if (dataEvento < hoje && evento.status === "confirmado")
-          return "finalizado";
-        return evento.status;
-      }
-
-      // ─── Submissão da proposta ─────────────────────────────────────
-      function submitProposta() {
+      async function submitProposta(event) {
+        event.preventDefault();
         const btn = event.target;
-
         const diaSelecionado = document.querySelector(".calendar-day.selected");
         if (!diaSelecionado) {
           mostrarModal("error", {
             titulo: "Data não selecionada",
-            sub: "Selecione uma data no calendário antes de enviar.",
+            sub: "Selecione uma data no calendário.",
           });
           return;
         }
-
         const form = document.getElementById("proposal-form");
         const inputs = form.querySelectorAll("input, select, textarea");
-
         const titulo = inputs[0].value.trim();
         const categoria = inputs[1].value;
-        const publico = inputs[2].value;
+        const publico = parseInt(inputs[2].value);
         const hora = inputs[3].value;
-        const diasMontagem = inputs[4].value;
+        const diasMontagem = parseInt(inputs[4].value);
         const imagemUrl = inputs[5].value.trim();
         const descBreve = inputs[6].value.trim();
         const descDetalhada = inputs[7].value.trim();
         const rider = inputs[8]?.value.trim() || "";
-
-        if (!titulo) {
+        if (!titulo || !hora) {
           mostrarModal("error", {
-            titulo: "Campo obrigatório",
-            sub: "Informe o título do evento.",
+            titulo: "Campos obrigatórios",
+            sub: "Preencha todos os campos necessários.",
           });
           return;
         }
-        if (!hora) {
-          mostrarModal("error", {
-            titulo: "Campo obrigatório",
-            sub: "Informe o horário de início.",
-          });
-          return;
-        }
-
         const dia = diaSelecionado.innerText.padStart(2, "0");
         const mes = String(currentMonth + 1).padStart(2, "0");
-        const dataStr = `${currentYear}-${mes}-${dia}`;
-
-        const nomeEmpresa = localStorage.getItem("nome_empresa") || "Empresa";
-        const emailPromotor = sessionStorage.getItem("email") || "";
-
-        const novoEvento = {
-          id: Date.now(),
-          promotorEmail: emailPromotor,
-          promotorNome: nomeEmpresa,
+        const dataHora = `${currentYear}-${mes}-${dia}T${hora}:00`;
+        const eventoData = {
           titulo,
           categoria,
           publico,
-          hora,
+          dataHora,
           diasMontagem,
-          imagem: imagemUrl,
+          imagemUrl,
           descricaoBreve: descBreve,
           descricaoDetalhada: descDetalhada,
           rider,
-          data: dataStr,
-          status: "em_analise",
-          criadoEm: new Date().toISOString(),
         };
-
-        // Mostra loading
         mostrarModal("loading", {
           titulo: "Enviando Proposta",
           sub: "Registrando sua solicitação...",
         });
-
         btn.disabled = true;
+        try {
+          const promotorId = sessionStorage.getItem("promotor_id");
+          const response = await fetch(`${API_URL}/eventos`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Promotor-Id": promotorId,
+            },
+            credentials: "include",
+            body: JSON.stringify(eventoData),
+          });
 
-        setTimeout(() => {
-          const eventos = getEventos();
-          eventos.push(novoEvento);
-          saveEventos(eventos);
+          // Log detalhado para depuração
+          console.log("Status:", response.status);
+          const text = await response.text();
+          console.log("Resposta:", text);
+
+          if (!response.ok) {
+            throw new Error(text || `HTTP ${response.status}`);
+          }
+
+          const novoEvento = text ? JSON.parse(text) : null;
+          const localEvent = {
+            id: novoEvento?.id?.toString() || Date.now().toString(),
+            titulo,
+            categoria,
+            publico,
+            data: `${currentYear}-${mes}-${dia}`,
+            hora,
+            diasMontagem,
+            imagem: imagemUrl,
+            descricaoBreve: descBreve,
+            descricaoDetalhada: descDetalhada,
+            rider,
+            status: "em_analise",
+            promotorNome:
+              sessionStorage.getItem("nome_representante") ||
+              localStorage.getItem("nome_representante") ||
+              "Promotor",
+          };
+          saveEventoLocal(localEvent);
 
           btn.disabled = false;
-
           form.querySelectorAll("input, textarea").forEach((i) => {
             if (i.type !== "number") i.value = "";
           });
           document
             .querySelectorAll(".calendar-day")
             .forEach((d) => d.classList.remove("selected"));
-
           mostrarModal("success", {
             titulo: "Proposta Enviada!",
-            sub: `Protocolo #PR-${novoEvento.id}. Você será notificado após a análise técnica.`,
+            sub: `Protocolo #${novoEvento.id}. Você será notificado após análise.`,
             callback: () => {
               switchView("meus-eventos");
               renderMeusEventos();
             },
           });
-        }, 1500);
+        } catch (error) {
+          btn.disabled = false;
+          mostrarModal("error", {
+            titulo: "Erro ao enviar",
+            sub: error.message,
+          });
+        }
       }
 
-      // ─── Renderiza "Meus Eventos" ──────────────────────────────────
       const STATUS_CONFIG = {
         em_analise: {
           label: "Em Análise Técnica",
@@ -821,126 +1200,117 @@
         },
       };
 
-      function renderMeusEventos() {
-        const emailPromotor = sessionStorage.getItem("email") || "";
-        const todos = getEventos().filter(
-          (e) => e.promotorEmail === emailPromotor,
-        );
+      async function renderMeusEventos() {
         const container = document.getElementById("meus-eventos-container");
         if (!container) return;
-
-        if (todos.length === 0) {
-          container.innerHTML = `
-      <div class="p-8 text-center border-2 border-black border-dashed font-bold opacity-50">
-        Nenhum evento enviado ainda. Use "Nova Solicitação" para começar.
-      </div>`;
-          return;
+        try {
+          const promotorId = sessionStorage.getItem("promotor_id");
+          const response = await fetch(`${API_URL}/eventos/meus`, {
+            headers: { "X-Promotor-Id": promotorId },
+          });
+          if (!response.ok) throw new Error("Falha ao carregar");
+          const eventos = await response.json();
+          if (eventos.length === 0) {
+            container.innerHTML = `<div class="p-8 text-center border-2 border-black border-dashed font-bold opacity-50">Nenhum evento enviado. Use "Nova Solicitação" para começar.</div>`;
+            return;
+          }
+          container.innerHTML = "";
+          eventos.sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora));
+          eventos.forEach((ev) => {
+            const status = getStatusReal(ev);
+            const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.em_analise;
+            const dataEvento = new Date(ev.dataHora);
+            const dataFormatada = dataEvento.toLocaleDateString("pt-BR");
+            const dia = String(dataEvento.getDate()).padStart(2, "0");
+            const mesNum = dataEvento.getMonth();
+            const ano = dataEvento.getFullYear();
+            const mesNome = [
+              "JAN",
+              "FEV",
+              "MAR",
+              "ABR",
+              "MAI",
+              "JUN",
+              "JUL",
+              "AGO",
+              "SET",
+              "OUT",
+              "NOV",
+              "DEZ",
+            ][mesNum];
+            const opacidade =
+              status === "finalizado" || status === "rejeitado"
+                ? "opacity-60 grayscale"
+                : "";
+            const bgData = status === "finalizado" ? "bg-gray-400" : "bg-black";
+            const card = document.createElement("div");
+            card.className = `bg-white brutal-border brutal-shadow flex flex-col md:flex-row ${opacidade}`;
+            card.innerHTML = `
+              <div class="${bgData} text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black shrink-0">
+                <span class="text-[10px] font-black uppercase">${mesNome}</span>
+                <span class="text-3xl brutal-title">${dia}</span>
+                <span class="text-[9px] opacity-60">${ano}</span>
+              </div>
+              <div class="p-6 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <span class="text-[9px] font-black uppercase text-blue-600">${ev.categoria || "N/A"}</span>
+                  <h3 class="brutal-title text-xl mt-1">${ev.nome}</h3>
+                  <p class="text-xs font-bold text-gray-500 uppercase mt-1">${ev.capacidadeMaxima} pessoas • R$ ${ev.preco}</p>
+                </div>
+                <div class="flex flex-col items-end gap-2 shrink-0">
+                  <span class="status-badge ${cfg.bg} ${cfg.text}">${cfg.label}</span>
+                  <span class="text-[9px] font-black text-gray-400 uppercase">${dataFormatada}</span>
+                </div>
+              </div>`;
+            container.appendChild(card);
+          });
+        } catch (error) {
+          container.innerHTML = `<div class="p-8 text-center border-2 border-red-500 border-dashed font-bold text-red-600">Erro ao carregar eventos. Tente novamente.</div>`;
         }
-
-        container.innerHTML = "";
-
-        // Ordena: mais recentes primeiro
-        todos.sort((a, b) => new Date(b.data) - new Date(a.data));
-
-        todos.forEach((ev) => {
-          const status = getStatusReal(ev);
-          const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.em_analise;
-          const dataFormatada = new Date(
-            ev.data + "T12:00:00",
-          ).toLocaleDateString("pt-BR");
-          const [ano, mes, dia] = ev.data.split("-");
-          const mesNome = [
-            "JAN",
-            "FEV",
-            "MAR",
-            "ABR",
-            "MAI",
-            "JUN",
-            "JUL",
-            "AGO",
-            "SET",
-            "OUT",
-            "NOV",
-            "DEZ",
-          ][parseInt(mes) - 1];
-
-          const opacidade =
-            status === "finalizado" || status === "rejeitado"
-              ? "opacity-60 grayscale"
-              : "";
-          const bgData = status === "finalizado" ? "bg-gray-400" : "bg-black";
-
-          const card = document.createElement("div");
-          card.className = `bg-white brutal-border brutal-shadow flex flex-col md:flex-row ${opacidade}`;
-          card.innerHTML = `
-            <div class="${bgData} text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black shrink-0">
-              <span class="text-[10px] font-black uppercase">${mesNome}</span>
-              <span class="text-3xl brutal-title">${dia}</span>
-              <span class="text-[9px] opacity-60">${ano}</span>
-            </div>
-            <div class="p-6 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <span class="text-[9px] font-black uppercase text-blue-600">${ev.categoria}</span>
-                <h3 class="brutal-title text-xl mt-1">${ev.titulo}</h3>
-                <p class="text-xs font-bold text-gray-500 uppercase mt-1">
-                  🕐 ${ev.hora}h &nbsp;•&nbsp; 👥 ${parseInt(ev.publico).toLocaleString("pt-BR")} pax
-                </p>
-              </div>
-              <div class="flex flex-col items-end gap-2 shrink-0">
-                <span class="status-badge ${cfg.bg} ${cfg.text}">${cfg.label}</span>
-                <span class="text-[9px] font-black text-gray-400 uppercase">
-                  Enviado em ${new Date(ev.criadoEm).toLocaleDateString("pt-BR")}
-                </span>
-              </div>
-            </div>`;
-          container.appendChild(card);
-        });
       }
 
-      // ─── Sistema de Modais ─────────────────────────────────────────────────────────
+      function getStatusReal(evento) {
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const dataEvento = new Date(evento.dataHora);
+        dataEvento.setHours(0, 0, 0, 0);
+        if (dataEvento < hoje && evento.status === "confirmado")
+          return "finalizado";
+        return evento.status;
+      }
 
       function criarModalHTML() {
         if (document.getElementById("modal-overlay")) return;
-
         document.body.insertAdjacentHTML(
           "beforeend",
           `
-            <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center">
-
-              <!-- Modal: Processando -->
-              <div id="modal-loading" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
-                <div class="w-14 h-14 border-[5px] border-black border-t-blue-600 rounded-full animate-spin"></div>
-                <div class="text-center">
-                  <p id="modal-loading-title" class="brutal-title text-xl">Processando</p>
-                  <p id="modal-loading-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-1">Aguarde um momento...</p>
-                </div>
+          <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center">
+            <div id="modal-loading" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
+              <div class="w-14 h-14 border-[5px] border-black border-t-blue-600 rounded-full animate-spin"></div>
+              <div class="text-center">
+                <p id="modal-loading-title" class="brutal-title text-xl">Processando</p>
+                <p id="modal-loading-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-1">Aguarde um momento...</p>
               </div>
-
-              <!-- Modal: Sucesso -->
-              <div id="modal-success" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
-                <div class="w-16 h-16 bg-green-400 brutal-border flex items-center justify-center text-3xl">✓</div>
-                <div class="text-center">
-                  <p id="modal-success-title" class="brutal-title text-xl">Sucesso!</p>
-                  <p id="modal-success-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-2 leading-relaxed"></p>
-                </div>
-                <button onclick="fecharModal()" class="w-full bg-black text-white p-3 font-black uppercase text-sm brutal-border hover:bg-blue-600 transition-colors">OK →</button>
-              </div>
-
-              <!-- Modal: Erro / Aviso -->
-              <div id="modal-error" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
-                <div class="w-16 h-16 bg-red-400 brutal-border flex items-center justify-center text-3xl">✕</div>
-                <div class="text-center">
-                  <p id="modal-error-title" class="brutal-title text-xl">Atenção</p>
-                  <p id="modal-error-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-2 leading-relaxed"></p>
-                </div>
-                <button onclick="fecharModal()" class="w-full bg-black text-white p-3 font-black uppercase text-sm brutal-border hover:bg-red-500 transition-colors">Entendi →</button>
-              </div>
-
             </div>
-          `,
+            <div id="modal-success" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
+              <div class="w-16 h-16 bg-green-400 brutal-border flex items-center justify-center text-3xl">✓</div>
+              <div class="text-center">
+                <p id="modal-success-title" class="brutal-title text-xl">Sucesso!</p>
+                <p id="modal-success-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-2 leading-relaxed"></p>
+              </div>
+              <button onclick="fecharModal()" class="w-full bg-black text-white p-3 font-black uppercase text-sm brutal-border hover:bg-blue-600 transition-colors">OK →</button>
+            </div>
+            <div id="modal-error" class="modal-box bg-white brutal-border brutal-shadow p-10 flex flex-col items-center gap-6 w-80 hidden">
+              <div class="w-16 h-16 bg-red-400 brutal-border flex items-center justify-center text-3xl">✕</div>
+              <div class="text-center">
+                <p id="modal-error-title" class="brutal-title text-xl">Atenção</p>
+                <p id="modal-error-sub" class="text-[11px] font-bold text-gray-500 uppercase mt-2 leading-relaxed"></p>
+              </div>
+              <button onclick="fecharModal()" class="w-full bg-black text-white p-3 font-black uppercase text-sm brutal-border hover:bg-red-500 transition-colors">Entendi →</button>
+            </div>
+          </div>
+        `,
         );
-
-        // Fecha ao clicar no overlay
         document
           .getElementById("modal-overlay")
           .addEventListener("click", (e) => {
@@ -954,18 +1324,13 @@
         document
           .querySelectorAll(".modal-box")
           .forEach((m) => m.classList.add("hidden"));
-
         overlay.classList.remove("hidden");
         overlay.classList.add("flex");
-
         const box = document.getElementById(`modal-${tipo}`);
         box.classList.remove("hidden");
-
         if (titulo)
           document.getElementById(`modal-${tipo}-title`).textContent = titulo;
         if (sub) document.getElementById(`modal-${tipo}-sub`).textContent = sub;
-
-        // Callback executado ao fechar modal de sucesso
         if (tipo === "success" && callback) {
           const btn = box.querySelector("button");
           btn.onclick = () => {
@@ -982,13 +1347,8 @@
         document
           .querySelectorAll(".modal-box")
           .forEach((m) => m.classList.add("hidden"));
-
-        // Reseta o botão do sucesso para o padrão
-        const btnSucesso = document.querySelector("#modal-success button");
-        if (btnSucesso) btnSucesso.onclick = fecharModal;
       }
 
-      // Inicialização
       window.onload = () => {
         criarModalHTML();
         renderCalendar();

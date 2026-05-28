@@ -3,6 +3,7 @@ package com.vempraarena.plataforma.controller;
 import com.vempraarena.plataforma.model.Promotor;
 import com.vempraarena.plataforma.service.PromotorService;
 import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,15 @@ public class PromotorController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Promotor promotor) {
+    public ResponseEntity<?> login(@RequestBody Promotor promotor, HttpSession session) {
         try {
             Promotor promotorAutenticado = promotorService.autenticar(promotor.getEmailCorporativo(), promotor.getSenha());
+            
+            // Armazena o promotor na sessão
+            session.setAttribute("promotor", promotorAutenticado);
+            session.setAttribute("promotor_id", promotorAutenticado.getId());
+            session.setAttribute("role", "promotor");
+            
             return ResponseEntity.ok(promotorAutenticado);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
@@ -45,5 +52,21 @@ public class PromotorController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("Logout realizado com sucesso");
+    }
+    
+    @GetMapping("/perfil")
+    public ResponseEntity<?> perfil(HttpSession session) {
+        Promotor promotor = (Promotor) session.getAttribute("promotor");
+        if (promotor == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Promotor não autenticado");
+        }
+        return ResponseEntity.ok(promotor);
     }
 }

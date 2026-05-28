@@ -4,7 +4,6 @@ import com.vempraarena.plataforma.model.Admin;
 import com.vempraarena.plataforma.model.Evento;
 import com.vempraarena.plataforma.model.Usuario;
 import com.vempraarena.plataforma.repository.AdminRepository;
-import com.vempraarena.plataforma.repository.EventoRepository;
 import com.vempraarena.plataforma.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

@@ -522,9 +522,9 @@
                 </div>
               </div>
               <div class="flex gap-2 w-full md:w-auto">
-                <button onclick="openDetails(${prop.id})" class="flex-1 md:flex-initial brutal-border bg-white hover:bg-[#F4D03F] px-4 py-2 font-black uppercase text-xs">Analisar</button>
-                <button onclick="rejectProposal(${prop.id})" class="brutal-border bg-[#FF6B6B] text-white p-2 hover:bg-black transition-colors" title="Rejeitar">✕</button>
-                <button onclick="approveProposal(${prop.id})" class="brutal-btn bg-[#4ADE80] text-black px-4 py-2 text-xs font-black brutal-border">Aprovar ✓</button>
+                <button onclick="openDetails('${prop.id}')" class="flex-1 md:flex-initial brutal-border bg-white hover:bg-[#F4D03F] px-4 py-2 font-black uppercase text-xs">Analisar</button>
+                <button onclick="rejectProposal('${prop.id}')" class="brutal-border bg-[#FF6B6B] text-white p-2 hover:bg-black transition-colors" title="Rejeitar">✕</button>
+                <button onclick="approveProposal('${prop.id}')" class="brutal-btn bg-[#4ADE80] text-black px-4 py-2 text-xs font-black brutal-border">Aprovar ✓</button>
               </div>
             `;
             container.appendChild(div);

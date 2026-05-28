@@ -3,7 +3,6 @@ package com.vempraarena.plataforma.service;
 import com.vempraarena.plataforma.model.Evento;
 import com.vempraarena.plataforma.model.Ingresso;
 import com.vempraarena.plataforma.model.Usuario;
-import com.vempraarena.plataforma.repository.EventoRepository;
 import com.vempraarena.plataforma.repository.IngressoRepository;
 import com.vempraarena.plataforma.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,13 @@ import java.util.UUID;
 public class IngressoService {
 
     private final IngressoRepository ingressoRepository;
-    private final EventoRepository eventoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final EventoService eventoService; // ← busca evento em memória/JSON
 
-    public IngressoService(IngressoRepository ingressoRepository, EventoRepository eventoRepository, UsuarioRepository usuarioRepository) {
+    public IngressoService(IngressoRepository ingressoRepository, UsuarioRepository usuarioRepository, EventoService eventoService) {
         this.ingressoRepository = ingressoRepository;
-        this.eventoRepository = eventoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.eventoService = eventoService;
     }
 
     @Transactional
@@ -30,7 +29,7 @@ public class IngressoService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        Evento evento = eventoRepository.findById(eventoId)
+        Evento evento = eventoService.buscarPorId(eventoId) // ← sem BD
                 .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado"));
 
         long ingressosVendidos = ingressoRepository.countByEventoId(eventoId);
@@ -39,7 +38,7 @@ public class IngressoService {
             throw new IllegalStateException("Evento esgotado");
         }
 
-        Ingresso ingresso = new Ingresso(evento, usuario);
+        Ingresso ingresso = new Ingresso(eventoId, usuario); // ← só o ID
         return ingressoRepository.save(ingresso);
     }
 

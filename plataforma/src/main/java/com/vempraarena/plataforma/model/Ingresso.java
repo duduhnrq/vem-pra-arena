@@ -12,9 +12,8 @@ public class Ingresso {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "evento_id", nullable = false)
-    private Evento evento;
+    @Column(name = "evento_id", nullable = false)
+    private UUID eventoId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -31,13 +30,14 @@ public class Ingresso {
         PAGO, CANCELADO, UTILIZADO
     }
 
-    public Ingresso() {}
+    public Ingresso() {
+    }
 
-    public Ingresso(Evento evento, Usuario usuario) {
-        this.evento = evento;
+    public Ingresso(UUID eventoId, Usuario usuario) {
+        this.eventoId = eventoId;
         this.usuario = usuario;
         this.dataCompra = LocalDateTime.now();
-        this.status = StatusIngresso.PAGO; // Para simplificar o MVP
+        this.status = StatusIngresso.PAGO;
     }
 
     public UUID getId() {
@@ -48,12 +48,12 @@ public class Ingresso {
         this.id = id;
     }
 
-    public Evento getEvento() {
-        return evento;
+    public UUID getEventoId() {
+        return eventoId;
     }
 
-    public void setEvento(Evento evento) {
-        this.evento = evento;
+    public void setEventoId(UUID eventoId) {
+        this.eventoId = eventoId;
     }
 
     public Usuario getUsuario() {
