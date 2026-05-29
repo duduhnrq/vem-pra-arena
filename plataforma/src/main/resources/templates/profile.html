@@ -449,7 +449,7 @@
       window.addEventListener("DOMContentLoaded", function () {
         const params = new URLSearchParams(window.location.search);
         if (params.get("tickets") === "true") {
-          switchTab("ingressos");
+          setTimeout(() => switchTab("ingressos"), 0);
         }
       });
 
@@ -469,6 +469,13 @@
           profileIcon.textContent = nomeUsuario.charAt(0).toUpperCase();
         if (profileName) profileName.textContent = nomeUsuario;
 
+        const tabIngressosBtn = document.getElementById("tab-ingressos");
+        const usuarioId = localStorage.getItem("id_usuario");
+        if (tabIngressosBtn && usuarioId) {
+          const totalIngressos = getIngressosDoUsuario(usuarioId).length;
+          tabIngressosBtn.innerHTML = `<span>🎫</span> Meus Ingressos (${totalIngressos})`;
+        }
+
         // ─── Formulário de dados pessoais ────────────────────────────────
         const campos = {
           nome: document.querySelector('input[type="text"]'),
@@ -486,6 +493,18 @@
         if (campos.telefone && telUsuario) campos.telefone.value = telUsuario;
 
         // ─── Tabs ─────────────────────────────────────────────────────────
+        function getIngressosLocal() {
+          return JSON.parse(localStorage.getItem("vpa_ingressos") || "[]");
+        }
+
+        function getIngressosDoUsuario(usuarioId) {
+          return getIngressosLocal().filter((ing) => ing.usuarioId === usuarioId);
+        }
+
+        function formatCurrency(value) {
+          return `R$ ${Number(value).toFixed(2).replace(".", ",")}`;
+        }
+
         window.switchTab = async function (tab) {
           document
             .querySelectorAll(".tab-content")
@@ -517,27 +536,44 @@
             return;
           }
 
-          try {
-            const response = await fetch(`/api/ingressos/usuario/${usuarioId}`);
-            const ingressos = await response.json();
+          let ingressos = getIngressosDoUsuario(usuarioId);
+          const hasLocal = ingressos.length > 0;
 
-            container.innerHTML =
-              '<h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>';
-
-            if (ingressos.length === 0) {
-              container.innerHTML +=
-                '<p class="font-bold opacity-60">Você ainda não possui ingressos.</p>';
-              return;
+          if (!hasLocal) {
+            try {
+              const response = await fetch(`/api/ingressos/usuario/${usuarioId}`);
+              if (response.ok) {
+                ingressos = await response.json();
+              }
+            } catch (error) {
+              console.warn("Não foi possível buscar ingressos do backend, usando apenas localStorage.", error);
             }
+          }
 
-            ingressos.forEach((ing) => {
-              const dataObj = new Date(ing.evento.dataHora);
-              const dia = String(dataObj.getDate()).padStart(2, "0");
-              const mes = dataObj
-                .toLocaleDateString("pt-BR", { month: "short" })
-                .toUpperCase();
+          container.innerHTML =
+            '<h2 class="brutal-title text-3xl mb-2 italic">Meus Eventos</h2>';
 
-              const ticketHtml = `
+          if (ingressos.length === 0) {
+            container.innerHTML +=
+              '<p class="font-bold opacity-60">Você ainda não possui ingressos.</p>';
+            const tabIngBtn = document.getElementById("tab-ingressos");
+            if (tabIngBtn) {
+              tabIngBtn.innerHTML = `<span>🎫</span> Meus Ingressos (0)`;
+            }
+            return;
+          }
+
+          ingressos.forEach((ing) => {
+            const dataObj = new Date(ing.evento.dataHora);
+            const dia = String(dataObj.getDate()).padStart(2, "0");
+            const mes = dataObj
+              .toLocaleDateString("pt-BR", { month: "short" })
+              .toUpperCase();
+            const tipo = ing.tipoIngresso || (ing.meiaEntrada ? "Meia Entrada" : "Inteira");
+            const classe = ing.classe || (ing.setor?.toUpperCase().includes("VIP") ? "VIP" : "Normal");
+            const total = formatCurrency(ing.total || 0);
+
+            const ticketHtml = `
                         <div class="bg-white brutal-border brutal-shadow flex flex-col md:flex-row mb-6">
                             <div class="bg-black text-white p-6 flex flex-col items-center justify-center md:w-32 border-b-4 md:border-b-0 md:border-r-4 border-black">
                             <span class="text-[10px] font-black uppercase">${mes}</span>
@@ -546,23 +582,24 @@
                             <div class="p-6 flex-1">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
-                                <span class="bg-yellow-400 border-2 border-black px-2 py-0.5 text-xs font-black uppercase">EVENTO</span>
+                                <span class="bg-yellow-400 border-2 border-black px-2 py-0.5 text-xs font-black uppercase">${classe}</span>
                                 <h3 class="brutal-title text-xl mt-1">${ing.evento.nome}</h3>
+                                <p class="text-xs uppercase tracking-[0.2em] mt-2">${tipo}</p>
                                 </div>
                                 <span class="text-xs font-black text-blue-600">#${ing.id.substring(0, 8).toUpperCase()}</span>
                             </div>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-bold uppercase">
                                 <div>
-                                <p class="text-gray-400">Status</p>
-                                <p>${ing.status}</p>
+                                <p class="text-gray-400">Setor</p>
+                                <p>${ing.setor || "Geral"}</p>
                                 </div>
                                 <div>
-                                <p class="text-gray-400">Local</p>
-                                <p>${ing.evento.local || "ARENA PE"}</p>
+                                <p class="text-gray-400">Qtd.</p>
+                                <p>${ing.quantidade || 1}</p>
                                 </div>
                                 <div>
-                                <p class="text-gray-400">Data Compra</p>
-                                <p>${new Date(ing.dataCompra).toLocaleDateString()}</p>
+                                <p class="text-gray-400">Total</p>
+                                <p>${total}</p>
                                 </div>
                                 <button class="brutal-btn brutal-border bg-black text-white p-2 font-black hover:bg-governo-blue">
                                 ACESSAR QR
@@ -571,18 +608,12 @@
                             </div>
                         </div>
                     `;
-              container.innerHTML += ticketHtml;
-            });
+            container.innerHTML += ticketHtml;
+          });
 
-            // Atualiza o contador na sidebar
-            const tabIngBtn = document.getElementById("tab-ingressos");
-            if (tabIngBtn) {
-              tabIngBtn.innerHTML = `<span>🎫</span> Meus Ingressos (${ingressos.length})`;
-            }
-          } catch (error) {
-            console.error("Erro ao carregar ingressos:", error);
-            container.innerHTML +=
-              '<p class="text-red-500 font-bold">Erro ao carregar ingressos.</p>';
+          const tabIngBtn = document.getElementById("tab-ingressos");
+          if (tabIngBtn) {
+            tabIngBtn.innerHTML = `<span>🎫</span> Meus Ingressos (${ingressos.length})`;
           }
         }
 

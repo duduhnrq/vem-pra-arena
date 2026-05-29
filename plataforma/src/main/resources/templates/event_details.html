@@ -116,8 +116,14 @@
       </div>
     </nav>
 
+    <div class="max-w-7xl px-4 mx-auto mt-2">
+      <button class="brutal-btn brutal-border uppercase bg-white text-black px-6 py-3 font-black transition-all" onclick="window.history.back()">
+        ← Voltar
+      </button>
+    </div>
+
     <main
-      class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 grid lg:grid-cols-12 gap-8 items-start"
+      class="flex-grow max-w-7xl w-full mx-auto p-4 grid lg:grid-cols-12 gap-8 items-start"
     >
       <!-- COLUNA ESQUERDA (Info Geral do Evento) -->
       <section class="lg:col-span-8 space-y-8">
@@ -502,6 +508,10 @@
         Religioso: { Geral: 30, VIP: 80 },
       };
 
+      function getEventosLocal() {
+        return JSON.parse(localStorage.getItem("vpa_eventos") || "[]");
+      }
+
       window.onload = async function () {
         const params = new URLSearchParams(window.location.search);
         const eventId = params.get("id");
@@ -512,28 +522,60 @@
         }
 
         try {
-          const response = await fetch(`http://localhost:8080/api/eventos/${eventId}`);
-          if (!response.ok) throw new Error("Evento não encontrado");
-          
-          const eventData = await response.json();
-          const dataHora = new Date(eventData.dataHora);
-          
-          currentEvent = {
-            id: eventData.id,
-            titulo: eventData.nome,
-            data: dataHora.toLocaleDateString("pt-BR", {
+          const localEventos = getEventosLocal();
+          let eventData = localEventos.find((e) => e.id === eventId);
+
+          if (!eventData) {
+            const response = await fetch(`http://localhost:8080/api/eventos/${eventId}`);
+            if (!response.ok) throw new Error("Evento não encontrado");
+            eventData = await response.json();
+          }
+
+          let dataValue = eventData.data;
+          let horaValue = eventData.hora;
+          let rawDateTime = eventData.dataHora;
+
+          if (!dataValue && eventData.dataHora) {
+            const date = new Date(eventData.dataHora);
+            dataValue = date.toISOString().split("T")[0];
+            horaValue = date.toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+          }
+
+          if (!rawDateTime && dataValue) {
+            rawDateTime = `${dataValue}T${horaValue || "00:00"}`;
+          }
+
+          const formattedDate = dataValue
+            ? new Date(`${dataValue}T${horaValue || "00:00"}`).toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
-            }),
-            hora: dataHora.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }),
+              })
+            : "Data não disponível";
+
+          currentEvent = {
+            id: eventData.id,
+            titulo: eventData.titulo || eventData.nome || "Evento",
+            local: eventData.local || "Arena Pernambuco",
+            data: formattedDate,
+            hora: horaValue || "--:--",
+            dataHoraRaw: rawDateTime,
             categoria: eventData.categoria || "Arena Eventos",
-            imagem: eventData.imagemUrl || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
-            descricao: eventData.descricaoDetalhada || eventData.descricaoBreve || "Detalhes em breve.",
+            imagem:
+              eventData.imagem || eventData.imagemUrl ||
+              "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1000",
+            descricao:
+              eventData.descricaoDetalhada ||
+              eventData.descricaoBreve ||
+              eventData.descricao ||
+              "Detalhes em breve.",
             setores: {
-              "Geral": parseFloat(eventData.preco) || 100,
-              "VIP": (parseFloat(eventData.preco) || 100) * 1.5
-            }
+              Geral: parseFloat(eventData.preco) || 100,
+              VIP: (parseFloat(eventData.preco) || 100) * 1.5,
+            },
           };
 
           renderEventDetails();
@@ -616,6 +658,24 @@
           `R$ ${total.toFixed(2)}`;
       }
 
+      function getIngressosLocal() {
+        return JSON.parse(localStorage.getItem("vpa_ingressos") || "[]");
+      }
+
+      function saveIngressoLocal(ingresso) {
+        const ingressos = getIngressosLocal();
+        ingressos.push(ingresso);
+        localStorage.setItem("vpa_ingressos", JSON.stringify(ingressos));
+      }
+
+      function formatCurrency(value) {
+        return `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
+      }
+
+      function generateTicketCode() {
+        return `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+      }
+
       async function executeReservation() {
         const estaLogado = localStorage.getItem("esta_logado") === "true";
         if (!estaLogado) {
@@ -624,55 +684,58 @@
           return;
         }
 
-        const usuarioId = localStorage.getItem("id_usuario"); // Assumindo que o ID do usuário está salvo no login
+        const usuarioId = localStorage.getItem("id_usuario");
         if (!usuarioId) {
           alert("Erro de autenticação. Por favor, faça login novamente.");
           return;
         }
 
-        let basePrice = currentEvent.setores[selectedSector];
-        if (selectedType === "meia") basePrice = basePrice / 2;
-        const total = basePrice * quantity + 4.0;
+        const basePrice = currentEvent.setores[selectedSector] || 100;
+        const meiaEntrada = selectedType === "meia";
+        const valorUnitario = meiaEntrada ? basePrice / 2 : basePrice;
+        const total = valorUnitario * quantity + 4.0;
+        const classeIngresso = selectedSector.toUpperCase().includes("VIP") ? "VIP" : "Normal";
+        const tipoIngresso = meiaEntrada ? "Meia Entrada" : "Inteira";
 
-        try {
-          const response = await fetch('/api/ingressos/comprar', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              usuarioId: usuarioId,
-              eventoId: currentEvent.id
-            })
-          });
+        const ingressoLocal = {
+          id: generateTicketCode(),
+          usuarioId,
+          evento: {
+            id: currentEvent.id,
+            nome: currentEvent.titulo,
+            local: currentEvent.local || "Arena Pernambuco",
+            dataHora: currentEvent.dataHoraRaw || new Date().toISOString(),
+            categoria: currentEvent.categoria,
+            imagemUrl: currentEvent.imagem,
+          },
+          setor: selectedSector,
+          classe: classeIngresso,
+          tipoIngresso,
+          meiaEntrada,
+          quantidade: quantity,
+          valorUnitario,
+          total,
+          dataCompra: new Date().toISOString(),
+          status: "CONFIRMADO",
+        };
 
-          if (!response.ok) {
-            const errorMsg = await response.text();
-            throw new Error(errorMsg || "Erro ao processar compra");
-          }
+        saveIngressoLocal(ingressoLocal);
 
-          const ingresso = await response.json();
+        document.getElementById("res-detail-event").innerText =
+          `Evento: ${currentEvent.titulo}`;
+        document.getElementById("res-detail-seats").innerText =
+          `Ingresso: ${tipoIngresso} • ${classeIngresso} • Setor ${selectedSector} • ${quantity}x`;
+        document.getElementById("res-detail-value").innerText =
+          `Total Pago: ${formatCurrency(total)}`;
 
-          document.getElementById("res-detail-event").innerText =
-            `Evento: ${currentEvent.titulo}`;
-          document.getElementById("res-detail-seats").innerText =
-            `Acesso: Setor ${selectedSector} (${quantity}x ${selectedType.toUpperCase()})`;
-          document.getElementById("res-detail-value").innerText =
-            `Total Pago: R$ ${total.toFixed(2)}`;
-
-          document
-            .getElementById("confirmation-modal")
-            .classList.remove("hidden");
-          document.getElementById("confirmation-modal").classList.add("flex");
-        } catch (error) {
-          alert("Erro na compra: " + error.message);
-        }
+        document.getElementById("confirmation-modal").classList.remove("hidden");
+        document.getElementById("confirmation-modal").classList.add("flex");
       }
 
       function closeConfirmationModal() {
         document.getElementById("confirmation-modal").classList.remove("flex");
         document.getElementById("confirmation-modal").classList.add("hidden");
-        window.location.href = "perfil-usuario.html";
+        window.location.href = "profile.html?tickets=true";
       }
     </script>
   </body>
