@@ -123,6 +123,12 @@
         opacity: 0.6;
       }
 
+      .blocked {
+        background-color: #e0e0e0;
+        color: #888;
+        cursor: not-allowed;
+      }
+
       @media (min-width: 768px) {
         .md\:w-60 {
           width: 15rem /* 240px */;
@@ -225,7 +231,7 @@
                 <label class="block font-black text-[10px] uppercase mb-1"
                   >E-mail</label
                 >
-                <input type="email" class="input-brutal" />
+                <input type="email" class="input-brutal blocked" readonly />
               </div>
             </div>
 
