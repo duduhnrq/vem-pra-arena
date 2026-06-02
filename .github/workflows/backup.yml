@@ -1,0 +1,29 @@
+name: Backup Automático do Banco
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Instalar Cliente PostgreSQL
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y postgresql-client
+
+    - name: Executar pg_dump e salvar arquivo
+      run: |
+        pg_dump "${{ secrets.SUPABASE_DB_URL }}" -F c -b -v -f backup_arena.dump
+
+    - name: Fazer Upload do Backup como Artefato
+      uses: actions/upload-artifact@v4
+      with:
+        name: backup-supabase
+        path: backup_arena.dump
+        retention-days: 7
