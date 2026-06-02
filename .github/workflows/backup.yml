@@ -23,7 +23,7 @@ jobs:
 
     - name: Executar pg_dump e salvar arquivo
       run: |
-        pg_dump '${{ secrets.SUPABASE_DB_URL }}' -w -F c -b -v -f backup_arena.dump
+        /usr/lib/postgresql/17/bin/pg_dump '${{ secrets.SUPABASE_DB_URL }}' -w -F c -b -v -f backup_arena.dump
 
     - name: Fazer Upload do Backup como Artefato
       uses: actions/upload-artifact@v4
